@@ -1,0 +1,611 @@
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Intel 80386
+  Version:                           0x1
+  Entry point address:               0x10000
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          112680 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         4
+  Size of section headers:           40 (bytes)
+  Number of section headers:         15
+  Section header string table index: 14
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .text             PROGBITS        00010000 001000 006b88 00  AX  0   0  1
+  [ 2] .rodata           PROGBITS        00017000 008000 0014c8 00   A  0   0 32
+  [ 3] .data             PROGBITS        00019000 00a000 00050c 00  WA  0   0 32
+  [ 4] .bss              NOBITS          0001a000 00a50c 0016c0 00  WA  0   0 32
+  [ 5] .debug_line       PROGBITS        00000000 00a50c 003302 00      0   0  1
+  [ 6] .debug_line_str   PROGBITS        00000000 00d80e 00024c 01  MS  0   0  1
+  [ 7] .debug_info       PROGBITS        00000000 00da5a 006f98 00      0   0  1
+  [ 8] .debug_abbrev     PROGBITS        00000000 0149f2 002736 00      0   0  1
+  [ 9] .debug_aranges    PROGBITS        00000000 017128 0003e0 00      0   0  8
+  [10] .debug_str        PROGBITS        00000000 017508 000dbd 01  MS  0   0  1
+  [11] .debug_rnglists   PROGBITS        00000000 0182c5 000045 00      0   0  1
+  [12] .symtab           SYMTAB          00000000 01830c 0021e0 10     13 401  4
+  [13] .strtab           STRTAB          00000000 01a4ec 0012a8 00      0   0  1
+  [14] .shstrtab         STRTAB          00000000 01b794 000094 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  D (mbind), p (processor specific)
+
+There are no section groups in this file.
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  LOAD           0x001000 0x00010000 0x00010000 0x06b88 0x06b88 R E 0x1000
+  LOAD           0x008000 0x00017000 0x00017000 0x014c8 0x014c8 R   0x1000
+  LOAD           0x00a000 0x00019000 0x00019000 0x0050c 0x026c0 RW  0x1000
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x10
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     .text 
+   01     .rodata 
+   02     .data .bss 
+   03     
+
+There is no dynamic section in this file.
+
+There are no relocations in this file.
+No processor specific unwind information to decode
+
+Symbol table '.symtab' contains 542 entries:
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 00000000     0 FILE    LOCAL  DEFAULT  ABS entry.o
+     2: 00010025     0 NOTYPE  LOCAL  DEFAULT    1 clearbss
+     3: 00000000     0 FILE    LOCAL  DEFAULT  ABS isrs.o
+     4: 00010040     0 NOTYPE  LOCAL  DEFAULT    1 isr_save
+     5: 000100a2     0 NOTYPE  LOCAL  DEFAULT    1 fmt
+     6: 00010145     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x00
+     7: 0001014e     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x01
+     8: 00010157     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x02
+     9: 00010160     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x03
+    10: 00010169     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x04
+    11: 00010172     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x05
+    12: 0001017b     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x06
+    13: 00010184     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x07
+    14: 0001018d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x08
+    15: 00010194     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x09
+    16: 0001019d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x0a
+    17: 000101a4     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x0b
+    18: 000101ab     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x0c
+    19: 000101b2     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x0d
+    20: 000101b9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x0e
+    21: 000101c0     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x0f
+    22: 000101c9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x10
+    23: 000101d2     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x11
+    24: 000101d9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x12
+    25: 000101e2     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x13
+    26: 000101eb     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x14
+    27: 000101f4     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x15
+    28: 000101fb     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x16
+    29: 00010204     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x17
+    30: 0001020d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x18
+    31: 00010216     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x19
+    32: 0001021f     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x1a
+    33: 00010228     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x1b
+    34: 00010231     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x1c
+    35: 0001023a     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x1d
+    36: 00010243     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x1e
+    37: 0001024c     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x1f
+    38: 00010255     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x20
+    39: 0001025e     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x21
+    40: 00010267     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x22
+    41: 00010270     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x23
+    42: 00010279     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x24
+    43: 00010282     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x25
+    44: 0001028b     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x26
+    45: 00010294     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x27
+    46: 0001029d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x28
+    47: 000102a6     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x29
+    48: 000102af     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x2a
+    49: 000102b8     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x2b
+    50: 000102c1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x2c
+    51: 000102ca     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x2d
+    52: 000102d3     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x2e
+    53: 000102dc     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x2f
+    54: 000102e5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x30
+    55: 000102ee     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x31
+    56: 000102f7     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x32
+    57: 00010300     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x33
+    58: 00010309     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x34
+    59: 00010312     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x35
+    60: 0001031b     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x36
+    61: 00010324     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x37
+    62: 0001032d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x38
+    63: 00010336     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x39
+    64: 0001033f     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x3a
+    65: 00010348     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x3b
+    66: 00010351     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x3c
+    67: 0001035a     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x3d
+    68: 00010363     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x3e
+    69: 0001036c     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x3f
+    70: 00010375     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x40
+    71: 0001037e     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x41
+    72: 00010387     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x42
+    73: 00010390     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x43
+    74: 00010399     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x44
+    75: 000103a2     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x45
+    76: 000103ab     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x46
+    77: 000103b4     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x47
+    78: 000103bd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x48
+    79: 000103c6     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x49
+    80: 000103cf     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x4a
+    81: 000103d8     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x4b
+    82: 000103e1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x4c
+    83: 000103ea     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x4d
+    84: 000103f3     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x4e
+    85: 000103fc     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x4f
+    86: 00010405     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x50
+    87: 0001040e     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x51
+    88: 00010417     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x52
+    89: 00010420     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x53
+    90: 00010429     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x54
+    91: 00010432     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x55
+    92: 0001043b     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x56
+    93: 00010444     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x57
+    94: 0001044d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x58
+    95: 00010456     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x59
+    96: 0001045f     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x5a
+    97: 00010468     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x5b
+    98: 00010471     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x5c
+    99: 0001047a     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x5d
+   100: 00010483     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x5e
+   101: 0001048c     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x5f
+   102: 00010495     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x60
+   103: 0001049e     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x61
+   104: 000104a7     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x62
+   105: 000104b0     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x63
+   106: 000104b9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x64
+   107: 000104c2     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x65
+   108: 000104cb     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x66
+   109: 000104d4     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x67
+   110: 000104dd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x68
+   111: 000104e6     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x69
+   112: 000104ef     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x6a
+   113: 000104f8     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x6b
+   114: 00010501     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x6c
+   115: 0001050a     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x6d
+   116: 00010513     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x6e
+   117: 0001051c     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x6f
+   118: 00010525     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x70
+   119: 0001052e     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x71
+   120: 00010537     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x72
+   121: 00010540     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x73
+   122: 00010549     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x74
+   123: 00010552     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x75
+   124: 0001055b     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x76
+   125: 00010564     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x77
+   126: 0001056d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x78
+   127: 00010576     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x79
+   128: 0001057f     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x7a
+   129: 00010588     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x7b
+   130: 00010591     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x7c
+   131: 0001059a     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x7d
+   132: 000105a3     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x7e
+   133: 000105ac     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x7f
+   134: 000105b5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x80
+   135: 000105c1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x81
+   136: 000105cd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x82
+   137: 000105d9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x83
+   138: 000105e5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x84
+   139: 000105f1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x85
+   140: 000105fd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x86
+   141: 00010609     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x87
+   142: 00010615     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x88
+   143: 00010621     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x89
+   144: 0001062d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x8a
+   145: 00010639     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x8b
+   146: 00010645     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x8c
+   147: 00010651     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x8d
+   148: 0001065d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x8e
+   149: 00010669     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x8f
+   150: 00010675     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x90
+   151: 00010681     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x91
+   152: 0001068d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x92
+   153: 00010699     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x93
+   154: 000106a5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x94
+   155: 000106b1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x95
+   156: 000106bd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x96
+   157: 000106c9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x97
+   158: 000106d5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x98
+   159: 000106e1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x99
+   160: 000106ed     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x9a
+   161: 000106f9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x9b
+   162: 00010705     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x9c
+   163: 00010711     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x9d
+   164: 0001071d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x9e
+   165: 00010729     0 NOTYPE  LOCAL  DEFAULT    1 isr_0x9f
+   166: 00010735     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa0
+   167: 00010741     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa1
+   168: 0001074d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa2
+   169: 00010759     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa3
+   170: 00010765     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa4
+   171: 00010771     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa5
+   172: 0001077d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa6
+   173: 00010789     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa7
+   174: 00010795     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa8
+   175: 000107a1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xa9
+   176: 000107ad     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xaa
+   177: 000107b9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xab
+   178: 000107c5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xac
+   179: 000107d1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xad
+   180: 000107dd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xae
+   181: 000107e9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xaf
+   182: 000107f5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb0
+   183: 00010801     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb1
+   184: 0001080d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb2
+   185: 00010819     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb3
+   186: 00010825     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb4
+   187: 00010831     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb5
+   188: 0001083d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb6
+   189: 00010849     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb7
+   190: 00010855     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb8
+   191: 00010861     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xb9
+   192: 0001086d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xba
+   193: 00010879     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xbb
+   194: 00010885     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xbc
+   195: 00010891     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xbd
+   196: 0001089d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xbe
+   197: 000108a9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xbf
+   198: 000108b5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc0
+   199: 000108c1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc1
+   200: 000108cd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc2
+   201: 000108d9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc3
+   202: 000108e5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc4
+   203: 000108f1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc5
+   204: 000108fd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc6
+   205: 00010909     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc7
+   206: 00010915     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc8
+   207: 00010921     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xc9
+   208: 0001092d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xca
+   209: 00010939     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xcb
+   210: 00010945     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xcc
+   211: 00010951     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xcd
+   212: 0001095d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xce
+   213: 00010969     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xcf
+   214: 00010975     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd0
+   215: 00010981     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd1
+   216: 0001098d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd2
+   217: 00010999     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd3
+   218: 000109a5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd4
+   219: 000109b1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd5
+   220: 000109bd     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd6
+   221: 000109c9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd7
+   222: 000109d5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd8
+   223: 000109e1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xd9
+   224: 000109ed     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xda
+   225: 000109f9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xdb
+   226: 00010a05     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xdc
+   227: 00010a11     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xdd
+   228: 00010a1d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xde
+   229: 00010a29     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xdf
+   230: 00010a35     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe0
+   231: 00010a41     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe1
+   232: 00010a4d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe2
+   233: 00010a59     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe3
+   234: 00010a65     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe4
+   235: 00010a71     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe5
+   236: 00010a7d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe6
+   237: 00010a89     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe7
+   238: 00010a95     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe8
+   239: 00010aa1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xe9
+   240: 00010aad     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xea
+   241: 00010ab9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xeb
+   242: 00010ac5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xec
+   243: 00010ad1     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xed
+   244: 00010add     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xee
+   245: 00010ae9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xef
+   246: 00010af5     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf0
+   247: 00010b01     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf1
+   248: 00010b0d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf2
+   249: 00010b19     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf3
+   250: 00010b25     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf4
+   251: 00010b31     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf5
+   252: 00010b3d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf6
+   253: 00010b49     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf7
+   254: 00010b55     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf8
+   255: 00010b61     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xf9
+   256: 00010b6d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xfa
+   257: 00010b79     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xfb
+   258: 00010b85     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xfc
+   259: 00010b91     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xfd
+   260: 00010b9d     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xfe
+   261: 00010ba9     0 NOTYPE  LOCAL  DEFAULT    1 isr_0xff
+   262: 00000000     0 FILE    LOCAL  DEFAULT  ABS cio.c
+   263: 0001a004     4 OBJECT  LOCAL  DEFAULT    4 scroll_min_x
+   264: 0001a008     4 OBJECT  LOCAL  DEFAULT    4 scroll_min_y
+   265: 0001a00c     4 OBJECT  LOCAL  DEFAULT    4 scroll_max_x
+   266: 0001a010     4 OBJECT  LOCAL  DEFAULT    4 scroll_max_y
+   267: 0001a014     4 OBJECT  LOCAL  DEFAULT    4 curr_x
+   268: 0001a018     4 OBJECT  LOCAL  DEFAULT    4 curr_y
+   269: 0001a01c     4 OBJECT  LOCAL  DEFAULT    4 min_x
+   270: 0001a020     4 OBJECT  LOCAL  DEFAULT    4 min_y
+   271: 0001a024     4 OBJECT  LOCAL  DEFAULT    4 max_x
+   272: 0001a028     4 OBJECT  LOCAL  DEFAULT    4 max_y
+   273: 0001a02c     1 OBJECT  LOCAL  DEFAULT    4 dup_to_sio
+   274: 0001a02d     1 OBJECT  LOCAL  DEFAULT    4 dup2sio_bak
+   275: 0001a030     4 OBJECT  LOCAL  DEFAULT    4 notify
+   276: 00010bb5   153 FUNC    LOCAL  DEFAULT    1 setcursor
+   277: 00010c4e   257 FUNC    LOCAL  DEFAULT    1 putchar_at
+   278: 00011319    79 FUNC    LOCAL  DEFAULT    1 mypad
+   279: 00011368   169 FUNC    LOCAL  DEFAULT    1 mypadstr
+   280: 00011411   726 FUNC    LOCAL  DEFAULT    1 do_printf
+   281: 00019400   256 OBJECT  LOCAL  DEFAULT    3 scan_code
+   282: 0001a040   200 OBJECT  LOCAL  DEFAULT    4 input_buffer
+   283: 00019500     4 OBJECT  LOCAL  DEFAULT    3 next_char
+   284: 00019504     4 OBJECT  LOCAL  DEFAULT    3 next_space
+   285: 00011723    29 FUNC    LOCAL  DEFAULT    1 increment
+   286: 00011740   271 FUNC    LOCAL  DEFAULT    1 input_scan_code
+   287: 0001a108     4 OBJECT  LOCAL  DEFAULT    4 shift.1
+   288: 00019508     4 OBJECT  LOCAL  DEFAULT    3 ctrl_mask.0
+   289: 0001184f   100 FUNC    LOCAL  DEFAULT    1 keyboard_isr
+   290: 00000000     0 FILE    LOCAL  DEFAULT  ABS clock.c
+   291: 0001a110     4 OBJECT  LOCAL  DEFAULT    4 pinwheel
+   292: 0001a114     4 OBJECT  LOCAL  DEFAULT    4 pindex
+   293: 00011ad5   765 FUNC    LOCAL  DEFAULT    1 clk_isr
+   294: 00017160     8 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   295: 00000000     0 FILE    LOCAL  DEFAULT  ABS kernel.c
+   296: 00011e6b   199 FUNC    LOCAL  DEFAULT    1 kreport
+   297: 0001748c     5 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   298: 00000000     0 FILE    LOCAL  DEFAULT  ABS kmem.c
+   299: 0001a62c     4 OBJECT  LOCAL  DEFAULT    4 free_pages
+   300: 0001a630     4 OBJECT  LOCAL  DEFAULT    4 free_slices
+   301: 0001a634     4 OBJECT  LOCAL  DEFAULT    4 n_pages
+   302: 0001a638     4 OBJECT  LOCAL  DEFAULT    4 n_slices
+   303: 0001a63c     4 OBJECT  LOCAL  DEFAULT    4 km_initialized
+   304: 000122e7   264 FUNC    LOCAL  DEFAULT    1 add_block
+   305: 000175bc    10 OBJECT  LOCAL  DEFAULT    2 __func__.5
+   306: 000175c8    14 OBJECT  LOCAL  DEFAULT    2 __func__.4
+   307: 000175d8    19 OBJECT  LOCAL  DEFAULT    2 __func__.3
+   308: 000128d8   148 FUNC    LOCAL  DEFAULT    1 carve_slices
+   309: 000175ec    13 OBJECT  LOCAL  DEFAULT    2 __func__.2
+   310: 000175fc    15 OBJECT  LOCAL  DEFAULT    2 __func__.1
+   311: 0001760c    14 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   312: 00000000     0 FILE    LOCAL  DEFAULT  ABS list.c
+   313: 00017668     9 OBJECT  LOCAL  DEFAULT    2 __func__.1
+   314: 00017674    12 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   315: 00000000     0 FILE    LOCAL  DEFAULT  ABS procs.c
+   316: 00012bb5    44 FUNC    LOCAL  DEFAULT    1 pcb_ix
+   317: 00012be1    61 FUNC    LOCAL  DEFAULT    1 comp_wakeup
+   318: 00017b04     9 OBJECT  LOCAL  DEFAULT    2 __func__.7
+   319: 00017b10    10 OBJECT  LOCAL  DEFAULT    2 __func__.6
+   320: 00017b1c     9 OBJECT  LOCAL  DEFAULT    2 __func__.5
+   321: 00017b28    13 OBJECT  LOCAL  DEFAULT    2 __func__.4
+   322: 00017b38    18 OBJECT  LOCAL  DEFAULT    2 __func__.3
+   323: 00017b4c    12 OBJECT  LOCAL  DEFAULT    2 __func__.2
+   324: 00017b58     9 OBJECT  LOCAL  DEFAULT    2 __func__.1
+   325: 00017b64     9 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   326: 00000000     0 FILE    LOCAL  DEFAULT  ABS queues.c
+   327: 0001a9a0     4 OBJECT  LOCAL  DEFAULT    4 free_qnodes
+   328: 0001a9c0   128 OBJECT  LOCAL  DEFAULT    4 queues
+   329: 0001aa40     8 OBJECT  LOCAL  DEFAULT    4 queue_free
+   330: 000138b5    44 FUNC    LOCAL  DEFAULT    1 que_ix
+   331: 000138e1    89 FUNC    LOCAL  DEFAULT    1 qnode_free
+   332: 00017d14    11 OBJECT  LOCAL  DEFAULT    2 __func__.5
+   333: 0001393a   130 FUNC    LOCAL  DEFAULT    1 qnode_add_page
+   334: 00017d20    15 OBJECT  LOCAL  DEFAULT    2 __func__.4
+   335: 000139bc    76 FUNC    LOCAL  DEFAULT    1 qnode_alloc
+   336: 00017d30    11 OBJECT  LOCAL  DEFAULT    2 __func__.3
+   337: 00017d3c     9 OBJECT  LOCAL  DEFAULT    2 __func__.2
+   338: 00017d48    11 OBJECT  LOCAL  DEFAULT    2 __func__.1
+   339: 00017d54    14 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   340: 00000000     0 FILE    LOCAL  DEFAULT  ABS sio.c
+   341: 0001aa80  1024 OBJECT  LOCAL  DEFAULT    4 inbuffer
+   342: 0001ae80     4 OBJECT  LOCAL  DEFAULT    4 inlast
+   343: 0001ae84     4 OBJECT  LOCAL  DEFAULT    4 innext
+   344: 0001ae88     4 OBJECT  LOCAL  DEFAULT    4 incount
+   345: 0001aea0  1024 OBJECT  LOCAL  DEFAULT    4 outbuffer
+   346: 0001b2a0     4 OBJECT  LOCAL  DEFAULT    4 outlast
+   347: 0001b2a4     4 OBJECT  LOCAL  DEFAULT    4 outnext
+   348: 0001b2a8     4 OBJECT  LOCAL  DEFAULT    4 outcount
+   349: 0001b2ac     4 OBJECT  LOCAL  DEFAULT    4 sending
+   350: 0001b2b0     1 OBJECT  LOCAL  DEFAULT    4 ier
+   351: 0001418d   841 FUNC    LOCAL  DEFAULT    1 sio_isr
+   352: 00017ee4     8 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   353: 00000000     0 FILE    LOCAL  DEFAULT  ABS stacks.c
+   354: 0001b2bc     4 OBJECT  LOCAL  DEFAULT    4 free_stacks
+   355: 00017f98     9 OBJECT  LOCAL  DEFAULT    2 __func__.1
+   356: 00017fa4     9 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   357: 00000000     0 FILE    LOCAL  DEFAULT  ABS support.c
+   358: 0001507b    48 FUNC    LOCAL  DEFAULT    1 unexpected_handler
+   359: 000150ab   134 FUNC    LOCAL  DEFAULT    1 illop_fault
+   360: 00015131   175 FUNC    LOCAL  DEFAULT    1 gp_fault
+   361: 000151e0   109 FUNC    LOCAL  DEFAULT    1 default_handler
+   362: 0001524d   112 FUNC    LOCAL  DEFAULT    1 mystery_handler
+   363: 000152bd   209 FUNC    LOCAL  DEFAULT    1 init_pic
+   364: 0001538e    67 FUNC    LOCAL  DEFAULT    1 set_idt_entry
+   365: 000153d1   162 FUNC    LOCAL  DEFAULT    1 init_idt
+   366: 00000000     0 FILE    LOCAL  DEFAULT  ABS syscalls.c
+   367: 000154c7   173 FUNC    LOCAL  DEFAULT    1 status_return
+   368: 000182fc    14 OBJECT  LOCAL  DEFAULT    2 __func__.11
+   369: 0001830c     9 OBJECT  LOCAL  DEFAULT    2 __func__.10
+   370: 00018318     9 OBJECT  LOCAL  DEFAULT    2 __func__.9
+   371: 00018324     9 OBJECT  LOCAL  DEFAULT    2 __func__.8
+   372: 00018330     9 OBJECT  LOCAL  DEFAULT    2 __func__.7
+   373: 0001833c     9 OBJECT  LOCAL  DEFAULT    2 __func__.6
+   374: 00018348    10 OBJECT  LOCAL  DEFAULT    2 __func__.5
+   375: 00018354    10 OBJECT  LOCAL  DEFAULT    2 __func__.4
+   376: 00018360    11 OBJECT  LOCAL  DEFAULT    2 __func__.3
+   377: 0001836c    12 OBJECT  LOCAL  DEFAULT    2 __func__.2
+   378: 00018378    12 OBJECT  LOCAL  DEFAULT    2 __func__.1
+   379: 00018280    40 OBJECT  LOCAL  DEFAULT    2 syscalls
+   380: 00016057   264 FUNC    LOCAL  DEFAULT    1 sys_isr
+   381: 00018384     8 OBJECT  LOCAL  DEFAULT    2 __func__.0
+   382: 00000000     0 FILE    LOCAL  DEFAULT  ABS kextras.c
+   383: 0001618d    16 FUNC    LOCAL  DEFAULT    1 r_ebp
+   384: 00000000     0 FILE    LOCAL  DEFAULT  ABS blkmov.c
+   385: 00000000     0 FILE    LOCAL  DEFAULT  ABS bound.c
+   386: 00000000     0 FILE    LOCAL  DEFAULT  ABS cvtdec.c
+   387: 00000000     0 FILE    LOCAL  DEFAULT  ABS cvtdec0.c
+   388: 00000000     0 FILE    LOCAL  DEFAULT  ABS cvthex.c
+   389: 00000000     0 FILE    LOCAL  DEFAULT  ABS cvtoct.c
+   390: 00000000     0 FILE    LOCAL  DEFAULT  ABS cvtuns.c
+   391: 00000000     0 FILE    LOCAL  DEFAULT  ABS cvtuns0.c
+   392: 00000000     0 FILE    LOCAL  DEFAULT  ABS memclr.c
+   393: 00000000     0 FILE    LOCAL  DEFAULT  ABS memcpy.c
+   394: 00000000     0 FILE    LOCAL  DEFAULT  ABS memmove.c
+   395: 00000000     0 FILE    LOCAL  DEFAULT  ABS memset.c
+   396: 00000000     0 FILE    LOCAL  DEFAULT  ABS sprint.c
+   397: 00000000     0 FILE    LOCAL  DEFAULT  ABS strcmp.c
+   398: 00000000     0 FILE    LOCAL  DEFAULT  ABS strlen.c
+   399: 00000000     0 FILE    LOCAL  DEFAULT  ABS padstr.c
+   400: 00000000     0 FILE    LOCAL  DEFAULT  ABS pad.c
+   401: 00010e51   187 FUNC    GLOBAL DEFAULT    1 cio_putchar_at
+   402: 000146d7   121 FUNC    GLOBAL DEFAULT    1 sio_disable
+   403: 00013575   118 FUNC    GLOBAL DEFAULT    1 pcb_find_pid
+   404: 0001a220   512 OBJECT  GLOBAL DEFAULT    4 b512
+   405: 0001108f    50 FUNC    GLOBAL DEFAULT    1 cio_puts
+   406: 000123ef   452 FUNC    GLOBAL DEFAULT    1 km_init
+   407: 00014750   182 FUNC    GLOBAL DEFAULT    1 sio_flush
+   408: 00014a7c   381 FUNC    GLOBAL DEFAULT    1 sio_dump
+   409: 0001a626     2 OBJECT  GLOBAL DEFAULT    4 user_segment
+   410: 00016780    83 FUNC    GLOBAL DEFAULT    1 memmove
+   411: 00012c1e   291 FUNC    GLOBAL DEFAULT    1 ctx_sanity_check
+   412: 00014bf9   124 FUNC    GLOBAL DEFAULT    1 stk_init
+   413: 000134b0   118 FUNC    GLOBAL DEFAULT    1 pcb_alloc
+   414: 0001277f    33 FUNC    GLOBAL DEFAULT    1 km_page_free
+   415: 000158fb   510 FUNC    GLOBAL DEFAULT    1 sys_fork
+   416: 0001669a    46 FUNC    GLOBAL DEFAULT    1 cvtuns
+   417: 00013cbf   480 FUNC    GLOBAL DEFAULT    1 que_insert
+   418: 0001a620     4 OBJECT  GLOBAL DEFAULT    4 user_locs
+   419: 00016b88     0 NOTYPE  GLOBAL DEFAULT    1 _etext
+   420: 0001104a    69 FUNC    GLOBAL DEFAULT    1 cio_puts_at
+   421: 00013b70   126 FUNC    GLOBAL DEFAULT    1 que_alloc
+   422: 0001a658     4 OBJECT  GLOBAL DEFAULT    4 sioread
+   423: 0001a420   512 OBJECT  GLOBAL DEFAULT    4 bpanic
+   424: 000135eb   134 FUNC    GLOBAL DEFAULT    1 pcb_find_child_of
+   425: 0001a64c     4 OBJECT  GLOBAL DEFAULT    4 sleeping
+   426: 00012ab4   153 FUNC    GLOBAL DEFAULT    1 list_add
+   427: 00015bf1   362 FUNC    GLOBAL DEFAULT    1 sys_read
+   428: 000127a0   312 FUNC    GLOBAL DEFAULT    1 km_page_free_multi
+   429: 00016752    46 FUNC    GLOBAL DEFAULT    1 memcpy
+   430: 00016417   154 FUNC    GLOBAL DEFAULT    1 blkmov
+   431: 0001615f    46 FUNC    GLOBAL DEFAULT    1 sys_init
+   432: 0001a984     4 OBJECT  GLOBAL DEFAULT    4 init_pcb
+   433: 00012e33   119 FUNC    GLOBAL DEFAULT    1 ctx_dump_all
+   434: 0001302f   239 FUNC    GLOBAL DEFAULT    1 ptable_dump
+   435: 00012a39   123 FUNC    GLOBAL DEFAULT    1 km_slice_free
+   436: 00014e3a   577 FUNC    GLOBAL DEFAULT    1 stk_dump
+   437: 00011172   109 FUNC    GLOBAL DEFAULT    1 cio_clearscreen
+   438: 000136d7    69 FUNC    GLOBAL DEFAULT    1 pcb_cleanup
+   439: 00014806    10 FUNC    GLOBAL DEFAULT    1 sio_inq_length
+   440: 0001aa60     4 OBJECT  GLOBAL DEFAULT    4 sio_ready
+   441: 00013c6e    81 FUNC    GLOBAL DEFAULT    1 que_length
+   442: 0001a654     4 OBJECT  GLOBAL DEFAULT    4 blocked
+   443: 000111df   314 FUNC    GLOBAL DEFAULT    1 cio_scroll
+   444: 00010000     0 NOTYPE  GLOBAL DEFAULT    1 begtext
+   445: 00017680    32 OBJECT  GLOBAL DEFAULT    2 state_str
+   446: 00011dd2   153 FUNC    GLOBAL DEFAULT    1 clk_init
+   447: 00011959    81 FUNC    GLOBAL DEFAULT    1 cio_gets
+   448: 0001371c   251 FUNC    GLOBAL DEFAULT    1 schedule
+   449: 0001406a   291 FUNC    GLOBAL DEFAULT    1 que_remove_by
+   450: 000144d6   392 FUNC    GLOBAL DEFAULT    1 sio_init
+   451: 00015e12   222 FUNC    GLOBAL DEFAULT    1 sys_sleep
+   452: 00014d3c   254 FUNC    GLOBAL DEFAULT    1 stk_setup
+   453: 0001006f     0 NOTYPE  GLOBAL DEFAULT    1 isr_restore
+   454: 00016b66    34 FUNC    GLOBAL DEFAULT    1 pad
+   455: 00012d41   242 FUNC    GLOBAL DEFAULT    1 ctx_dump
+   456: 000167fa   629 FUNC    GLOBAL DEFAULT    1 sprint
+   457: 000165a9   107 FUNC    GLOBAL DEFAULT    1 cvthex
+   458: 0001a120   256 OBJECT  GLOBAL DEFAULT    4 b256
+   459: 000166c8   102 FUNC    GLOBAL DEFAULT    1 cvtuns0
+   460: 00013e9f   194 FUNC    GLOBAL DEFAULT    1 que_peek
+   461: 00017000     0 NOTYPE  GLOBAL DEFAULT    2 _rodata
+   462: 000161d7   190 FUNC    GLOBAL DEFAULT    1 backtrace
+   463: 000154a2    37 FUNC    GLOBAL DEFAULT    1 install_isr
+   464: 000176a0    15 OBJECT  GLOBAL DEFAULT    2 prio_str
+   465: 0001296c   205 FUNC    GLOBAL DEFAULT    1 km_slice_alloc
+   466: 0001267c   259 FUNC    GLOBAL DEFAULT    1 km_page_alloc
+   467: 00015d5b   183 FUNC    GLOBAL DEFAULT    1 sys_write
+   468: 000164b1    36 FUNC    GLOBAL DEFAULT    1 bound
+   469: 0001a10c     4 OBJECT  GLOBAL DEFAULT    4 system_time
+   470: 00010000     0 NOTYPE  GLOBAL DEFAULT    1 _start
+   471: 000110c1    57 FUNC    GLOBAL DEFAULT    1 cio_write
+   472: 00010d4f   162 FUNC    GLOBAL DEFAULT    1 cio_setscroll
+   473: 00014c75   102 FUNC    GLOBAL DEFAULT    1 stk_alloc
+   474: 00013bee   128 FUNC    GLOBAL DEFAULT    1 que_free
+   475: 0001a65c     4 OBJECT  GLOBAL DEFAULT    4 current
+   476: 000125b3   201 FUNC    GLOBAL DEFAULT    1 km_dump
+   477: 00014982   167 FUNC    GLOBAL DEFAULT    1 sio_write
+   478: 0001a000     4 OBJECT  GLOBAL DEFAULT    4 cio_ready
+   479: 00016518   145 FUNC    GLOBAL DEFAULT    1 cvtdec0
+   480: 0001a624     2 OBJECT  GLOBAL DEFAULT    4 user_offset
+   481: 00015473    28 FUNC    GLOBAL DEFAULT    1 panic
+   482: 0001a628     2 OBJECT  GLOBAL DEFAULT    4 user_sectors
+   483: 00013817   158 FUNC    GLOBAL DEFAULT    1 dispatch
+   484: 00012eaa   389 FUNC    GLOBAL DEFAULT    1 pcb_dump
+   485: 00013215   667 FUNC    GLOBAL DEFAULT    1 pcb_init
+   486: 0001a650     4 OBJECT  GLOBAL DEFAULT    4 zombie
+   487: 000119d2   171 FUNC    GLOBAL DEFAULT    1 cio_init
+   488: 0001845c    17 OBJECT  GLOBAL DEFAULT    2 hexdigits
+   489: 0001a000     0 NOTYPE  GLOBAL DEFAULT    4 __bss_start
+   490: 000167d3    39 FUNC    GLOBAL DEFAULT    1 memset
+   491: 00011f32   949 FUNC    GLOBAL DEFAULT    1 main
+   492: 0001548f    19 FUNC    GLOBAL DEFAULT    1 init_interrupts
+   493: 00014871   155 FUNC    GLOBAL DEFAULT    1 sio_read
+   494: 0001b2c0  1024 OBJECT  GLOBAL DEFAULT    4 isr_table
+   495: 0001619d    58 FUNC    GLOBAL DEFAULT    1 put_char_or_code
+   496: 00011a7d    44 FUNC    GLOBAL DEFAULT    1 cio_opt_set
+   497: 00014a29    45 FUNC    GLOBAL DEFAULT    1 sio_puts
+   498: 00016a6f    54 FUNC    GLOBAL DEFAULT    1 strcmp
+   499: 0001a980     4 OBJECT  GLOBAL DEFAULT    4 next_pid
+   500: 00016295    44 FUNC    GLOBAL DEFAULT    1 delay
+   501: 00016ac9   157 FUNC    GLOBAL DEFAULT    1 padstr
+   502: 00013671   102 FUNC    GLOBAL DEFAULT    1 pcb_zombify
+   503: 00013b1f    81 FUNC    GLOBAL DEFAULT    1 que_init
+   504: 00014810    97 FUNC    GLOBAL DEFAULT    1 sio_readc
+   505: 000162c1   342 FUNC    GLOBAL DEFAULT    1 kpanic
+   506: 000116e7    32 FUNC    GLOBAL DEFAULT    1 cio_printf_at
+   507: 0001b2b8     4 OBJECT  GLOBAL DEFAULT    4 kesp
+   508: 000119aa    40 FUNC    GLOBAL DEFAULT    1 cio_input_queue
+   509: 00013526    79 FUNC    GLOBAL DEFAULT    1 pcb_free
+   510: 00011707    28 FUNC    GLOBAL DEFAULT    1 cio_printf
+   511: 00019000     0 NOTYPE  GLOBAL DEFAULT    3 _data
+   512: 00015f46    86 FUNC    GLOBAL DEFAULT    1 sys_gettime
+   513: 00010f0c   318 FUNC    GLOBAL DEFAULT    1 cio_putchar
+   514: 00016614   134 FUNC    GLOBAL DEFAULT    1 cvtoct
+   515: 00015f9c   187 FUNC    GLOBAL DEFAULT    1 sys_getprio
+   516: 00014a56    38 FUNC    GLOBAL DEFAULT    1 sio_putchar
+   517: 00015af9   248 FUNC    GLOBAL DEFAULT    1 sys_exec
+   518: 00014cdb    97 FUNC    GLOBAL DEFAULT    1 stk_free
+   519: 0001950c     0 NOTYPE  GLOBAL DEFAULT    3 _edata
+   520: 000164d5    67 FUNC    GLOBAL DEFAULT    1 cvtdec
+   521: 00019000     0 NOTYPE  GLOBAL DEFAULT    3 isr_stub_table
+   522: 0001b6c0     0 NOTYPE  GLOBAL DEFAULT    4 _end
+   523: 00015809   242 FUNC    GLOBAL DEFAULT    1 sys_wait
+   524: 00015574   661 FUNC    GLOBAL DEFAULT    1 sys_exit
+   525: 0001311e   247 FUNC    GLOBAL DEFAULT    1 ptable_dump_stats
+   526: 0001a660   800 OBJECT  GLOBAL DEFAULT    4 ptable
+   527: 0001672e    36 FUNC    GLOBAL DEFAULT    1 memclr
+   528: 00016aa5    36 FUNC    GLOBAL DEFAULT    1 strlen
+   529: 0001a640    12 OBJECT  GLOBAL DEFAULT    4 ready
+   530: 00010df1    96 FUNC    GLOBAL DEFAULT    1 cio_moveto
+   531: 000110fa   120 FUNC    GLOBAL DEFAULT    1 cio_clearscroll
+   532: 00015ef0    86 FUNC    GLOBAL DEFAULT    1 sys_getpid
+   533: 00013a08   279 FUNC    GLOBAL DEFAULT    1 que_dump
+   534: 0001465e   121 FUNC    GLOBAL DEFAULT    1 sio_enable
+   535: 0001490c   118 FUNC    GLOBAL DEFAULT    1 sio_writec
+   536: 00013f61   265 FUNC    GLOBAL DEFAULT    1 que_remove
+   537: 000118b3   166 FUNC    GLOBAL DEFAULT    1 cio_getchar
+   538: 00012b4d   104 FUNC    GLOBAL DEFAULT    1 list_remove
+   539: 00011aa9    44 FUNC    GLOBAL DEFAULT    1 cio_opt_clear
+   540: 0001b2b4     4 OBJECT  GLOBAL DEFAULT    4 kstack
+   541: 000184c8     0 NOTYPE  GLOBAL DEFAULT    2 _erodata
+
+No version information found in this file.

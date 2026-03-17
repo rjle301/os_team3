@@ -1,0 +1,6 @@
+elf.h -         ELF file data structures and declarations.
+
+vmlayout.txt -  A description of the memory layout of user process in the
+                20245 version of the OS.
+
+x86/ -          VM-related header files for the x86 architecture.

@@ -1,0 +1,764 @@
+Archive member included to satisfy reference by file (symbol)
+
+build/lib/libuser.a(uextras.o)
+                              build/user/init.o (parseArgs)
+build/lib/libuser.a(usys.o)   build/user/progABC.o (exit)
+build/lib/libcommon.a(ccvthex.o)
+                              build/lib/libuser.a(uextras.o) (hexdigits)
+build/lib/libcommon.a(csprint.o)
+                              build/user/init.o (sprint)
+build/lib/libcommon.a(cstr2int.o)
+                              build/user/progABC.o (str2int)
+build/lib/libcommon.a(cstrchr.o)
+                              build/lib/libcommon.a(cstr2int.o) (strchr)
+build/lib/libcommon.a(cstrlen.o)
+                              build/lib/libuser.a(uextras.o) (strlen)
+build/lib/libcommon.a(ccvtdec.o)
+                              build/lib/libcommon.a(csprint.o) (cvtdec)
+build/lib/libcommon.a(ccvtdec0.o)
+                              build/lib/libcommon.a(ccvtdec.o) (cvtdec0)
+build/lib/libcommon.a(ccvtoct.o)
+                              build/lib/libcommon.a(csprint.o) (cvtoct)
+build/lib/libcommon.a(ccvtuns.o)
+                              build/lib/libcommon.a(csprint.o) (cvtuns)
+build/lib/libcommon.a(ccvtuns0.o)
+                              build/lib/libcommon.a(ccvtuns.o) (cvtuns0)
+build/lib/libcommon.a(cpadstr.o)
+                              build/lib/libcommon.a(csprint.o) (padstr)
+build/lib/libcommon.a(cpad.o)
+                              build/lib/libcommon.a(cpadstr.o) (pad)
+
+Discarded input sections
+
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/locations.o
+ .comment       0x0000000000000000       0x2e build/user/init.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/init.o
+ .eh_frame      0x0000000000000000       0x54 build/user/init.o
+ .comment       0x0000000000000000       0x2e build/user/idle.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/idle.o
+ .eh_frame      0x0000000000000000       0x34 build/user/idle.o
+ .comment       0x0000000000000000       0x2e build/user/progABC.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progABC.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progABC.o
+ .comment       0x0000000000000000       0x2e build/user/progDE.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progDE.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progDE.o
+ .comment       0x0000000000000000       0x2e build/user/progFG.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progFG.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progFG.o
+ .comment       0x0000000000000000       0x2e build/user/progH.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progH.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progH.o
+ .comment       0x0000000000000000       0x2e build/user/progI.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progI.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progI.o
+ .comment       0x0000000000000000       0x2e build/user/progJ.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progJ.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progJ.o
+ .comment       0x0000000000000000       0x2e build/user/progKL.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progKL.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progKL.o
+ .comment       0x0000000000000000       0x2e build/user/progMN.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progMN.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progMN.o
+ .comment       0x0000000000000000       0x2e build/user/progP.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progP.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progP.o
+ .comment       0x0000000000000000       0x2e build/user/progQ.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progQ.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progQ.o
+ .comment       0x0000000000000000       0x2e build/user/progR.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progR.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progR.o
+ .comment       0x0000000000000000       0x2e build/user/progS.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progS.o
+ .eh_frame      0x0000000000000000       0x34 build/user/progS.o
+ .comment       0x0000000000000000       0x2e build/user/progTUV.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progTUV.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progTUV.o
+ .comment       0x0000000000000000       0x2e build/user/progW.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progW.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progW.o
+ .comment       0x0000000000000000       0x2e build/user/progX.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progX.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progX.o
+ .comment       0x0000000000000000       0x2e build/user/progY.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progY.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progY.o
+ .comment       0x0000000000000000       0x2e build/user/progZ.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/user/progZ.o
+ .eh_frame      0x0000000000000000       0x38 build/user/progZ.o
+ .comment       0x0000000000000000       0x2e build/lib/libuser.a(uextras.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libuser.a(uextras.o)
+ .eh_frame      0x0000000000000000      0x138 build/lib/libuser.a(uextras.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libuser.a(usys.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(ccvthex.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(ccvthex.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(ccvthex.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(csprint.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(csprint.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(csprint.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(cstr2int.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(cstr2int.o)
+ .eh_frame      0x0000000000000000       0x48 build/lib/libcommon.a(cstr2int.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(cstrchr.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(cstrchr.o)
+ .eh_frame      0x0000000000000000       0x60 build/lib/libcommon.a(cstrchr.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(cstrlen.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(cstrlen.o)
+ .eh_frame      0x0000000000000000       0x3c build/lib/libcommon.a(cstrlen.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(ccvtdec.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(ccvtdec.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(ccvtdec.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(ccvtdec0.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(ccvtdec0.o)
+ .eh_frame      0x0000000000000000       0x3c build/lib/libcommon.a(ccvtdec0.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(ccvtoct.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(ccvtoct.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(ccvtoct.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(ccvtuns.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(ccvtuns.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(ccvtuns.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(ccvtuns0.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(ccvtuns0.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(ccvtuns0.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(cpadstr.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(cpadstr.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(cpadstr.o)
+ .comment       0x0000000000000000       0x2e build/lib/libcommon.a(cpad.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/libcommon.a(cpad.o)
+ .eh_frame      0x0000000000000000       0x38 build/lib/libcommon.a(cpad.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000000030000                . = 0x30000
+
+.text           0x0000000000030000     0x31b1
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x0000000000030000        0x8 build/user/locations.o
+                0x0000000000030000                begtext
+                0x0000000000030000                locations
+                0x0000000000030000                _start
+ .text          0x0000000000030008      0x2f3 build/user/init.o
+                0x0000000000030112                init
+ .text          0x00000000000302fb       0x9f build/user/idle.o
+                0x00000000000302fb                idle
+ .text          0x000000000003039a      0x26a build/user/progABC.o
+                0x000000000003039a                progABC
+ .text          0x0000000000030604      0x1f8 build/user/progDE.o
+                0x0000000000030604                progDE
+ .text          0x00000000000307fc      0x1ee build/user/progFG.o
+                0x00000000000307fc                progFG
+ .text          0x00000000000309ea      0x1ef build/user/progH.o
+                0x00000000000309ea                progH
+ .text          0x0000000000030bd9      0x2b0 build/user/progI.o
+                0x0000000000030bd9                progI
+ .text          0x0000000000030e89      0x1bf build/user/progJ.o
+                0x0000000000030e89                progJ
+ .text          0x0000000000031048      0x1dd build/user/progKL.o
+                0x0000000000031048                progKL
+ .text          0x0000000000031225      0x23e build/user/progMN.o
+                0x0000000000031225                progMN
+ .text          0x0000000000031463      0x1e7 build/user/progP.o
+                0x0000000000031463                progP
+ .text          0x000000000003164a      0x16f build/user/progQ.o
+                0x000000000003164a                progQ
+ .text          0x00000000000317b9      0x275 build/user/progR.o
+                0x00000000000317b9                progR
+ .text          0x0000000000031a2e      0x1b1 build/user/progS.o
+                0x0000000000031a2e                progS
+ .text          0x0000000000031bdf      0x335 build/user/progTUV.o
+                0x0000000000031bdf                progTUV
+ .text          0x0000000000031f14      0x239 build/user/progW.o
+                0x0000000000031f14                progW
+ .text          0x000000000003214d      0x1bd build/user/progX.o
+                0x000000000003214d                progX
+ .text          0x000000000003230a      0x1c9 build/user/progY.o
+                0x000000000003230a                progY
+ .text          0x00000000000324d3      0x1ec build/user/progZ.o
+                0x00000000000324d3                progZ
+ .text          0x00000000000326bf      0x344 build/lib/libuser.a(uextras.o)
+                0x00000000000326bf                parseArgs
+                0x0000000000032762                expand_args
+                0x0000000000032868                spawn
+                0x0000000000032931                cwritech
+                0x0000000000032952                cwrites
+                0x000000000003297f                cwrite
+                0x000000000003299a                swritech
+                0x00000000000329bb                swrites
+                0x00000000000329e8                swrite
+ .text          0x0000000000032a03       0x63 build/lib/libuser.a(usys.o)
+                0x0000000000032a03                exit
+                0x0000000000032a0b                wait
+                0x0000000000032a13                fork
+                0x0000000000032a1b                exec
+                0x0000000000032a23                read
+                0x0000000000032a2b                write
+                0x0000000000032a33                sleep
+                0x0000000000032a3b                getpid
+                0x0000000000032a43                gettime
+                0x0000000000032a4b                getprio
+                0x0000000000032a53                bogus
+                0x0000000000032a5b                fake_exit
+ .text          0x0000000000032a66       0x6b build/lib/libcommon.a(ccvthex.o)
+                0x0000000000032a66                cvthex
+ .text          0x0000000000032ad1      0x275 build/lib/libcommon.a(csprint.o)
+                0x0000000000032ad1                sprint
+ .text          0x0000000000032d46      0x113 build/lib/libcommon.a(cstr2int.o)
+                0x0000000000032d46                str2int
+ .text          0x0000000000032e59       0x87 build/lib/libcommon.a(cstrchr.o)
+                0x0000000000032e59                strchr
+                0x0000000000032e89                strrchr
+ .text          0x0000000000032ee0       0x24 build/lib/libcommon.a(cstrlen.o)
+                0x0000000000032ee0                strlen
+ .text          0x0000000000032f04       0x43 build/lib/libcommon.a(ccvtdec.o)
+                0x0000000000032f04                cvtdec
+ .text          0x0000000000032f47       0x91 build/lib/libcommon.a(ccvtdec0.o)
+                0x0000000000032f47                cvtdec0
+ .text          0x0000000000032fd8       0x86 build/lib/libcommon.a(ccvtoct.o)
+                0x0000000000032fd8                cvtoct
+ .text          0x000000000003305e       0x2e build/lib/libcommon.a(ccvtuns.o)
+                0x000000000003305e                cvtuns
+ .text          0x000000000003308c       0x66 build/lib/libcommon.a(ccvtuns0.o)
+                0x000000000003308c                cvtuns0
+ .text          0x00000000000330f2       0x9d build/lib/libcommon.a(cpadstr.o)
+                0x00000000000330f2                padstr
+ .text          0x000000000003318f       0x22 build/lib/libcommon.a(cpad.o)
+                0x000000000003318f                pad
+                [!provide]                        PROVIDE (_etext = .)
+
+.iplt           0x00000000000331b1        0x0
+ .iplt          0x00000000000331b1        0x0 build/user/locations.o
+                0x0000000000034000                . = ALIGN (0x1000)
+                [!provide]                        PROVIDE (_rodata = .)
+
+.rodata         0x0000000000034000      0x778
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x0000000000034000      0x22a build/user/init.o
+ .rodata        0x000000000003422a       0x19 build/user/idle.o
+ *fill*         0x0000000000034243        0x1 
+ .rodata        0x0000000000034244       0x7b build/user/progABC.o
+ .rodata        0x00000000000342bf       0x5b build/user/progDE.o
+ .rodata        0x000000000003431a       0x3f build/user/progFG.o
+ *fill*         0x0000000000034359        0x3 
+ .rodata        0x000000000003435c       0x4f build/user/progH.o
+ .rodata        0x00000000000343ab       0x44 build/user/progI.o
+ .rodata        0x00000000000343ef       0x30 build/user/progJ.o
+ .rodata        0x000000000003441f       0x33 build/user/progKL.o
+ .rodata        0x0000000000034452       0x39 build/user/progMN.o
+ .rodata        0x000000000003448b       0x27 build/user/progP.o
+ *fill*         0x00000000000344b2        0x2 
+ .rodata        0x00000000000344b4       0x4f build/user/progQ.o
+ .rodata        0x0000000000034503       0x43 build/user/progR.o
+ .rodata        0x0000000000034546       0x35 build/user/progS.o
+ *fill*         0x000000000003457b        0x1 
+ .rodata        0x000000000003457c       0xb8 build/user/progTUV.o
+ .rodata        0x0000000000034634       0x38 build/user/progW.o
+ .rodata        0x000000000003466c       0x29 build/user/progX.o
+ .rodata        0x0000000000034695       0x28 build/user/progY.o
+ .rodata        0x00000000000346bd       0x28 build/user/progZ.o
+ *fill*         0x00000000000346e5        0x3 
+ .rodata        0x00000000000346e8       0x21 build/lib/libuser.a(uextras.o)
+ *fill*         0x0000000000034709        0x3 
+ .rodata        0x000000000003470c       0x11 build/lib/libcommon.a(ccvthex.o)
+                0x000000000003470c                hexdigits
+ *fill*         0x000000000003471d        0x3 
+ .rodata        0x0000000000034720       0x58 build/lib/libcommon.a(csprint.o)
+                [!provide]                        PROVIDE (_erodata = .)
+
+.rel.dyn        0x0000000000034778        0x0
+ .rel.got       0x0000000000034778        0x0 build/user/locations.o
+ .rel.iplt      0x0000000000034778        0x0 build/user/locations.o
+                0x0000000000035000                . = ALIGN (0x1000)
+
+.data           0x0000000000035000        0x1
+ *(.data)
+ .data          0x0000000000035000        0x0 build/user/locations.o
+ .data          0x0000000000035000        0x1 build/user/init.o
+ .data          0x0000000000035001        0x0 build/user/idle.o
+ .data          0x0000000000035001        0x0 build/user/progABC.o
+ .data          0x0000000000035001        0x0 build/user/progDE.o
+ .data          0x0000000000035001        0x0 build/user/progFG.o
+ .data          0x0000000000035001        0x0 build/user/progH.o
+ .data          0x0000000000035001        0x0 build/user/progI.o
+ .data          0x0000000000035001        0x0 build/user/progJ.o
+ .data          0x0000000000035001        0x0 build/user/progKL.o
+ .data          0x0000000000035001        0x0 build/user/progMN.o
+ .data          0x0000000000035001        0x0 build/user/progP.o
+ .data          0x0000000000035001        0x0 build/user/progQ.o
+ .data          0x0000000000035001        0x0 build/user/progR.o
+ .data          0x0000000000035001        0x0 build/user/progS.o
+ .data          0x0000000000035001        0x0 build/user/progTUV.o
+ .data          0x0000000000035001        0x0 build/user/progW.o
+ .data          0x0000000000035001        0x0 build/user/progX.o
+ .data          0x0000000000035001        0x0 build/user/progY.o
+ .data          0x0000000000035001        0x0 build/user/progZ.o
+ .data          0x0000000000035001        0x0 build/lib/libuser.a(uextras.o)
+ .data          0x0000000000035001        0x0 build/lib/libuser.a(usys.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(ccvthex.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(csprint.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(cstr2int.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(cstrchr.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(cstrlen.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(ccvtdec.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(ccvtdec0.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(ccvtoct.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(ccvtuns.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(ccvtuns0.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(cpadstr.o)
+ .data          0x0000000000035001        0x0 build/lib/libcommon.a(cpad.o)
+                [!provide]                        PROVIDE (_edata = .)
+
+.got            0x0000000000035004        0x0
+ .got           0x0000000000035004        0x0 build/user/locations.o
+
+.got.plt        0x0000000000035004        0x0
+ .got.plt       0x0000000000035004        0x0 build/user/locations.o
+
+.igot.plt       0x0000000000035004        0x0
+ .igot.plt      0x0000000000035004        0x0 build/user/locations.o
+                0x0000000000036000                . = ALIGN (0x1000)
+                [!provide]                        PROVIDE (__bss_start = .)
+
+.bss            0x0000000000036000       0x38
+ *(.bss)
+ .bss           0x0000000000036000        0x0 build/user/locations.o
+ .bss           0x0000000000036000       0x38 build/user/init.o
+ .bss           0x0000000000036038        0x0 build/user/idle.o
+ .bss           0x0000000000036038        0x0 build/user/progABC.o
+ .bss           0x0000000000036038        0x0 build/user/progDE.o
+ .bss           0x0000000000036038        0x0 build/user/progFG.o
+ .bss           0x0000000000036038        0x0 build/user/progH.o
+ .bss           0x0000000000036038        0x0 build/user/progI.o
+ .bss           0x0000000000036038        0x0 build/user/progJ.o
+ .bss           0x0000000000036038        0x0 build/user/progKL.o
+ .bss           0x0000000000036038        0x0 build/user/progMN.o
+ .bss           0x0000000000036038        0x0 build/user/progP.o
+ .bss           0x0000000000036038        0x0 build/user/progQ.o
+ .bss           0x0000000000036038        0x0 build/user/progR.o
+ .bss           0x0000000000036038        0x0 build/user/progS.o
+ .bss           0x0000000000036038        0x0 build/user/progTUV.o
+ .bss           0x0000000000036038        0x0 build/user/progW.o
+ .bss           0x0000000000036038        0x0 build/user/progX.o
+ .bss           0x0000000000036038        0x0 build/user/progY.o
+ .bss           0x0000000000036038        0x0 build/user/progZ.o
+ .bss           0x0000000000036038        0x0 build/lib/libuser.a(uextras.o)
+ .bss           0x0000000000036038        0x0 build/lib/libuser.a(usys.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(ccvthex.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(csprint.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(cstr2int.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(cstrchr.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(cstrlen.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(ccvtdec.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(ccvtdec0.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(ccvtoct.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(ccvtuns.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(ccvtuns0.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(cpadstr.o)
+ .bss           0x0000000000036038        0x0 build/lib/libcommon.a(cpad.o)
+                [!provide]                        PROVIDE (_end = .)
+
+/DISCARD/
+ *(.stab .stab_info .stabstr .eh_frame .note.GNU-stack .note.gnu.property .comment)
+LOAD build/user/locations.o
+LOAD build/user/init.o
+LOAD build/user/idle.o
+LOAD build/user/progABC.o
+LOAD build/user/progDE.o
+LOAD build/user/progFG.o
+LOAD build/user/progH.o
+LOAD build/user/progI.o
+LOAD build/user/progJ.o
+LOAD build/user/progKL.o
+LOAD build/user/progMN.o
+LOAD build/user/progP.o
+LOAD build/user/progQ.o
+LOAD build/user/progR.o
+LOAD build/user/progS.o
+LOAD build/user/progTUV.o
+LOAD build/user/progW.o
+LOAD build/user/progX.o
+LOAD build/user/progY.o
+LOAD build/user/progZ.o
+LOAD build/lib/libuser.a
+LOAD build/lib/libcommon.a
+OUTPUT(build/user/user elf32-i386)
+
+.debug_info     0x0000000000000000     0x3e7e
+ .debug_info    0x0000000000000000      0x42c build/user/init.o
+ .debug_info    0x000000000000042c      0x1bf build/user/idle.o
+ .debug_info    0x00000000000005eb      0x24a build/user/progABC.o
+ .debug_info    0x0000000000000835      0x1e2 build/user/progDE.o
+ .debug_info    0x0000000000000a17      0x232 build/user/progFG.o
+ .debug_info    0x0000000000000c49      0x269 build/user/progH.o
+ .debug_info    0x0000000000000eb2      0x331 build/user/progI.o
+ .debug_info    0x00000000000011e3      0x255 build/user/progJ.o
+ .debug_info    0x0000000000001438      0x29b build/user/progKL.o
+ .debug_info    0x00000000000016d3      0x2c0 build/user/progMN.o
+ .debug_info    0x0000000000001993      0x24a build/user/progP.o
+ .debug_info    0x0000000000001bdd      0x1af build/user/progQ.o
+ .debug_info    0x0000000000001d8c      0x28f build/user/progR.o
+ .debug_info    0x000000000000201b      0x1dc build/user/progS.o
+ .debug_info    0x00000000000021f7      0x357 build/user/progTUV.o
+ .debug_info    0x000000000000254e      0x26c build/user/progW.o
+ .debug_info    0x00000000000027ba      0x214 build/user/progX.o
+ .debug_info    0x00000000000029ce      0x22f build/user/progY.o
+ .debug_info    0x0000000000002bfd      0x22f build/user/progZ.o
+ .debug_info    0x0000000000002e2c      0x43b build/lib/libuser.a(uextras.o)
+ .debug_info    0x0000000000003267       0x24 build/lib/libuser.a(usys.o)
+ .debug_info    0x000000000000328b      0x132 build/lib/libcommon.a(ccvthex.o)
+ .debug_info    0x00000000000033bd      0x1c4 build/lib/libcommon.a(csprint.o)
+ .debug_info    0x0000000000003581      0x135 build/lib/libcommon.a(cstr2int.o)
+ .debug_info    0x00000000000036b6      0x10a build/lib/libcommon.a(cstrchr.o)
+ .debug_info    0x00000000000037c0       0xb4 build/lib/libcommon.a(cstrlen.o)
+ .debug_info    0x0000000000003874       0xd7 build/lib/libcommon.a(ccvtdec.o)
+ .debug_info    0x000000000000394b       0xb0 build/lib/libcommon.a(ccvtdec0.o)
+ .debug_info    0x00000000000039fb       0xe3 build/lib/libcommon.a(ccvtoct.o)
+ .debug_info    0x0000000000003ade       0xd7 build/lib/libcommon.a(ccvtuns.o)
+ .debug_info    0x0000000000003bb5       0xd8 build/lib/libcommon.a(ccvtuns0.o)
+ .debug_info    0x0000000000003c8d      0x145 build/lib/libcommon.a(cpadstr.o)
+ .debug_info    0x0000000000003dd2       0xac build/lib/libcommon.a(cpad.o)
+
+.debug_abbrev   0x0000000000000000     0x2068
+ .debug_abbrev  0x0000000000000000      0x18e build/user/init.o
+ .debug_abbrev  0x000000000000018e      0x10c build/user/idle.o
+ .debug_abbrev  0x000000000000029a      0x121 build/user/progABC.o
+ .debug_abbrev  0x00000000000003bb      0x10a build/user/progDE.o
+ .debug_abbrev  0x00000000000004c5      0x121 build/user/progFG.o
+ .debug_abbrev  0x00000000000005e6      0x11b build/user/progH.o
+ .debug_abbrev  0x0000000000000701      0x129 build/user/progI.o
+ .debug_abbrev  0x000000000000082a      0x109 build/user/progJ.o
+ .debug_abbrev  0x0000000000000933      0x120 build/user/progKL.o
+ .debug_abbrev  0x0000000000000a53      0x120 build/user/progMN.o
+ .debug_abbrev  0x0000000000000b73      0x136 build/user/progP.o
+ .debug_abbrev  0x0000000000000ca9      0x115 build/user/progQ.o
+ .debug_abbrev  0x0000000000000dbe      0x15d build/user/progR.o
+ .debug_abbrev  0x0000000000000f1b       0xfd build/user/progS.o
+ .debug_abbrev  0x0000000000001018      0x120 build/user/progTUV.o
+ .debug_abbrev  0x0000000000001138      0x137 build/user/progW.o
+ .debug_abbrev  0x000000000000126f      0x131 build/user/progX.o
+ .debug_abbrev  0x00000000000013a0      0x131 build/user/progY.o
+ .debug_abbrev  0x00000000000014d1      0x131 build/user/progZ.o
+ .debug_abbrev  0x0000000000001602      0x1bc build/lib/libuser.a(uextras.o)
+ .debug_abbrev  0x00000000000017be       0x14 build/lib/libuser.a(usys.o)
+ .debug_abbrev  0x00000000000017d2       0xed build/lib/libcommon.a(ccvthex.o)
+ .debug_abbrev  0x00000000000018bf       0xe4 build/lib/libcommon.a(csprint.o)
+ .debug_abbrev  0x00000000000019a3       0xf1 build/lib/libcommon.a(cstr2int.o)
+ .debug_abbrev  0x0000000000001a94       0xc3 build/lib/libcommon.a(cstrchr.o)
+ .debug_abbrev  0x0000000000001b57       0x88 build/lib/libcommon.a(cstrlen.o)
+ .debug_abbrev  0x0000000000001bdf       0xae build/lib/libcommon.a(ccvtdec.o)
+ .debug_abbrev  0x0000000000001c8d       0x81 build/lib/libcommon.a(ccvtdec0.o)
+ .debug_abbrev  0x0000000000001d0e       0xa2 build/lib/libcommon.a(ccvtoct.o)
+ .debug_abbrev  0x0000000000001db0       0xae build/lib/libcommon.a(ccvtuns.o)
+ .debug_abbrev  0x0000000000001e5e       0xae build/lib/libcommon.a(ccvtuns0.o)
+ .debug_abbrev  0x0000000000001f0c       0xea build/lib/libcommon.a(cpadstr.o)
+ .debug_abbrev  0x0000000000001ff6       0x72 build/lib/libcommon.a(cpad.o)
+
+.debug_aranges  0x0000000000000000      0x420
+ .debug_aranges
+                0x0000000000000000       0x20 build/user/init.o
+ .debug_aranges
+                0x0000000000000020       0x20 build/user/idle.o
+ .debug_aranges
+                0x0000000000000040       0x20 build/user/progABC.o
+ .debug_aranges
+                0x0000000000000060       0x20 build/user/progDE.o
+ .debug_aranges
+                0x0000000000000080       0x20 build/user/progFG.o
+ .debug_aranges
+                0x00000000000000a0       0x20 build/user/progH.o
+ .debug_aranges
+                0x00000000000000c0       0x20 build/user/progI.o
+ .debug_aranges
+                0x00000000000000e0       0x20 build/user/progJ.o
+ .debug_aranges
+                0x0000000000000100       0x20 build/user/progKL.o
+ .debug_aranges
+                0x0000000000000120       0x20 build/user/progMN.o
+ .debug_aranges
+                0x0000000000000140       0x20 build/user/progP.o
+ .debug_aranges
+                0x0000000000000160       0x20 build/user/progQ.o
+ .debug_aranges
+                0x0000000000000180       0x20 build/user/progR.o
+ .debug_aranges
+                0x00000000000001a0       0x20 build/user/progS.o
+ .debug_aranges
+                0x00000000000001c0       0x20 build/user/progTUV.o
+ .debug_aranges
+                0x00000000000001e0       0x20 build/user/progW.o
+ .debug_aranges
+                0x0000000000000200       0x20 build/user/progX.o
+ .debug_aranges
+                0x0000000000000220       0x20 build/user/progY.o
+ .debug_aranges
+                0x0000000000000240       0x20 build/user/progZ.o
+ .debug_aranges
+                0x0000000000000260       0x20 build/lib/libuser.a(uextras.o)
+ .debug_aranges
+                0x0000000000000280       0x20 build/lib/libuser.a(usys.o)
+ .debug_aranges
+                0x00000000000002a0       0x20 build/lib/libcommon.a(ccvthex.o)
+ .debug_aranges
+                0x00000000000002c0       0x20 build/lib/libcommon.a(csprint.o)
+ .debug_aranges
+                0x00000000000002e0       0x20 build/lib/libcommon.a(cstr2int.o)
+ .debug_aranges
+                0x0000000000000300       0x20 build/lib/libcommon.a(cstrchr.o)
+ .debug_aranges
+                0x0000000000000320       0x20 build/lib/libcommon.a(cstrlen.o)
+ .debug_aranges
+                0x0000000000000340       0x20 build/lib/libcommon.a(ccvtdec.o)
+ .debug_aranges
+                0x0000000000000360       0x20 build/lib/libcommon.a(ccvtdec0.o)
+ .debug_aranges
+                0x0000000000000380       0x20 build/lib/libcommon.a(ccvtoct.o)
+ .debug_aranges
+                0x00000000000003a0       0x20 build/lib/libcommon.a(ccvtuns.o)
+ .debug_aranges
+                0x00000000000003c0       0x20 build/lib/libcommon.a(ccvtuns0.o)
+ .debug_aranges
+                0x00000000000003e0       0x20 build/lib/libcommon.a(cpadstr.o)
+ .debug_aranges
+                0x0000000000000400       0x20 build/lib/libcommon.a(cpad.o)
+
+.debug_line     0x0000000000000000     0x1ce4
+ .debug_line    0x0000000000000000      0x135 build/user/init.o
+ .debug_line    0x0000000000000135       0x88 build/user/idle.o
+ .debug_line    0x00000000000001bd      0x10f build/user/progABC.o
+ .debug_line    0x00000000000002cc       0xf3 build/user/progDE.o
+ .debug_line    0x00000000000003bf       0xf9 build/user/progFG.o
+ .debug_line    0x00000000000004b8       0xf9 build/user/progH.o
+ .debug_line    0x00000000000005b1      0x146 build/user/progI.o
+ .debug_line    0x00000000000006f7       0xee build/user/progJ.o
+ .debug_line    0x00000000000007e5      0x105 build/user/progKL.o
+ .debug_line    0x00000000000008ea      0x11c build/user/progMN.o
+ .debug_line    0x0000000000000a06       0xfb build/user/progP.o
+ .debug_line    0x0000000000000b01       0xbc build/user/progQ.o
+ .debug_line    0x0000000000000bbd       0xff build/user/progR.o
+ .debug_line    0x0000000000000cbc       0xdd build/user/progS.o
+ .debug_line    0x0000000000000d99      0x15a build/user/progTUV.o
+ .debug_line    0x0000000000000ef3      0x111 build/user/progW.o
+ .debug_line    0x0000000000001004       0xea build/user/progX.o
+ .debug_line    0x00000000000010ee       0xef build/user/progY.o
+ .debug_line    0x00000000000011dd       0xf7 build/user/progZ.o
+ .debug_line    0x00000000000012d4      0x20a build/lib/libuser.a(uextras.o)
+ .debug_line    0x00000000000014de       0x59 build/lib/libuser.a(usys.o)
+ .debug_line    0x0000000000001537       0xa5 build/lib/libcommon.a(ccvthex.o)
+ .debug_line    0x00000000000015dc      0x125 build/lib/libcommon.a(csprint.o)
+ .debug_line    0x0000000000001701      0x13b build/lib/libcommon.a(cstr2int.o)
+ .debug_line    0x000000000000183c       0xae build/lib/libcommon.a(cstrchr.o)
+ .debug_line    0x00000000000018ea       0x69 build/lib/libcommon.a(cstrlen.o)
+ .debug_line    0x0000000000001953       0x71 build/lib/libcommon.a(ccvtdec.o)
+ .debug_line    0x00000000000019c4       0x74 build/lib/libcommon.a(ccvtdec0.o)
+ .debug_line    0x0000000000001a38       0xb5 build/lib/libcommon.a(ccvtoct.o)
+ .debug_line    0x0000000000001aed       0x69 build/lib/libcommon.a(ccvtuns.o)
+ .debug_line    0x0000000000001b56       0x78 build/lib/libcommon.a(ccvtuns0.o)
+ .debug_line    0x0000000000001bce       0xb5 build/lib/libcommon.a(cpadstr.o)
+ .debug_line    0x0000000000001c83       0x61 build/lib/libcommon.a(cpad.o)
+
+.debug_str      0x0000000000000000      0x404
+ .debug_str     0x0000000000000000      0x212 build/user/init.o
+                                        0x243 (size before relaxing)
+ .debug_str     0x0000000000000212       0x23 build/user/idle.o
+                                        0x180 (size before relaxing)
+ .debug_str     0x0000000000000235       0x1c build/user/progABC.o
+                                        0x17b (size before relaxing)
+ .debug_str     0x0000000000000251      0x15e build/user/progDE.o
+ .debug_str     0x0000000000000251        0x6 build/user/progFG.o
+                                        0x17b (size before relaxing)
+ .debug_str     0x0000000000000257       0x11 build/user/progH.o
+                                        0x195 (size before relaxing)
+ .debug_str     0x0000000000000268       0x1a build/user/progI.o
+                                        0x1b2 (size before relaxing)
+ .debug_str     0x0000000000000282        0xb build/user/progJ.o
+                                        0x187 (size before relaxing)
+ .debug_str     0x000000000000028d        0xb build/user/progKL.o
+                                        0x196 (size before relaxing)
+ .debug_str     0x0000000000000298       0x17 build/user/progMN.o
+                                        0x1a5 (size before relaxing)
+ .debug_str     0x00000000000002af        0x6 build/user/progP.o
+                                        0x188 (size before relaxing)
+ .debug_str     0x00000000000002b5        0xc build/user/progQ.o
+                                        0x163 (size before relaxing)
+ .debug_str     0x00000000000002c1        0xe build/user/progR.o
+                                        0x1d8 (size before relaxing)
+ .debug_str     0x00000000000002cf        0x6 build/user/progS.o
+                                        0x163 (size before relaxing)
+ .debug_str     0x00000000000002d5       0x14 build/user/progTUV.o
+                                        0x1be (size before relaxing)
+ .debug_str     0x00000000000002e9      0x195 build/user/progW.o
+ .debug_str     0x00000000000002e9      0x176 build/user/progX.o
+ .debug_str     0x00000000000002e9      0x185 build/user/progY.o
+ .debug_str     0x00000000000002e9      0x185 build/user/progZ.o
+ .debug_str     0x00000000000002e9       0x56 build/lib/libuser.a(uextras.o)
+                                        0x226 (size before relaxing)
+ .debug_str     0x000000000000033f       0x32 build/lib/libuser.a(usys.o)
+ .debug_str     0x0000000000000371       0x1a build/lib/libcommon.a(ccvthex.o)
+                                        0x140 (size before relaxing)
+ .debug_str     0x000000000000038b       0x35 build/lib/libcommon.a(csprint.o)
+                                        0x167 (size before relaxing)
+ .debug_str     0x00000000000003c0       0x1d build/lib/libcommon.a(cstr2int.o)
+                                        0x142 (size before relaxing)
+ .debug_str     0x00000000000003dd        0x8 build/lib/libcommon.a(cstrchr.o)
+                                        0x132 (size before relaxing)
+ .debug_str     0x00000000000003e5      0x123 build/lib/libcommon.a(cstrlen.o)
+ .debug_str     0x00000000000003e5        0x8 build/lib/libcommon.a(ccvtdec.o)
+                                        0x130 (size before relaxing)
+ .debug_str     0x00000000000003ed        0x9 build/lib/libcommon.a(ccvtdec0.o)
+                                        0x12a (size before relaxing)
+ .debug_str     0x00000000000003f6      0x136 build/lib/libcommon.a(ccvtoct.o)
+ .debug_str     0x00000000000003f6        0x8 build/lib/libcommon.a(ccvtuns.o)
+                                        0x131 (size before relaxing)
+ .debug_str     0x00000000000003fe      0x13b build/lib/libcommon.a(ccvtuns0.o)
+ .debug_str     0x00000000000003fe        0x6 build/lib/libcommon.a(cpadstr.o)
+                                        0x149 (size before relaxing)
+ .debug_str     0x0000000000000404      0x121 build/lib/libcommon.a(cpad.o)
+
+.debug_line_str
+                0x0000000000000000      0x1f3
+ .debug_line_str
+                0x0000000000000000       0x4d build/user/init.o
+                                         0x83 (size before relaxing)
+ .debug_line_str
+                0x000000000000004d        0xc build/user/idle.o
+                                         0x74 (size before relaxing)
+ .debug_line_str
+                0x0000000000000059        0xf build/user/progABC.o
+                                         0x7d (size before relaxing)
+ .debug_line_str
+                0x0000000000000068        0xe build/user/progDE.o
+                                         0x72 (size before relaxing)
+ .debug_line_str
+                0x0000000000000076        0xe build/user/progFG.o
+                                         0x7a (size before relaxing)
+ .debug_line_str
+                0x0000000000000084        0xd build/user/progH.o
+                                         0x7f (size before relaxing)
+ .debug_line_str
+                0x0000000000000091        0xd build/user/progI.o
+                                         0x7f (size before relaxing)
+ .debug_line_str
+                0x000000000000009e        0xd build/user/progJ.o
+                                         0x7f (size before relaxing)
+ .debug_line_str
+                0x00000000000000ab        0xe build/user/progKL.o
+                                         0x82 (size before relaxing)
+ .debug_line_str
+                0x00000000000000b9        0xe build/user/progMN.o
+                                         0x82 (size before relaxing)
+ .debug_line_str
+                0x00000000000000c7        0xd build/user/progP.o
+                                         0x77 (size before relaxing)
+ .debug_line_str
+                0x00000000000000d4        0xd build/user/progQ.o
+                                         0x77 (size before relaxing)
+ .debug_line_str
+                0x00000000000000e1        0xd build/user/progR.o
+                                         0x7e (size before relaxing)
+ .debug_line_str
+                0x00000000000000ee        0xd build/user/progS.o
+                                         0x77 (size before relaxing)
+ .debug_line_str
+                0x00000000000000fb        0xf build/user/progTUV.o
+                                         0x85 (size before relaxing)
+ .debug_line_str
+                0x000000000000010a        0xd build/user/progW.o
+                                         0x77 (size before relaxing)
+ .debug_line_str
+                0x0000000000000117        0xd build/user/progX.o
+                                         0x77 (size before relaxing)
+ .debug_line_str
+                0x0000000000000124        0xd build/user/progY.o
+                                         0x77 (size before relaxing)
+ .debug_line_str
+                0x0000000000000131        0xd build/user/progZ.o
+                                         0x77 (size before relaxing)
+ .debug_line_str
+                0x000000000000013e       0x12 build/lib/libuser.a(uextras.o)
+                                         0x82 (size before relaxing)
+ .debug_line_str
+                0x0000000000000150        0x7 build/lib/libuser.a(usys.o)
+                                         0x2d (size before relaxing)
+ .debug_line_str
+                0x0000000000000157        0xd build/lib/libcommon.a(ccvthex.o)
+                                         0x71 (size before relaxing)
+ .debug_line_str
+                0x0000000000000164        0xd build/lib/libcommon.a(csprint.o)
+                                         0x71 (size before relaxing)
+ .debug_line_str
+                0x0000000000000171        0xe build/lib/libcommon.a(cstr2int.o)
+                                         0x6c (size before relaxing)
+ .debug_line_str
+                0x000000000000017f        0xd build/lib/libcommon.a(cstrchr.o)
+                                         0x71 (size before relaxing)
+ .debug_line_str
+                0x000000000000018c        0xd build/lib/libcommon.a(cstrlen.o)
+                                         0x6b (size before relaxing)
+ .debug_line_str
+                0x0000000000000199        0xd build/lib/libcommon.a(ccvtdec.o)
+                                         0x71 (size before relaxing)
+ .debug_line_str
+                0x00000000000001a6        0xe build/lib/libcommon.a(ccvtdec0.o)
+                                         0x5c (size before relaxing)
+ .debug_line_str
+                0x00000000000001b4        0xd build/lib/libcommon.a(ccvtoct.o)
+                                         0x6b (size before relaxing)
+ .debug_line_str
+                0x00000000000001c1        0xd build/lib/libcommon.a(ccvtuns.o)
+                                         0x71 (size before relaxing)
+ .debug_line_str
+                0x00000000000001ce        0xe build/lib/libcommon.a(ccvtuns0.o)
+                                         0x74 (size before relaxing)
+ .debug_line_str
+                0x00000000000001dc        0xd build/lib/libcommon.a(cpadstr.o)
+                                         0x71 (size before relaxing)
+ .debug_line_str
+                0x00000000000001e9        0xa build/lib/libcommon.a(cpad.o)
+                                         0x50 (size before relaxing)
+
+.debug_rnglists
+                0x0000000000000000       0x2e
+ .debug_rnglists
+                0x0000000000000000       0x17 build/user/progI.o
+ .debug_rnglists
+                0x0000000000000017       0x17 build/lib/libcommon.a(cstr2int.o)

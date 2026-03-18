@@ -1,0 +1,9 @@
+start.S -   Startup code for user processes; should be linked with each
+            user process binary. Used instead of the 'fake_exit()' approach
+
+ulibc.c -   A single file that includes all the library function source
+            files. This puts all the object code for the library functions
+            into a single .o file.
+
+unames/ -   Versions of the common library functions with a 'u' prefix
+            on the function name for each and on the file name for each.

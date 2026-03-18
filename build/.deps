@@ -1,0 +1,197 @@
+build/user/progH.o: user/progH.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progP.o: user/progP.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/uextras.o: lib/uextras.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/kextras.o: lib/kextras.c include/common.h include/types.h \
+ include/params.h include/defs.h include/kdefs.h include/debug.h \
+ include/cio.h include/support.h include/lib.h include/klib.h \
+ include/x86/ops.h include/x86/arch.h include/procs.h include/queues.h \
+ include/common.h include/sio.h include/compat.h
+build/lib/ccvthex.o: lib/cvthex.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/kmem.o: kernel/kmem.c include/compat.h include/common.h \
+ include/types.h include/params.h include/defs.h include/kdefs.h \
+ include/debug.h include/cio.h include/support.h include/lib.h \
+ include/klib.h include/x86/ops.h include/x86/arch.h include/procs.h \
+ include/queues.h include/common.h include/x86/bios.h include/memory.h \
+ include/kmem.h
+build/user/idle.o: user/idle.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cblkmov.o: lib/blkmov.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/ccvtuns0.o: lib/cvtuns0.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progI.o: user/progI.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/ccvtuns.o: lib/cvtuns.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cstrcmp.o: lib/strcmp.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cmemclr.o: lib/memclr.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/list.o: kernel/list.c include/common.h include/types.h \
+ include/params.h include/defs.h include/kdefs.h include/debug.h \
+ include/cio.h include/support.h include/lib.h include/klib.h \
+ include/x86/ops.h include/x86/arch.h include/list.h
+build/lib/cstrlen.o: lib/strlen.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progW.o: user/progW.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progQ.o: user/progQ.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/support.o: kernel/support.c include/support.h include/lib.h \
+ include/types.h include/ulib.h include/common.h include/params.h \
+ include/defs.h include/udefs.h include/cio.h include/x86/arch.h \
+ include/x86/ops.h include/x86/pic.h include/memory.h include/procs.h \
+ include/queues.h include/common.h
+build/kernel/entry.o: kernel/entry.S include/memory.h include/x86/arch.h \
+ include/x86/bios.h
+build/kernel/procs.o: kernel/procs.c include/common.h include/types.h \
+ include/params.h include/defs.h include/kdefs.h include/debug.h \
+ include/cio.h include/support.h include/lib.h include/klib.h \
+ include/x86/ops.h include/x86/arch.h include/procs.h include/queues.h \
+ include/common.h include/stacks.h include/kmem.h include/memory.h
+build/user/init.o: user/init.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progFG.o: user/progFG.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/queues.o: kernel/queues.c include/common.h include/types.h \
+ include/params.h include/defs.h include/kdefs.h include/debug.h \
+ include/cio.h include/support.h include/lib.h include/klib.h \
+ include/x86/ops.h include/x86/arch.h include/kmem.h include/queues.h \
+ include/common.h
+build/user/progDE.o: user/progDE.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progKL.o: user/progKL.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/ccvtdec0.o: lib/cvtdec0.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/ccvtdec.o: lib/cvtdec.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/stacks.o: kernel/stacks.c include/common.h include/types.h \
+ include/params.h include/defs.h include/kdefs.h include/debug.h \
+ include/cio.h include/support.h include/lib.h include/klib.h \
+ include/x86/ops.h include/x86/arch.h include/stacks.h include/kmem.h \
+ include/procs.h include/queues.h include/common.h include/memory.h \
+ include/list.h
+build/lib/csprint.o: lib/sprint.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/cio.o: kernel/cio.c include/cio.h include/lib.h \
+ include/types.h include/klib.h include/common.h include/params.h \
+ include/defs.h include/kdefs.h include/debug.h include/support.h \
+ include/x86/arch.h include/x86/ops.h include/x86/kbd.h include/x86/pic.h \
+ include/x86/vga.h include/sio.h include/compat.h include/procs.h \
+ include/queues.h include/common.h
+build/lib/ccvtoct.o: lib/cvtoct.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progR.o: user/progR.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cpadstr.o: lib/padstr.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progZ.o: user/progZ.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cmemcpy.o: lib/memcpy.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/clock.o: kernel/clock.c include/common.h include/types.h \
+ include/params.h include/defs.h include/kdefs.h include/debug.h \
+ include/cio.h include/support.h include/lib.h include/klib.h \
+ include/x86/ops.h include/x86/arch.h include/clock.h include/procs.h \
+ include/queues.h include/common.h include/x86/pic.h include/x86/pit.h
+build/lib/cpad.o: lib/pad.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/usys.o: lib/usys.S include/syscalls.h include/common.h \
+ include/types.h include/params.h include/defs.h include/udefs.h \
+ include/lib.h
+build/user/progJ.o: user/progJ.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cstrchr.o: lib/strchr.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progY.o: user/progY.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progS.o: user/progS.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/kernel.o: kernel/kernel.c include/common.h include/types.h \
+ include/params.h include/defs.h include/kdefs.h include/debug.h \
+ include/cio.h include/support.h include/lib.h include/klib.h \
+ include/x86/ops.h include/x86/arch.h include/memory.h include/clock.h \
+ include/kmem.h include/procs.h include/queues.h include/common.h \
+ include/stacks.h include/sio.h include/compat.h include/syscalls.h
+build/lib/cmemmove.o: lib/memmove.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progTUV.o: user/progTUV.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progMN.o: user/progMN.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/isrs.o: kernel/isrs.S include/memory.h
+build/user/progABC.o: user/progABC.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/boot/boot.o: boot/boot.S include/memory.h include/x86/bios.h \
+ include/x86/arch.h include/x86/kbd.h
+build/lib/cbound.o: lib/bound.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cstrcat.o: lib/strcat.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/lib/cstrcpy.o: lib/strcpy.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/syscalls.o: kernel/syscalls.c include/common.h \
+ include/types.h include/params.h include/defs.h include/kdefs.h \
+ include/debug.h include/cio.h include/support.h include/lib.h \
+ include/klib.h include/x86/ops.h include/x86/arch.h include/clock.h \
+ include/procs.h include/queues.h include/common.h include/stacks.h \
+ include/kmem.h include/sio.h include/compat.h include/syscalls.h \
+ include/x86/pic.h
+build/lib/cmemset.o: lib/memset.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/kernel/sio.o: kernel/sio.c include/compat.h include/common.h \
+ include/types.h include/params.h include/defs.h include/kdefs.h \
+ include/debug.h include/cio.h include/support.h include/lib.h \
+ include/klib.h include/x86/ops.h include/x86/arch.h include/procs.h \
+ include/queues.h include/common.h include/x86/uart.h include/x86/pic.h \
+ include/sio.h
+build/lib/cstr2int.o: lib/str2int.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h
+build/user/progX.o: user/progX.c include/common.h include/types.h \
+ include/params.h include/defs.h include/udefs.h include/lib.h \
+ include/ulib.h

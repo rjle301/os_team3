@@ -1,0 +1,74 @@
+/*
+** VM layout of the system
+**
+** User processes use the first 4MB of the 32-bit address space; see the
+** next comment for details.
+**
+** Kernel virtual addresses are in the "higher half" range, beginning
+** at 0x80000000.  We define our mapping such that virtual address
+** 0x8nnnnnnn maps to physical address 0x0nnnnnnn, so converting between
+** the two is trivial.
+*/
+
+/*
+** VM layout of process' address space
+**
+** Processes are limited to the first 4MB of the 32-bit address space:
+**
+**  Address Range            Contents
+**  =======================  ================================
+**  0x00000000 - 0x00000fff  page 0 is inaccessible
+**  0x00001000 - 0x000..fff  text occupies pages 1 - N
+**  0x000..000 - 0x000..fff  data occupies pages N+1 - N+d
+**  0x000..000 - 0x000..fff  bss occupies pages N+d+1 - N+d+b
+**  0x000..000 - 0x003fdfff  unusable
+**  0x003fe000 - 0x003fffff  stack occupies last two pages
+**
+** This gives us the following page table structure:
+**
+** Page directory:
+**   Entries    Contents
+**   ========   ==============================
+**   0          point to PMT for address space
+**   1 - 1023   invalid
+**
+** Page map table:
+**   Entries         Contents
+**   ========        ==============================
+**   0               invalid
+**   1 - N           text frames
+**   N+1 - N+d       data frames
+**   N+d+1 - N+d+b   bss frames
+**   N+d+b+1 - 1021  invalid
+**   1022 - 1023     stack frames
+*/
+
+/*
+** General (C and/or assembly) definitions
+*/
+
+// user virtual addresses
+#define USER_BASE      0x00000000
+#define USER_MAX       0x003fffff
+#define USER_TEXT      0x00001000
+#define USER_STACK     0x003fe000
+#	define USER_STACK_P1   USER_STACK
+#	define USER_STACK_P2   0x003ff000
+#define USER_STK_END   0x00400000
+
+// how to find the addresses of the stack pages in the VM hierarchy
+// user address space is the first 4MB of virtual memory
+#define USER_PDE            0
+// the stack occupies this range of pages in the user address space
+#define USER_STK_FIRST_PTE  1022
+#define USER_STK_LAST_PTE   1023
+
+// some important memory addresses
+#define KERN_BASE      0x80000000    // start of "kernel" memory
+#define EXT_BASE       0x00100000    // start of "extended" memory (1MB)
+#define DEV_BASE       0xfe000000    // "device" memory
+#define PHYS_TOP       0x3fffffff    // last usable physical address (1GB - 1)
+
+// where the kernel actually lives
+#define KERN_PLINK     0x00010000
+#define KERN_VLINK     (KERN_BASE + KERN_PLINK)

@@ -1,0 +1,76 @@
+echo "-m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include" | cmp -s build/.vars.CFLAGS || echo "-m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include" > build/.vars.CFLAGS
+echo "" | cmp -s build/.vars.CLCFLAGS || echo "" > build/.vars.CLCFLAGS
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cblkmov.o lib/blkmov.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cbound.o lib/bound.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/ccvtdec.o lib/cvtdec.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/ccvtdec0.o lib/cvtdec0.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/ccvthex.o lib/cvthex.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/ccvtoct.o lib/cvtoct.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/ccvtuns.o lib/cvtuns.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/ccvtuns0.o lib/cvtuns0.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cmemclr.o lib/memclr.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cmemcpy.o lib/memcpy.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cmemmove.o lib/memmove.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cmemset.o lib/memset.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cpad.o lib/pad.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cpadstr.o lib/padstr.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/csprint.o lib/sprint.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cstr2int.o lib/str2int.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cstrcat.o lib/strcat.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cstrchr.o lib/strchr.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cstrcmp.o lib/strcmp.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cstrcpy.o lib/strcpy.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/cstrlen.o lib/strlen.c
+ar rsU build/lib/libcommon.a  build/lib/cblkmov.o  build/lib/cbound.o  build/lib/ccvtdec.o  build/lib/ccvtdec0.o  build/lib/ccvthex.o  build/lib/ccvtoct.o  build/lib/ccvtuns.o  build/lib/ccvtuns0.o  build/lib/cmemclr.o  build/lib/cmemcpy.o  build/lib/cmemmove.o  build/lib/cmemset.o  build/lib/cpad.o  build/lib/cpadstr.o  build/lib/csprint.o  build/lib/cstr2int.o  build/lib/cstrcat.o  build/lib/cstrchr.o  build/lib/cstrcmp.o  build/lib/cstrcpy.o  build/lib/cstrlen.o
+echo "" | cmp -s build/.vars.ULCFLAGS || echo "" > build/.vars.ULCFLAGS
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/uextras.o lib/uextras.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include  -c -o build/lib/usys.o lib/usys.S
+objdump -S build/lib/usys.o > build/lib/usys.asm
+ar rsU build/lib/libuser.a build/lib/uextras.o  build/lib/usys.o
+echo "-DCLEAR_BSS -DGET_MMAP -DVIDEO_BW -DCIO_DUP2_SIO -DFORCE_INLINING -DRPT_INT_UNEXP -DTRACE_CX -DCX_SANITY_CHK -DSYSTEM_STATUS=5 -DCATCH_OP_FAULTS -DCATCH_GP_FAULTS -DT_INIT " | cmp -s build/.vars.BCFLAGS || echo "-DCLEAR_BSS -DGET_MMAP -DVIDEO_BW -DCIO_DUP2_SIO -DFORCE_INLINING -DRPT_INT_UNEXP -DTRACE_CX -DCX_SANITY_CHK -DSYSTEM_STATUS=5 -DCATCH_OP_FAULTS -DCATCH_GP_FAULTS -DT_INIT " > build/.vars.BCFLAGS
+echo "-DCLEAR_BSS -DGET_MMAP -DVIDEO_BW -DCIO_DUP2_SIO -DFORCE_INLINING -DRPT_INT_UNEXP -DTRACE_CX -DCX_SANITY_CHK -DSYSTEM_STATUS=5 -DCATCH_OP_FAULTS -DCATCH_GP_FAULTS -DT_INIT " | cmp -s build/.vars.KCFLAGS || echo "-DCLEAR_BSS -DGET_MMAP -DVIDEO_BW -DCIO_DUP2_SIO -DFORCE_INLINING -DRPT_INT_UNEXP -DTRACE_CX -DCX_SANITY_CHK -DSYSTEM_STATUS=5 -DCATCH_OP_FAULTS -DCATCH_GP_FAULTS -DT_INIT " > build/.vars.KCFLAGS
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DCLEAR_BSS -DGET_MMAP -DVIDEO_BW -DCIO_DUP2_SIO -DFORCE_INLINING -DRPT_INT_UNEXP -DTRACE_CX -DCX_SANITY_CHK -DSYSTEM_STATUS=5 -DCATCH_OP_FAULTS -DCATCH_GP_FAULTS -DT_INIT  -c -o build/kernel/support.o kernel/support.c
+echo "-melf_i386 -no-pie -nostdlib -Lbuild/lib" | cmp -s build/.vars.LDFLAGS || echo "-melf_i386 -no-pie -nostdlib -Lbuild/lib" > build/.vars.LDFLAGS
+echo "-T kernel/kernel.ld -M" | cmp -s build/.vars.KLDFLAGS || echo "-T kernel/kernel.ld -M" > build/.vars.KLDFLAGS
+ld -T kernel/kernel.ld -M -melf_i386 -no-pie -nostdlib -Lbuild/lib -o build/kernel/kernel  build/kernel/entry.o  build/kernel/isrs.o build/kernel/cio.o build/kernel/clock.o build/kernel/kernel.o build/kernel/kmem.o build/kernel/list.o build/kernel/procs.o build/kernel/queues.o build/kernel/sio.o build/kernel/stacks.o build/kernel/support.o build/kernel/syscalls.o -lkernel -lcommon > build/kernel/kernel.map
+objdump -S build/kernel/kernel > build/kernel/kernel.asm
+nm -n build/kernel/kernel > build/kernel/kernel.sym
+readelf -a build/kernel/kernel > build/kernel/kernel.info
+hexdump -C build/kernel/kernel > build/kernel/kernel.hex
+objcopy -O binary build/kernel/kernel build/kernel/kernel.b
+hexdump -C build/kernel/kernel.b > build/kernel/kernel.b.hex
+echo "-DVERBOSE_IDLE" | cmp -s build/.vars.UCFLAGS || echo "-DVERBOSE_IDLE" > build/.vars.UCFLAGS
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/init.o user/init.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/idle.o user/idle.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progABC.o user/progABC.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progDE.o user/progDE.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progFG.o user/progFG.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progH.o user/progH.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progI.o user/progI.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progJ.o user/progJ.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progKL.o user/progKL.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progMN.o user/progMN.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progP.o user/progP.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progQ.o user/progQ.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progR.o user/progR.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progS.o user/progS.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progTUV.o user/progTUV.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progW.o user/progW.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progX.o user/progX.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progY.o user/progY.c
+gcc -m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include -DVERBOSE_IDLE -c -o build/user/progZ.o user/progZ.c
+echo "-T user/user.ld -M" | cmp -s build/.vars.ULDFLAGS || echo "-T user/user.ld -M" > build/.vars.ULDFLAGS
+ld -T user/user.ld -M -melf_i386 -no-pie -nostdlib -Lbuild/lib -o build/user/user  build/user/locations.o build/user/init.o build/user/idle.o build/user/progABC.o build/user/progDE.o build/user/progFG.o build/user/progH.o build/user/progI.o build/user/progJ.o build/user/progKL.o build/user/progMN.o build/user/progP.o build/user/progQ.o build/user/progR.o build/user/progS.o build/user/progTUV.o build/user/progW.o build/user/progX.o build/user/progY.o build/user/progZ.o -luser -lcommon > build/user/user.map
+objdump -S build/user/user > build/user/user.asm
+nm -n build/user/user > build/user/user.sym
+readelf -a build/user/user > build/user/user.info
+hexdump -C build/user/user > build/user/user.hex
+objcopy -O binary build/user/user build/user/user.b
+hexdump -C build/user/user.b > build/user/user.b.hex
+./BuildImage -o disk.img -b build/boot/boot \
+	build/kernel/kernel.b 0x10000 \
+	build/user/user.b 0x30000
+build/kernel/kernel.b: 75 sectors, loaded at 0x10000
+build/user/user.b: 41 sectors, loaded at 0x30000
+hexdump -C disk.img > disk.img.hex
+cat build/kernel/kernel.sym build/user/user.sym > all.sym

@@ -1,0 +1,14 @@
+Make.mk -   Utility program Makefile fragment that includes the blob
+            programs.
+
+listblob.c -    Utility program to list the contents of a user blob.
+                Creates a header file named "userids.h" which contains
+                CPP symbols identifying the position of each user
+                program in the blob. This header can be included in
+                any file that needs to locate a program (e.g., any
+                user program that needs to exec() a specific child
+                program).
+
+mkblob.c -      Utility program to create a user blob. Also creates the
+                initial index to the blob, to allow the kernel to find
+                the ELF file containing the specific user program.

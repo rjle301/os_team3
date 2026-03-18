@@ -1,0 +1,8 @@
+user.ld -   A linker script used to create ELF modules from user programs.
+            Each user program has the same layout in virtual memory:
+
+                entry point is '_start' (in lib/start.S)
+                .text at 0x1000 (second page of the address space)
+                .rodata immediate after text
+                .data at next page boundary
+                .bss at next page boundary

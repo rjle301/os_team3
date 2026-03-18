@@ -211,10 +211,8 @@ typedef struct proc_s {
 there is no user 'O'
 #define SPAWN_P
 #define SPAWN_Q
-#endif
 #define SPAWN_R
 #define SPAWN_S
-#if 0
 #define SPAWN_T
 #define SPAWN_U
 #define SPAWN_V

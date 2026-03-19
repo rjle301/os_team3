@@ -218,7 +218,7 @@ $(BUILD)/.vars.%: FORCE
 #
 # Location of the QEMU binary
 #
-QEMU := /home/rjle03/qemu-10.2.1/build/qemu-system-i386
+QEMU := qemu-system-i386
 #QEMU := /usr/bin/qemu-system-i386
 
 # try to generate a unique GDB port

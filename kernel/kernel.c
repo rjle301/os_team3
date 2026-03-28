@@ -25,6 +25,7 @@
 #include <sio.h>
 #include <syscalls.h>
 
+#include <pci.h>
 /*
 ** PRIVATE DEFINITIONS
 */
@@ -284,7 +285,10 @@ int main( void ) {
 	**
 	**	Enabling any I/O devices (e.g., SIO xmit/rcv)
 	*/
-
+  pci_scan();
+#ifdef SLOW_INIT
+  delay ( DELAY_2_SEC );
+#endif
 	/*
 	** Create the initial user process
 	** 

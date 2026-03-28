@@ -11,6 +11,8 @@
 #include <lib.h>
 #include <cio.h>
 #include <x86/ops.h>
+#include <klib.h>
+#include <support.h>
 
 uint16_t pciConfigReadWord(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
   uint32_t address;
@@ -35,8 +37,8 @@ void pci_scan(void) {
   char buf[128];
   uint16_t vendorID, deviceID;
 
-  for (uint16_t bus = 0; bus < 3; bus++) {
-    for (uint8_t slot = 0; slot < 4; slot++) {
+  for (uint16_t bus = 0; bus < 256; bus++) {
+    for (uint8_t slot = 0; slot < 32; slot++) {
       for (uint8_t function = 0; function < 8; function++) {
 
         if ((vendorID = pciConfigReadWord(bus, slot, 0, 0)) != 0xFFFF) {
@@ -46,6 +48,9 @@ void pci_scan(void) {
           cio_printf(buf);
         }
       }
+#ifdef SLOW_INIT
+          delay( DELAY_2_SEC );
+#endif
     }
   }
 }

@@ -26,14 +26,16 @@
 //} pci_dev_hdr_t
 
 
-// Read register from configuration space.
+// Read one register from PCI configuration space.
 uint32_t pci_cfgspace_read_dword(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
 
-uint16_t get_device_num(uint8_t bus, uint8_t slot, uint8_t func);
+uint16_t get_device_num(uint8_t bus, uint8_t slot, uint8_t function);
 
-uint16_t get_vendor_id(uint8_t bus, uint8_t slot, uint8_t func);
+uint16_t get_vendor_id(uint8_t bus, uint8_t slot, uint8_t function);
 
-void check_device(uint8_t bus, uint8_t slot);
+// Read a PCI device's header from PCI configuration space
+// The header information is stored in the block of memory pointed to by hdr
+void read_header(uint8_t bus, uint8_t slot, uint8_t function, uint32_t *hdr);
 
 // Brute force scan PCI devices
 void pci_bus_scan(void);

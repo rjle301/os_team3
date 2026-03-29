@@ -285,7 +285,7 @@ int main( void ) {
 	**
 	**	Enabling any I/O devices (e.g., SIO xmit/rcv)
 	*/
-  pci_bus_scan();
+  pci_init();
 #ifdef SLOW_INIT
   delay ( DELAY_2_SEC );
 #endif

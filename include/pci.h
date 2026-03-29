@@ -25,6 +25,11 @@
 //  }
 //} pci_dev_hdr_t
 
+// Limit max devices to how many pointers can fit on one page of memory
+//#define MAX_DEVICES     1024
+
+//extern uint32_t *pci_header_list[MAX_DEVICES];
+extern uint32_t *pro100_hdr;
 
 // Read one register from PCI configuration space.
 uint32_t pci_cfgspace_read_dword(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
@@ -39,5 +44,8 @@ void read_header(uint8_t bus, uint8_t slot, uint8_t function, uint32_t *hdr);
 
 // Brute force scan PCI devices
 void pci_bus_scan(void);
+
+// Initialize PCI device list
+void pci_init(void);
 
 #endif

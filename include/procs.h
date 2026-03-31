@@ -8,7 +8,7 @@
 ** Our process table is an array of statically-allocated PCB structures.
 ** We allocate PCBs by scanning the table, looking for an entry whose
 ** state is STATE_UNUSED; we deallocate a PCB by setting its state to
-** STATE_UNUSED. 
+** STATE_UNUSED.
 **
 ** If a PCB's state is STATE_UNUSED, none of the other data in the PCB
 ** is valid.
@@ -46,23 +46,28 @@
 ** Process states
 */
 enum state_e {
-	// pre-viable
-	STATE_UNUSED = 0, STATE_NEW,
-	// runnable
-	STATE_READY, STATE_RUNNING,
-	// runnable, but waiting for some event
-	STATE_SLEEPING, STATE_BLOCKED, STATE_WAITING,
-	// no longer runnable
-	STATE_ZOMBIE
-	// sentinel value
-	, N_STATES
+  // pre-viable
+  STATE_UNUSED = 0,
+  STATE_NEW,
+  // runnable
+  STATE_READY,
+  STATE_RUNNING,
+  // runnable, but waiting for some event
+  STATE_SLEEPING,
+  STATE_BLOCKED,
+  STATE_WAITING,
+  // no longer runnable
+  STATE_ZOMBIE
+  // sentinel value
+  ,
+  N_STATES
 };
 
 // these may be handy for checking general conditions of processes
 // they depend on the order of the state names in the enum!
-#define	FIRST_VIABLE   STATE_READY
-#define FIRST_BLOCKED  STATE_SLEEPING
-#define LAST_VIABLE    STATE_WAITING
+#define FIRST_VIABLE STATE_READY
+#define FIRST_BLOCKED STATE_SLEEPING
+#define LAST_VIABLE STATE_WAITING
 
 // process state
 typedef uint8_t state_t;
@@ -74,13 +79,13 @@ typedef uint8_t state_t;
 
 // quantum values, in clock ticks
 // (could be an enum, but we only have one...)
-#define Q_STD             3
+#define Q_STD 3
 
 /*
 ** PID-related definitions
 */
-#define PID_INIT          1
-#define FIRST_USER_PID    2
+#define PID_INIT 1
+#define FIRST_USER_PID 2
 
 // pid_t is defined in <types.h>
 
@@ -96,24 +101,24 @@ typedef uint8_t state_t;
 */
 
 typedef struct context_s {
-	uint32_t ss;		// pushed by isr_save
-	uint32_t gs;
-	uint32_t fs;
-	uint32_t es;
-	uint32_t ds;
-	uint32_t edi;
-	uint32_t esi;
-	uint32_t ebp;
-	uint32_t esp;
-	uint32_t ebx;
-	uint32_t edx;
-	uint32_t ecx;
-	uint32_t eax;
-	uint32_t vector;
-	uint32_t code;		// pushed by isr_save or the hardware
-	uint32_t eip;		// pushed by the hardware
-	uint32_t cs;
-	uint32_t eflags;
+  uint32_t ss; // pushed by isr_save
+  uint32_t gs;
+  uint32_t fs;
+  uint32_t es;
+  uint32_t ds;
+  uint32_t edi;
+  uint32_t esi;
+  uint32_t ebp;
+  uint32_t esp;
+  uint32_t ebx;
+  uint32_t edx;
+  uint32_t ecx;
+  uint32_t eax;
+  uint32_t vector;
+  uint32_t code; // pushed by isr_save or the hardware
+  uint32_t eip;  // pushed by the hardware
+  uint32_t cs;
+  uint32_t eflags;
 } context_t;
 // SZ_CONTEXT is defined in <offsets.h>
 
@@ -135,28 +140,31 @@ typedef struct context_s {
 
 typedef struct pcb_s {
 
-	// four-byte fields
-	// start with these four bytes, for easy access in assembly
-	context_t *context;         // pointer to context save area on stack
+  // four-byte fields
+  // start with these four bytes, for easy access in assembly
+  context_t *context; // pointer to context save area on stack
 
-	// Memory information
-	uint32_t *stack;            // stack for this process
+  // Memory information
+  uint32_t *stack; // stack for this process
 
-	// process state/environment
-	struct pcb_s *parent;       // pointer to PCB of our parent process
-	uint32_t wakeup;            // wakeup time, for sleeping processes
-	int32_t status;             // termination status, for parent's use
+  // process state/environment
+  struct pcb_s *parent; // pointer to PCB of our parent process
+  uint32_t wakeup;      // wakeup time, for sleeping processes
+  int32_t status;       // termination status, for parent's use
 
-	// these things may not need to be four bytes
-	pid_t pid;                  // PID of this process
+  // vruntime
+  int32_t vrunttime;
 
-	// one-byte fields
-	state_t state;              // process' current state
-	prio_t priority;            // process priority level
-	uint8_t quantum;            // remaining quantum for this process
+  // these things may not need to be four bytes
+  pid_t pid; // PID of this process
 
-	// filler out to 32 bytes
-	uint8_t filler[5];
+  // one-byte fields
+  state_t state;   // process' current state
+  prio_t priority; // process priority level
+  uint8_t quantum; // remaining quantum for this process
+
+  // filler out to 32 bytes
+  uint8_t filler[1];
 
 } pcb_t;
 // SZ_PCB is defined in <offsets.h>
@@ -166,7 +174,7 @@ typedef struct pcb_s {
 */
 
 // public-facing process queues
-extern queue_t ready[N_PRIOS];     // a MLQ
+extern queue_t ready[N_PRIOS]; // a MLQ
 extern queue_t sleeping;
 extern queue_t zombie;
 extern queue_t blocked;
@@ -205,7 +213,7 @@ extern const char prio_str[N_PRIOS][5];
 **
 ** @param ctx[in]   A pointer to the context to be checked
 */
-void ctx_sanity_check( register context_t *c );
+void ctx_sanity_check(register context_t *c);
 
 /**
 ** Name:	ctx_dump
@@ -215,7 +223,7 @@ void ctx_sanity_check( register context_t *c );
 ** @param msg[in]   An optional message to print before the dump
 ** @param c[in]     The context to dump out
 */
-void ctx_dump( const char *msg, register context_t *c );
+void ctx_dump(const char *msg, register context_t *c);
 
 /**
 ** Name:	ctx_dump_all
@@ -224,7 +232,7 @@ void ctx_dump( const char *msg, register context_t *c );
 **
 ** @param msg[in]  Optional message to print
 */
-void ctx_dump_all( const char *msg );
+void ctx_dump_all(const char *msg);
 
 /**
 ** Name:	pcb_dump
@@ -235,7 +243,7 @@ void ctx_dump_all( const char *msg );
 ** @param p[in]    The PCB to dump
 ** @param all[in]  Dump all the contents?
 */
-void pcb_dump( const char *msg, register pcb_t *p, bool_t all );
+void pcb_dump(const char *msg, register pcb_t *p, bool_t all);
 
 /**
 ** Name:	ptable_dump
@@ -245,7 +253,7 @@ void pcb_dump( const char *msg, register pcb_t *p, bool_t all );
 ** @param msg[in]  Optional message to print
 ** @param all[in]  Dump all or only part of the relevant data
 */
-void ptable_dump( const char *msg, bool_t all );
+void ptable_dump(const char *msg, bool_t all);
 
 /**
 ** Name:	ptable_dump_stats
@@ -257,7 +265,7 @@ void ptable_dump( const char *msg, bool_t all );
 **
 ** @return The number of process table entries in an "unknown" state.
 */
-uint32_t ptable_dump_stats( uint_t *tbl );
+uint32_t ptable_dump_stats(uint_t *tbl);
 
 /*
 ** Process operations
@@ -270,7 +278,7 @@ uint32_t ptable_dump_stats( uint_t *tbl );
 **
 ** ASSUMES PCBS ARE ALLOCATED STATICALLY.
 */
-void pcb_init( void );
+void pcb_init(void);
 
 /**
 ** pcb_alloc()
@@ -283,7 +291,7 @@ void pcb_init( void );
 **
 ** @return status of the allocation attempt
 */
-int pcb_alloc( pcb_t **pcb );
+int pcb_alloc(pcb_t **pcb);
 
 /**
 ** pcb_free()
@@ -294,7 +302,7 @@ int pcb_alloc( pcb_t **pcb );
 **
 ** @param[out] pcb   Pointer to the PCB to be deallocated.
 */
-void pcb_free( pcb_t *pcb );
+void pcb_free(pcb_t *pcb);
 
 /**
 ** pcb_find_pid()
@@ -307,7 +315,7 @@ void pcb_free( pcb_t *pcb );
 **
 ** @return Pointer to the PCB, or NULL if not found
 */
-pcb_t *pcb_find_pid( pid_t pid );
+pcb_t *pcb_find_pid(pid_t pid);
 
 /**
 ** pcb_find_child_of()
@@ -320,7 +328,7 @@ pcb_t *pcb_find_pid( pid_t pid );
 **
 ** @return Pointer to the child's PCB, or NULL
 */
-pcb_t *pcb_find_child_of( register pcb_t *parent );
+pcb_t *pcb_find_child_of(register pcb_t *parent);
 
 /**
 ** Name:    pcb_zombify
@@ -334,7 +342,7 @@ pcb_t *pcb_find_child_of( register pcb_t *parent );
 **
 ** @param pcb[in,out]   Pointer to the newly-undead PCB
 */
-void pcb_zombify( register pcb_t *pcb );
+void pcb_zombify(register pcb_t *pcb);
 
 /**
 ** Name:    pcb_cleanup
@@ -343,7 +351,7 @@ void pcb_zombify( register pcb_t *pcb );
 **
 ** @param pcb[in]   The PCB to reclaim
 */
-void pcb_cleanup( pcb_t *pcb );
+void pcb_cleanup(pcb_t *pcb);
 
 /*
 ** Scheduler routines
@@ -356,15 +364,15 @@ void pcb_cleanup( pcb_t *pcb );
 **
 ** @param[in,out] pcb   Pointer to the PCB of the process to be scheduled
 */
-void schedule( pcb_t *pcb );
+void schedule(pcb_t *pcb);
 
 /**
 ** dispatch()
 **
 ** Select the next process to receive the CPU
 */
-void dispatch( void );
+void dispatch(void);
 
-#endif  /* !ASM_SRC */
+#endif /* !ASM_SRC */
 
 #endif

@@ -45,6 +45,7 @@ GEN_OPTS += -DFORCE_INLINING
 #
 
 DBG_OPTS := -DRPT_INT_UNEXP
+DBG_OPTS := -DSLOW_KINIT
 DBG_OPTS += -DTRACE_CX
 DBG_OPTS += -DCX_SANITY_CHK
 DBG_OPTS += -DSYSTEM_STATUS=5
@@ -64,6 +65,7 @@ DBG_OPTS += -DCATCH_GP_FAULTS
 #   T_INIT                  Module init function tracing
 #   T_SIO, T_SIOR, T_SIOW   General SIO module checks
 #   T_STK, T_STKS           Stack operations (alloc/free, setup)
+#	T_PCI					PCI module init and device discovery
 #
 # You can add compilation options "on the fly" by using EXTRAS=thing
 # on the command line.  For example, to compile with -H (to show the
@@ -79,6 +81,8 @@ TRACE_OPTS := -DT_INIT
 #TRACE_OPTS += -DT_SCH
 #TRACE_OPTS += -DT_DSP
 #TRACE_OPTS += -DT_SCALL -DT_SRET
+#TRACE_OPTS += -DT_PCI
+TRACE_OPTS += -DT_P100
 
 KERNEL_OPTS := $(GEN_OPTS) $(DBG_OPTS) $(TRACE_OPTS) $(EXTRAS)
 
@@ -218,8 +222,8 @@ $(BUILD)/.vars.%: FORCE
 #
 # Location of the QEMU binary
 #
-QEMU := qemu-system-i386
-#QEMU := /usr/bin/qemu-system-i386
+# QEMU := /home/course/csci352/bin/qemu-system-i386
+QEMU := /usr/bin/qemu-system-i386
 
 # try to generate a unique GDB port
 GDBPORT := $(shell expr `id -u` % 5000 + 25000)
@@ -286,6 +290,12 @@ gdb:
 # gdb with the super-mega-fancy Text User Interface
 gdb-tui:
 	gdb -q -n -x .gdbinit -tui
+
+docker-build: Dockerfile
+	docker build -t sysprog:build .
+
+docker-run: Dockerfile
+	docker run --rm -v .:/src sysprog:build
 
 qemu: disk.img
 	$(QEMU) -serial mon:stdio $(QEMUOPTS)

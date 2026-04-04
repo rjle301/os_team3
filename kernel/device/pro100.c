@@ -7,6 +7,8 @@
 */
 
 #include <pci.h>
+#include <device/pro100.h>
+#include <kmem.h>
 /** These are for print debugging */
 #include <support.h>
 #include <lib.h>
@@ -14,13 +16,21 @@
 #include <klib.h>
 /** ====== */
 
-// Should probably change this to return a pointer to some struct
+pro100_t *pro100;
+
+// Consider changing this to return a pointer to some struct
 // that represents a network device
 void pro100_init(void) {
+  
   // lets do some testing and see what we have here
   char buf[128];
-  uint16_t vendor_id = pro100_hdr->vendor_id;
-  uint16_t device_id = pro100_hdr->device_id;
+  pro100 = (pro100_t *) km_page_alloc(1);
+
+  // Initialize the pro100's fields
+  pro100->pci_hdr = pro100_hdr;
+
+  uint16_t vendor_id = pro100->pci_hdr->vendor_id;
+  uint16_t device_id = pro100->pci_hdr->device_id;
 
   sprint(buf, "Inside pro100_init: vendor_id=0x%x, device_id=0x%x\n", vendor_id, device_id); 
   cio_printf(buf);

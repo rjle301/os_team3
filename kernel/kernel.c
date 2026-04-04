@@ -26,6 +26,7 @@
 #include <syscalls.h>
 
 #include <pci.h>
+#include <device/pro100.h>
 /*
 ** PRIVATE DEFINITIONS
 */
@@ -286,9 +287,12 @@ int main( void ) {
 	**	Enabling any I/O devices (e.g., SIO xmit/rcv)
 	*/
   pci_init();
+
 #ifdef SLOW_INIT
   delay ( DELAY_2_SEC );
 #endif
+
+  pro100_init();
 	/*
 	** Create the initial user process
 	** 

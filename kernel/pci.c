@@ -46,8 +46,7 @@
 /*
 ** PUBLIC GLOBAL VARIABLES
 */
-//uint32_t *pci_hdr_list[MAX_DEVICES]; <-- The queue of devices, not using this yet
-uint32_t *pro100_hdr;
+pci_hdr_t *pro100_hdr;
 
 // Basically the same as the pseudocode on OSDev wiki, but reads all 32 bits instead of 16
 uint32_t pci_cfgspace_read_dword(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
@@ -74,10 +73,6 @@ uint16_t get_device_id(uint8_t bus, uint8_t slot, uint8_t function) {
 
 uint16_t get_vendor_id(uint8_t bus, uint8_t slot, uint8_t function) {
   return (uint16_t) (pci_cfgspace_read_dword(bus, slot, function, 0) & 0xFFFF);
-}
-
-void add_to_device_list(uint32_t *hdr) {
-     
 }
 
 // Read the header registers from PCI configuration space  
@@ -122,16 +117,14 @@ uint32_t *check_device(uint8_t bus, uint8_t slot, uint8_t function) {
   // If it's the Pro100 NIC, make it global so we can use it in driver initialization
   // Actually good PCI scanning wouldn't do this, of course. We should use a global
   // list (queue) of device headers...
-  if ( vendor_id == INTEL_VENDOR_ID && device_id == PRO100_DEV_ID ) {
+  if ( vendor_id == INTEL_VENDOR_ID && (device_id == PRO100_DEV_ID || device_id == 0x1229) ) {
 
-    pro100_hdr = hdr_regs;
+    pro100_hdr = (pci_hdr_t *) hdr_regs;
 
 #ifdef DEBUG_PCI
-    for ( uint8_t i = 0; i < N_REGS; i++ ) {   
-
-      sprint( buf, "Reg 0x%x: %08x\n", i, hdr_regs[i] );
+    for (uint8_t j = 0; j < 0x6; j++) {
+      sprint( buf, "BAR[%x]=0x%08x\n", j, pro100_hdr->bar[j] );
       cio_printf( buf );
-
     }
 
     // Give enough time to see dump of all header registers

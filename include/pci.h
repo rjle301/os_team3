@@ -14,17 +14,15 @@
 
 #include <types.h>
 
-// Contains all the info for a PCI device header
-// Figures can be found on https://wiki.osdev.org/PCI#Configuration_Space
-//typedef struct pci_device_header {
-//  union {
-//    uint32_t regs[N_REGS];
-//  }
-//  struct {
-//    
-//  }
-//} pci_dev_hdr_t
+#define PCI_BAR_MEM 0x0
+#define PCI_BAR_IO  0x1
 
+// For the I/O BAR, bit 0 is always 1, and bit 1 is reserved,
+// so mask off the lower to bits to get the actual base address.
+#define PCI_BAR_IO_MASK 0xFFFFFFC
+
+// Contains all the info for a PCI device header
+// for header type 0x0.
 typedef struct __attribute__((packed)) {
   // 0x00
   uint16_t vendor_id;
@@ -74,22 +72,39 @@ typedef struct __attribute__((packed)) {
 
 } pci_hdr_t;
 
+// A generic PCI device struct, so I don't have to pass bus, slot, and function
+// as arguments to the pci_cfgspace_read/write functions
+typedef struct {
+
+  // The bus, slot, and function of the PCI device
+  uint8_t bus;
+  uint8_t slot;
+  uint8_t function;
+
+  // Header registers
+  pci_hdr_t *hdr;
+
+} pci_dev_t;
+
 // Limit max devices to how many pointers can fit on one page of memory
 //#define MAX_DEVICES     1024
 
-//extern uint32_t *pci_header_list[MAX_DEVICES];
-extern pci_hdr_t *pro100_hdr;
+extern pci_dev_t *pci_dev_pro100;
 
 // Read one register from PCI configuration space.
-uint32_t pci_cfgspace_read_dword(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
+uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset);
 
-uint16_t get_device_num(uint8_t bus, uint8_t slot, uint8_t function);
+uint16_t get_device_id(pci_dev_t *pci_dev);
 
-uint16_t get_vendor_id(uint8_t bus, uint8_t slot, uint8_t function);
+uint16_t get_vendor_id(pci_dev_t *pci_dev);
+
+uint32_t pci_get_bar(pci_hdr_t *hdr, uint8_t type);
 
 // Read a PCI device's header from PCI configuration space
 // The header information is stored in the block of memory pointed to by hdr
-void read_header(uint8_t bus, uint8_t slot, uint8_t function, uint32_t *hdr);
+void read_header(pci_dev_t *pci_dev, uint32_t *hdr);
+
+void check_device(pci_dev_t *pci_dev);
 
 // Brute force scan PCI devices
 void pci_bus_scan(void);

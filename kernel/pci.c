@@ -67,6 +67,24 @@ uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset) {
 
 }
 
+void pci_cfgspace_write_dword(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) {
+
+  uint32_t address;
+  uint32_t lbus  = (uint32_t)pci_dev->bus;
+  uint32_t lslot = (uint32_t)pci_dev->slot;
+  uint32_t lfunc = (uint32_t)pci_dev->function;
+
+  // Create configuration address
+  address = (uint32_t)((lbus << 16) | (lslot << 11) |
+            (lfunc << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
+
+  // Write out the address
+  outl(CONFIG_ADDRESS, address);
+
+  // Write out the data
+  outl(CONFIG_DATA, val);
+}
+
 uint16_t get_device_id(pci_dev_t *pci_dev) {
   return (uint16_t) ((pci_cfgspace_read_dword(pci_dev, 0) >> 16) & 0xFFFF);
 }
@@ -144,7 +162,7 @@ void check_device(pci_dev_t *pci_dev) {
     }
 
     // Give enough time to see dump of all header registers
-    delay( DELAY_5_SEC );
+    delay( DELAY_2_SEC );
 #endif
 
   }

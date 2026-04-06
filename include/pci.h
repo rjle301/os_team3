@@ -94,6 +94,8 @@ extern pci_dev_t *pci_dev_pro100;
 // Read one register from PCI configuration space.
 uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset);
 
+void pci_cfgspace_write_dword(pci_dev_t *pci_dev, uint8_t offset, uint32_t val);
+
 uint16_t get_device_id(pci_dev_t *pci_dev);
 
 uint16_t get_vendor_id(pci_dev_t *pci_dev);

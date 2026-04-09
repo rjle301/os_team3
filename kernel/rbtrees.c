@@ -122,6 +122,72 @@ static rbtree_dump_details(const char *msg, rbtree_t t) {
   return;
 }
 
+/*
+ *  rbtree_rotate_left(rbtnode_t *n)
+ *
+ *  preforms a left rotate at node n.
+ *
+ *  @param[in,out] the node to be rotated about.
+ */
+static void rbtree_rotate_left(rbtree_t *t, rbtnode_t *n) {
+  assert1(tree != NULL);
+  assert1(n != NULL);
+
+  rbtnode_t *r = n->right;
+
+  //  Detach Subtree: Move r's left subtree to become n's new right subtree.
+  n->right = r->left;
+  if (n->right != NULL) {
+    n->right->parent = n;
+  }
+
+  // Shift Parent Link: Update r's parent to be n's current parent.
+  r->parent = n->parent;
+
+  // Relink Parent: Update n's parent to point to r instead of n.
+  if (n->parent == NULL) {
+    // n was root.
+    t->root = r;
+  } else if (r->parent->left == n) {
+    r->parent->left = r;
+  } else {
+    r->parent->right = r;
+  }
+
+  // Promote Child: Set r's left child to n.
+  r->left = n;
+
+  // Finalize Parent: Set n's parent to r.
+  n->parent = r;
+}
+
+static void rbtree_rotate_right(rbtree_t t, rbtnode_t *n) {
+  assert1(tree != NULL);
+  assert1(n != NULL);
+
+  rbtnode_t *l = n->left;
+  //  Detach Subtree: Move l's right subtree to become n's new left subtree.
+  n->left = l->right;
+  if (n->left != NULL) {
+    n->left->parent = n;
+  }
+  // Shift Parent Link: Update l's parent to be n's current parent.
+  l->parent = n->parent;
+
+  // Relink Parent: Update n's parent to point to l instead of n.
+  if (l->parent == NULL) {
+    t->root = l;
+  } else if (l->parent->left == n) {
+    l->parent->left = l;
+  } else {
+    l->parent->right = l;
+  }
+  // Promote Child: Set l's right child to n.
+  l->right = n;
+  // Finalize Parent: Set n's parent to l.
+  n->parent = l;
+}
+
 /**
  *  PUBLIC FUNCTIONS
  */
@@ -241,10 +307,12 @@ int rbtree_insert(rbtree_t t, void *data) {
 
   rbtnode_t *n = rbtnode_alloc();
 
+  // no unalloced rbtree nodes.
   if (n == NULL) {
     return E_NO_RBTNODES;
   }
 
+  // all new nodes get set to red
   n->color = #RBNODE_RED;
   n->data = data;
 
@@ -258,11 +326,19 @@ int rbtree_insert(rbtree_t t, void *data) {
   }
 
   //@TODO: Implement insert logic for red-black tree.
-  rbtnode_t *tmp = t->root;
+  rbtnode_t *curr = t->root;
+  while (curr != NULL) {
+    if (t->compare(curr->data, data) < 0) {
+      curr = t->left;
+    } else {
+      curr = t->right;
+    }
+  }
 }
 
 int rbtree_peek(rbtree_t t, void **data) {
   assert1(t != NULL);
+
   if (data == NULL) {
     return E_BAD_PARAM;
   }
@@ -277,6 +353,7 @@ int rbtree_peek(rbtree_t t, void **data) {
     n = n->left;
   }
 
+  // get left most leaf.
   for (n = t->root; n->left != NULL; n->left)
     ;
   *data = n->data;

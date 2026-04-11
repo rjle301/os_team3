@@ -7,6 +7,7 @@
 */
 
 #include <pci.h>
+#include <device/cb.h>
 #include <device/pro100.h>
 #include <kmem.h>
 #include <x86/ops.h>
@@ -27,6 +28,7 @@
 #define CU_START        0x0010
 #define CU_RESUME       0x0020
 #define INT_MASK        0x0100
+#define CNA_INT_MASK    0x2000
 
 /*
 ** Intel 8255x Control/Status Register (CSR) Macros
@@ -41,8 +43,9 @@
 /*
 ** Command Block (CB) Macros
 */
-#define CB_CMD_NOP   0x0000
-#define CB_CMD_EL    (1 << 15)  // End of list
+#define CB_CMD_NOP    0x0000
+#define CB_CMD_CFG    0x0002
+#define CB_CMD_EL     0x8000  // End of list
 
 // Global Pro100 pointer
 pro100_t *pro100;
@@ -69,6 +72,36 @@ uint16_t pro100_inw(uint32_t offset) {
 
 uint8_t pro100_inb(uint32_t offset) {
   return inb(pro100->io_base_addr + offset);
+}
+
+cb_config_t *pro100_set_config_params(void) {
+
+  cb_config_t *cb = (cb_config_t *) km_page_alloc(1);
+  cb->hdr.status = 0;
+  cb->hdr.command = CB_CMD_CFG | CB_CMD_EL;
+  cb->hdr.link = 0xFFFFFFFF;
+  
+  // Set everything in the config map to 0, 
+  // because most recommended values are 0 
+  memset(cb->config, N_CONFIG_BYTES, 0);
+
+  // Set the fundamental operating parameters of the Pro100
+  // Uses the recommended settings from the datasheet
+  cb->config[0]   = 0x16;  // 22 bytes configuration map
+  cb->config[1]   = 0x08;  // FIFO Tx/Rx limits
+  cb->config[3]   = 0x01;  // Read alignment
+  cb->config[6]   = 0x30;  // Standard TxCB
+  cb->config[7]   = 0x03;  // Retry after bad Rx
+  cb->config[8]   = 0x01;  // PHY MII mode
+  cb->config[10]  = 0x28;  // 7-byte preamble, NSAI
+  cb->config[12]  = 0x60;  // IFS
+  cb->config[14]  = 0xF2;  // For backwards compatibility
+  cb->config[18]  = 0xF3;  // Padding + Stripping of frames
+  cb->config[19]  = 0x80;  // Mandatory bits for 82559
+  cb->config[20]  = 0x3F;  // Mandatory bits for 82559
+  cb->config[21]  = 0x05;  // Disables Multicast all
+
+  return cb;
 }
 
 void pro100_access_enable(void) {
@@ -124,23 +157,29 @@ void pro100_init(void) {
   // Recommended delay after software reset is 15us.
   // With 1 KHz clock frequency, no delay should be needed
   // Time for a CB No-Op command
-  cb_t *cb_noop = (cb_t *) km_page_alloc(1);
-  cb_noop->status = 0;
-  cb_noop->command = CB_CMD_NOP | CB_CMD_EL; 
-  cb_noop->link = 0xFFFFFFFF; // end of list
+  //cb_t *cb_noop = (cb_t *) km_page_alloc(1);
+  //cb_noop->status = 0;
+  //cb_noop->command = CB_CMD_NOP | CB_CMD_EL; 
+  //cb_noop->link = 0xFFFFFFFF; // end of list
   
   // Load the No-Op command block into the SCB 
-  pro100_outl(SCB_POINTER, (uint32_t) cb_noop);
+  //pro100_outl(SCB_POINTER, (uint32_t) cb_noop);
 
   // This generates an interrupt I'm not handling yet, so mask for now
-  pro100_outw(SCB_COMMAND, CU_START | 0x2000);
+  //pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+
+  // The device's operating parameters need initialization after a reset
+  cb_config_t *cb_config = pro100_set_config_params();
+  pro100_outl(SCB_POINTER, (uint32_t) cb_config);
+  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+
 
 #ifdef DEBUG_PCI
   
   char buf[128];
 
   // lets do some testing and see what we have here
-  sprint(buf, "Command block Status=0x%04x\n", cb_noop->status);
+  sprint(buf, "Command block Status=0x%04x\n", cb_config->hdr.status);
   cio_printf(buf);
   delay( DELAY_1_SEC );
   
@@ -157,6 +196,6 @@ void pro100_init(void) {
 #endif
   
   // Free the command block memory
-  km_page_free(cb_noop);
+  km_page_free(cb_config);
 
 }

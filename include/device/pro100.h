@@ -7,6 +7,11 @@
 **
 */
 
+#ifndef PRO_100_H
+#define PRO_100_H
+
+#include <device/cb.h>
+
 typedef struct pro_100 {
 
   // Pro100 PCI information
@@ -14,20 +19,14 @@ typedef struct pro_100 {
   
   // MAC address
   uint8_t mac[6];
-
+ 
+  // Beginning of the I/O communication space 
   uint16_t io_base_addr; 
 
 } pro100_t;
  
 extern pro100_t *pro100;
 
-typedef struct __attribute__((packed)) {
-  
-  uint16_t status;
-  uint16_t command;
-  uint32_t link;
-
-} cb_t;
 
 /*
 ** Functions for reading from / writing to the Pro100 NIC
@@ -39,6 +38,22 @@ uint32_t pro100_inl(uint32_t offset);
 uint16_t pro100_inw(uint32_t offset);
 uint8_t pro100_inb(uint32_t offset);
 
+
+/*
+** Builds a configuration command block to set the Pro100's
+** Configuration Map parameters. Uses values sufficient for
+** basic Tx/Rx
+*/
+cb_config_t *pro100_set_config_params(void);
+
+/*
+** Enables I/O communication from the CPU to the NIC
+*/
 void pro100_access_enable(void);
 
+/*
+** Sets the Pro100 NIC up for Transmit/Recieve
+*/
 void pro100_init(void);
+
+#endif

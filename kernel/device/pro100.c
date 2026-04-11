@@ -146,8 +146,6 @@ void pro100_init(void) {
   
   // Read scb status and ack any interrupt bits set
   uint16_t scb_status = pro100_inw(SCB_STATUS);
-  pro100_outw(SCB_STATUS, scb_status);
-
   sprint(buf, "SCB Status=0x%04x\n", scb_status);
   cio_printf(buf);
   delay( DELAY_1_SEC );
@@ -157,5 +155,8 @@ void pro100_init(void) {
   cio_printf(buf);
   delay( DELAY_1_SEC );
 #endif
+  
+  // Free the command block memory
+  km_page_free(cb_noop);
 
 }

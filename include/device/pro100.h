@@ -21,10 +21,23 @@ typedef struct pro_100 {
  
 extern pro100_t *pro100;
 
+typedef struct __attribute__((packed)) {
+  
+  uint16_t status;
+  uint16_t command;
+  uint32_t link;
+
+} cb_t;
+
+/*
+** Functions for reading from / writing to the Pro100 NIC
+*/
 void pro100_outl(uint32_t offset, uint32_t val);
 void pro100_outw(uint32_t offset, uint16_t val);
+void pro100_outb(uint32_t offset, uint8_t val);
 uint32_t pro100_inl(uint32_t offset);
 uint16_t pro100_inw(uint32_t offset);
+uint8_t pro100_inb(uint32_t offset);
 
 void pro100_access_enable(void);
 

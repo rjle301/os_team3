@@ -161,6 +161,10 @@ void check_device(pci_dev_t *pci_dev) {
       cio_printf( buf );
     }
 
+    sprint(buf, "Interrupt PIN=0%x, Interrupt Line=0x%x\n",
+                pci_dev->hdr->interrupt_pin, pci_dev->hdr->interrupt_line);
+    cio_printf( buf );
+
     // Give enough time to see dump of all header registers
     delay( DELAY_2_SEC );
 #endif

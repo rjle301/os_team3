@@ -102,8 +102,10 @@ uint16_t get_vendor_id(pci_dev_t *pci_dev);
 
 uint32_t pci_get_bar(pci_hdr_t *hdr, uint8_t type);
 
-// Read a PCI device's header from PCI configuration space
-// The header information is stored in the block of memory pointed to by hdr
+/* 
+** Read a PCI device's header from PCI configuration space
+** The header information is stored in the block of memory pointed to by hdr
+*/
 void read_header(pci_dev_t *pci_dev, uint32_t *hdr);
 
 void check_device(pci_dev_t *pci_dev);

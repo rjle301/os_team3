@@ -49,6 +49,7 @@
 #define CB_CMD_TX     0x0004
 #define CB_CMD_EL     0x8000  // Any cb with this bit set is the last cb
 #define TXCB_EOF      0x8000
+#define CMD_SUCCESS   0xA000
 
 // Global Pro100 pointer
 pro100_t *pro100;
@@ -160,7 +161,7 @@ void pro100_access_enable(void) {
 }
 
 void pro100_transmit(char *data) {
-  
+ 
   // Build the TxCB
   tx_cb_t *tx_cb = (tx_cb_t *) km_page_alloc(1);
   tx_cb->hdr.status = 0;
@@ -170,13 +171,13 @@ void pro100_transmit(char *data) {
   tx_cb->tbd_addr = 0xFFFFFFFF;
   tx_cb->tx_threshold = 0x01;
   tx_cb->tbd_number = 0;
-
+ 
   /*
   ** Begin packet building
   */ 
   uint8_t *p = tx_cb->packet;
   
-  // Destination MAC
+  // Destination MAC arbitrary
   p[0] = 0x11;
   p[1] = 0x22;
   p[2] = 0x33;
@@ -197,17 +198,26 @@ void pro100_transmit(char *data) {
   // than minimum required ethernet frame length 
   uint32_t len_data = strlen(data);
   memcpy(&p[14], data, len_data);
-
-  tx_cb->byte_count = 14 + len_data;
   
-  // SEND IT
-  //pro100_outl(SCB_POINTER, (uint32_t) tx_cb);
-  //pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK | INT_MASK);
+  // 14 = 2 * 6-byte MAC addresses, 2-byte Length/Type field
+  tx_cb->byte_count = 14 + len_data;
+
+  // Begin transmission
+  pro100_outl(SCB_POINTER, (uint32_t) tx_cb);
+  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+  
+  // Poll to see if entire frame has been sent to NIC's transmit FIFO
+  while(!(tx_cb->hdr.status & CMD_SUCCESS)) {
+    // wait
+  }
+
+  // Once the entire frame is given to the NIC, we can free this memory
+  km_page_free(tx_cb);
 }
 
 // Consider changing this to return a pointer to some struct
 // that represents a network device
-void pro100_init(void) {
+void pro100_init() {
   
   pro100 = (pro100_t *) km_page_alloc(1);
 
@@ -252,7 +262,7 @@ void pro100_init(void) {
   ** of the trasmit, and print a message based on that result
   */
   // Null terminated and word aligned
-  char *msg = "Hello, World -RJ\0";
+  char *msg = "Hello, World! RLE\0";
   pro100_transmit(msg);
 
 
@@ -282,5 +292,4 @@ void pro100_init(void) {
   // cast to silence compiler warnings
   km_page_free((cb_ias_t *) cb_config->hdr.link);
   km_page_free(cb_config);
-
 }

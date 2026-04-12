@@ -56,7 +56,7 @@ void pro100_access_enable(void);
 ** Builds a TxCB, constructs an ethernet packet, and
 ** begins the transmit action command
 */
-void pro100_transmit(char* data);
+void pro100_transmit(char *data);
 
 /*
 ** Sets the Pro100 NIC up for Transmit/Recieve

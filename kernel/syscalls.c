@@ -802,7 +802,7 @@ SYSIMPL(setvgatextmode) {
 	assert( pcb != NULL );
 
 	//Calls Chris Giese's register assignment for reverting to text mode
-	setvgatextmode();
+	set_text_mode();
 }
 
 SYSIMPL(writepixel) {
@@ -815,7 +815,7 @@ SYSIMPL(writepixel) {
 	unsigned c = ARG(pcb,3);
 
 	//Calls Chris Giese's register assignment for writing a color to a pixel at some coordinate (x, y)
-	writepixel(x, y, c);
+	write_pixel(x, y, c);
 
 }
 
@@ -824,7 +824,7 @@ SYSIMPL(getwidth) {
 	// sanity check!
 	assert( pcb != NULL );
 
-	RET(pcb) = returnwidth();
+	RET(pcb) = return_width();
 
 }
 
@@ -833,7 +833,7 @@ SYSIMPL(getheight) {
 	// sanity check!
 	assert( pcb != NULL );
 
-	RET(pcb) = returnheight();
+	RET(pcb) = return_height();
 }
 
 /*

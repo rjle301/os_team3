@@ -24,14 +24,31 @@ typedef struct __attribute__((packed)) {
 
 
 /*
-** Command block for configuring Pro100 parameters
+** Command block for a Configure command
+** Sets the Pro100's operating parameters
 */
 typedef struct __attribute__((packed)) {
   
   // Bytes are packed so this can't be a pointer
   cb_t hdr;
+
+  // Contiguous 22-byte configuration map
   uint8_t config[N_CONFIG_BYTES];
 
 } cb_config_t;
+
+/*
+** Command block for an Individual Address Setup command
+** Sets the Pro100's MAC address
+*/
+typedef struct __attribute__((packed)) {
+  
+  // Bytes are packed so this can't be a pointer 
+  cb_t hdr;
+
+  // MAC addresses are 6 bytes long
+  uint8_t mac[6];
+
+} cb_ias_t;
 
 #endif

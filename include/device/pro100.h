@@ -40,11 +40,12 @@ uint8_t pro100_inb(uint32_t offset);
 
 
 /*
-** Builds a configuration command block to set the Pro100's
-** Configuration Map parameters. Uses values sufficient for
-** basic Tx/Rx
+** Creates the necessary command blocks to initialize the Pro100.
+** In particular, creates a Configure CB and an IAS CB and links
+** them together. These commands will be run after a software
+** reset is issued.
 */
-cb_config_t *pro100_set_config_params(void);
+cb_config_t *pro100_create_init_cbs(void);
 
 /*
 ** Enables I/O communication from the CPU to the NIC

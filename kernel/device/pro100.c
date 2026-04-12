@@ -44,8 +44,9 @@
 ** Command Block (CB) Macros
 */
 #define CB_CMD_NOP    0x0000
+#define CB_CMD_IAS    0x0001
 #define CB_CMD_CFG    0x0002
-#define CB_CMD_EL     0x8000  // End of list
+#define CB_CMD_EL     0x8000  // Any cb with this bit set is the last cb
 
 // Global Pro100 pointer
 pro100_t *pro100;
@@ -74,15 +75,34 @@ uint8_t pro100_inb(uint32_t offset) {
   return inb(pro100->io_base_addr + offset);
 }
 
-cb_config_t *pro100_set_config_params(void) {
+cb_config_t *pro100_create_init_cbs(void) {
+  
+  cb_ias_t *cb_ias = (cb_ias_t *) km_page_alloc(1);
+  cb_ias->hdr.status = 0;
+  cb_ias->hdr.command = CB_CMD_IAS | CB_CMD_EL;
+  cb_ias->hdr.link = 0xFFFFFFFF;
+  
+  // Set a random mac address
+  cb_ias->mac[0] = 0xA2;
+  cb_ias->mac[1] = 0xB3;
+  cb_ias->mac[2] = 0xC4;
+  cb_ias->mac[3] = 0xD5;
+  cb_ias->mac[4] = 0xE6;
+  cb_ias->mac[5] = 0xF7;
 
+  // Copy this 6-byte mac address to the Pro100 device structure in memory
+  // Might be important later for building Tx frames
+  memcpy(pro100->mac, cb_ias->mac, 6);
+
+  // Now build the Configure command and set it's link
+  // to the IAS command
   cb_config_t *cb = (cb_config_t *) km_page_alloc(1);
   cb->hdr.status = 0;
-  cb->hdr.command = CB_CMD_CFG | CB_CMD_EL;
-  cb->hdr.link = 0xFFFFFFFF;
+  cb->hdr.command = CB_CMD_CFG; 
+  cb->hdr.link = (uint32_t) cb_ias;
   
   // Set everything in the config map to 0, 
-  // because most recommended values are 0 
+  // because many recommended values are 0 
   memset(cb->config, N_CONFIG_BYTES, 0);
 
   // Set the fundamental operating parameters of the Pro100
@@ -169,7 +189,7 @@ void pro100_init(void) {
   //pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
 
   // The device's operating parameters need initialization after a reset
-  cb_config_t *cb_config = pro100_set_config_params();
+  cb_config_t *cb_config = pro100_create_init_cbs();
   pro100_outl(SCB_POINTER, (uint32_t) cb_config);
   pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
 
@@ -193,9 +213,17 @@ void pro100_init(void) {
   sprint(buf, "SCB Command=0x%04x\n", scb_command);
   cio_printf(buf);
   delay( DELAY_1_SEC );
+
+  for (int i = 0; i < 6; i++) {
+    sprint(buf, "MAC[%d]=0x%x\n", i, pro100->mac[i]);
+    cio_printf(buf);
+    delay(DELAY_1_SEC);
+  }
 #endif
   
   // Free the command block memory
+  // cast to silence compiler warnings
+  km_page_free((cb_ias_t *) cb_config->hdr.link);
   km_page_free(cb_config);
 
 }

@@ -576,17 +576,17 @@ void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
 }
 
 
-void set_vga_256linear(){
+void set_vga_256linear(void){
 	write_regs(g_320x200x256);
 	g_wd = 320;
 	g_ht = 200;
 }
 
 
-unsigned return_width(){
+unsigned return_width(void){
 	return g_wd;
 }
 
-unsigned return_height(){
+unsigned return_height(void){
 	return g_ht;
 }

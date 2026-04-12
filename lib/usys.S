@@ -68,6 +68,13 @@ SYSCALL(getpid)
 SYSCALL(gettime)
 SYSCALL(getprio)
 
+#VGA syscalls
+SYSCALL(setvga256linear)
+SYSCALL(setvgatextmode)
+SYSCALL(writepixel)
+SYSCALL(getheight)
+SYSCALL(getwidth)
+
 #
 # This is a bogus system call; it's here so that we can test
 # our handling of out-of-range syscall codes in the syscall ISR.

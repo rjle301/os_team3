@@ -53,6 +53,12 @@ cb_config_t *pro100_create_init_cbs(void);
 void pro100_access_enable(void);
 
 /*
+** Builds a TxCB, constructs an ethernet packet, and
+** begins the transmit action command
+*/
+void pro100_transmit(char* data);
+
+/*
 ** Sets the Pro100 NIC up for Transmit/Recieve
 */
 void pro100_init(void);

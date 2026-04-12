@@ -11,10 +11,10 @@
 #include <device/pro100.h>
 #include <kmem.h>
 #include <x86/ops.h>
+#include <lib.h>
 
 /** These are for print debugging */
 #include <support.h>
-#include <lib.h>
 #include <cio.h>
 #include <klib.h>
 /** ====== */
@@ -46,7 +46,9 @@
 #define CB_CMD_NOP    0x0000
 #define CB_CMD_IAS    0x0001
 #define CB_CMD_CFG    0x0002
+#define CB_CMD_TX     0x0004
 #define CB_CMD_EL     0x8000  // Any cb with this bit set is the last cb
+#define TXCB_EOF      0x8000
 
 // Global Pro100 pointer
 pro100_t *pro100;
@@ -157,6 +159,52 @@ void pro100_access_enable(void) {
 
 }
 
+void pro100_transmit(char *data) {
+  
+  // Build the TxCB
+  tx_cb_t *tx_cb = (tx_cb_t *) km_page_alloc(1);
+  tx_cb->hdr.status = 0;
+  tx_cb->hdr.command = CB_CMD_TX | CB_CMD_EL;
+  tx_cb->hdr.link = 0xFFFFFFFF;
+
+  tx_cb->tbd_addr = 0xFFFFFFFF;
+  tx_cb->tx_threshold = 0x01;
+  tx_cb->tbd_number = 0;
+
+  /*
+  ** Begin packet building
+  */ 
+  uint8_t *p = tx_cb->packet;
+  
+  // Destination MAC
+  p[0] = 0x11;
+  p[1] = 0x22;
+  p[2] = 0x33;
+  p[3] = 0x44;
+  p[4] = 0x55;
+  p[5] = 0x66;
+
+  // Source MAC. Not inserted by NIC
+  memcpy(&p[6], pro100->mac, 6);
+
+  // EtherType. 0x0800 = IPv4
+  p[12] = 0x08;
+  p[13] = 0x00;
+  
+  // Payload
+  // config map byte 18 bits 1:0 means NIC should handle packet
+  // padding and stripping, so SHOULD be fine if data is shorter
+  // than minimum required ethernet frame length 
+  uint32_t len_data = strlen(data);
+  memcpy(&p[14], data, len_data);
+
+  tx_cb->byte_count = 14 + len_data;
+  
+  // SEND IT
+  //pro100_outl(SCB_POINTER, (uint32_t) tx_cb);
+  //pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK | INT_MASK);
+}
+
 // Consider changing this to return a pointer to some struct
 // that represents a network device
 void pro100_init(void) {
@@ -194,6 +242,20 @@ void pro100_init(void) {
   pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
 
 
+
+  /*
+  ** Here lies the transmit milestone
+  ** packet construction and transmission will be moved to it's
+  ** own function and called via a syscall from a user program
+  **
+  ** Syscall should call packet send function, check the result
+  ** of the trasmit, and print a message based on that result
+  */
+  // Null terminated and word aligned
+  char *msg = "Hello, World -RJ\0";
+  pro100_transmit(msg);
+
+
 #ifdef DEBUG_PCI
   
   char buf[128];
@@ -214,11 +276,6 @@ void pro100_init(void) {
   cio_printf(buf);
   delay( DELAY_1_SEC );
 
-  for (int i = 0; i < 6; i++) {
-    sprint(buf, "MAC[%d]=0x%x\n", i, pro100->mac[i]);
-    cio_printf(buf);
-    delay(DELAY_1_SEC);
-  }
 #endif
   
   // Free the command block memory

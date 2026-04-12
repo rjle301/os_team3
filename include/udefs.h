@@ -76,6 +76,7 @@ USERMAIN(progI);   USERMAIN(progJ);   USERMAIN(progKL); USERMAIN(progMN);
 USERMAIN(progO);   USERMAIN(progP);   USERMAIN(progQ);  USERMAIN(progR);
 USERMAIN(progS);   USERMAIN(progTUV); USERMAIN(progW);  USERMAIN(progX);
 USERMAIN(progY);   USERMAIN(progZ);
+USERMAIN(progVGA);
 
 // user command-line argument separator character
 #define	ARG_SEP    '\r'

@@ -18,6 +18,7 @@
 #include <syscalls.h>
 #include <kmem.h>
 #include <x86/pic.h>
+#include <x86/vga.h>
 
 /*
 ** PRIVATE DEFINITIONS
@@ -781,6 +782,60 @@ SYSIMPL(getprio) {
 	SYSCALL_EXIT( pcb->pid );
 }
 
+
+
+
+
+
+SYSIMPL(setvga256linear) {
+
+	// sanity check!
+	assert( pcb != NULL );
+
+	//Calls Chris Giese's register assignment 
+	set_vga_256linear();
+}
+
+SYSIMPL(setvgatextmode) {
+
+	// sanity check!
+	assert( pcb != NULL );
+
+	//Calls Chris Giese's register assignment for reverting to text mode
+	setvgatextmode();
+}
+
+SYSIMPL(writepixel) {
+
+	// sanity check!
+	assert( pcb != NULL );
+
+	unsigned x = ARG(pcb,1);
+	unsigned y = ARG(pcb,2);
+	unsigned c = ARG(pcb,3);
+
+	//Calls Chris Giese's register assignment for writing a color to a pixel at some coordinate (x, y)
+	writepixel(x, y, c);
+
+}
+
+SYSIMPL(getwidth) {
+
+	// sanity check!
+	assert( pcb != NULL );
+
+	RET(pcb) = returnwidth();
+
+}
+
+SYSIMPL(getheight) {
+
+	// sanity check!
+	assert( pcb != NULL );
+
+	RET(pcb) = returnheight();
+}
+
 /*
 ** PRIVATE FUNCTIONS AND GLOBAL VARIABLES
 */
@@ -795,16 +850,21 @@ SYSIMPL(getprio) {
 */
 
 static void (* const syscalls[N_SYSCALLS])( pcb_t * ) = {
-	[ SYS_exit ]    = sys_exit,
-	[ SYS_wait ]    = sys_wait,
-	[ SYS_fork ]    = sys_fork,
-	[ SYS_exec ]    = sys_exec,
-	[ SYS_read ]    = sys_read,
-	[ SYS_write ]   = sys_write,
-	[ SYS_sleep ]   = sys_sleep,
-	[ SYS_getpid ]  = sys_getpid,
-	[ SYS_gettime ] = sys_gettime,
-	[ SYS_getprio ] = sys_getprio
+	[ SYS_exit ]    		= sys_exit,
+	[ SYS_wait ]    		= sys_wait,
+	[ SYS_fork ]    		= sys_fork,
+	[ SYS_exec ]    		= sys_exec,
+	[ SYS_read ]    		= sys_read,
+	[ SYS_write ]   		= sys_write,
+	[ SYS_sleep ]   		= sys_sleep,
+	[ SYS_getpid ]  		= sys_getpid,
+	[ SYS_gettime ] 		= sys_gettime,
+	[ SYS_getprio ] 		= sys_getprio,
+	[ SYS_setvga256linear ]	= sys_setvga256linear,
+	[ SYS_setvgatextmode ]	= sys_setvgatextmode,
+	[ SYS_writepixel ]		= sys_writepixel,
+	[ SYS_getwidth ]		= sys_getwidth,
+	[ SYS_getheight ]		= sys_getheight
 };
 
 /**

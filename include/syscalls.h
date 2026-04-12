@@ -34,8 +34,17 @@
 #define SYS_gettime     8
 #define SYS_getprio     9
 
+
+// Custom VGA syscalls
+    //Only should matter if x in SYS_x is consistent with the respective user system call in ulib.h
+#define SYS_setvga256linear 10
+#define SYS_setvgatextmode  11
+#define SYS_writepixel      12
+#define SYS_getwidth        13
+#define SYS_getheight       14
+
 // UPDATE THIS DEFINITION IF MORE SYSCALLS ARE ADDED!
-#define N_SYSCALLS      10
+#define N_SYSCALLS      15
 
 // dummy system call code for testing our ISR
 #define SYS_bogus       0xbad

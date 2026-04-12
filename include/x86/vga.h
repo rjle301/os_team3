@@ -67,14 +67,14 @@
 #define	VGA_BLACK_ON_WHITE  (VGA_FG_BLACK | VGA_BG_WHITE)
 
 
-void set_text_mode();
+void set_text_mode(void);
 
-void write_pixel(unsigned x, unsigned y, unsigned c);
+void write_pixel(unsigned, unsigned, unsigned);
 
-void set_vga_256linear();
+void set_vga_256linear(void);
 
-unsigned return_width();
+unsigned return_width(void);
 
-unsigned return_height();
+unsigned return_height(void);
 
 #endif	/* vga.h */

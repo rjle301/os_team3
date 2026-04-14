@@ -189,11 +189,15 @@ typedef struct proc_s {
 ** of ?.
 */
 
+//What does "#if 0" mean?
+	//Code below will spawn all processes in except M-Q and S-V.
+
 /*
 ** The standard set of test programs, start by the shell (which is started
 ** automatically from the initial user process)
 */
-
+#define SPAWN_VGA
+/*
 #define SPAWN_A
 #define SPAWN_B
 #define SPAWN_C
@@ -221,7 +225,7 @@ there is no user 'O'
 #define SPAWN_V
 #endif
 // users 'W' through 'Z' are spawned by other processes
-
+*/
 #endif /* !ASM_SRC */
 
 #endif

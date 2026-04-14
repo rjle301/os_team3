@@ -20,8 +20,8 @@ USERMAIN( progVGA ) {
     setvga256linear();//Sets to linear text mode.
 
 
-    unsigned x = returnwidth()/2;
-    unsigned y = returnheight()/2;
+    unsigned x = getwidth()/2;
+    unsigned y = getheight()/2;
 
     unsigned YELLOW = 0x6;//Taken from pagekey's definition of yellow. Hopefully this actually works
 

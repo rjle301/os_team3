@@ -243,7 +243,7 @@ void writepixel(unsigned x, unsigned y, unsigned c);
 **
 ** @return The current screen width.
 */
-unsigned returnwidth( void );
+unsigned getwidth( void );
 
 
 /**
@@ -254,7 +254,7 @@ unsigned returnwidth( void );
 **
 ** @return The current screen height.
 */
-unsigned returnheight( void );
+unsigned getheight( void );
 
 
 

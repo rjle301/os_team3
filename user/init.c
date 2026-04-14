@@ -126,10 +126,10 @@ static const proc_t in_procs[] = {
 	PROCENT( progTUV, "userU\rU\r6", PRIO_STD, 'u' ),
 #endif
 #if defined(SPAWN_V)
-	PROCENT( progTUV, "userV\rV\r6", PRIO_STD, 'v' )
+	PROCENT( progTUV, "userV\rV\r6", PRIO_STD, 'v' ),
 #endif
 #if defined(SPAWN_VGA)
-	PROCENT( progVGA, "userVGA\rVGA\r6", PRIO_STD, '+' );
+	PROCENT( progVGA, "userVGA\rVGA\r6", PRIO_STD, '+' )
 #endif
 	// these processes are spawned by the ones above, and are never
 	// spawned directly.

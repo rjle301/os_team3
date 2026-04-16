@@ -598,6 +598,8 @@ void update_13h_buffer(void){
 //outb
 	//outb( int port, uint8_t data )
 //Modified version of Chris Giese's code, which writes 80x25 text registers
+	//Also seems to be breaking.
+		//Will unintentionally modify the visuals of the text mode provided by the baseline operating system, for some reason.
 void set_text_mode(void)
 {
 	//Save what was already present in text mode in graphics mode.
@@ -619,8 +621,8 @@ void set_text_mode(void)
 	pokeb(0x40, 0x84, rows - 1);	/* rows on screen - 1 */
 	pokeb(0x40, 0x85, ht);		/* char height */
 /* set white-on-black attributes for all text */
-	for(i = 0; i < cols * rows; i++)
-		pokeb(0xB800, i * 2 + 1, 7);
+	/*for(i = 0; i < cols * rows; i++)
+		pokeb(0xB800, i * 2 + 1, 7);*/
 	g_wd = 80;
 	g_ht = 25;
 }

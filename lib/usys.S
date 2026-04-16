@@ -74,6 +74,7 @@ SYSCALL(setvgatextmode)
 SYSCALL(writepixel)
 SYSCALL(getheight)
 SYSCALL(getwidth)
+SYSCALL(getfbsegment)
 
 #
 # This is a bogus system call; it's here so that we can test

@@ -67,6 +67,7 @@ SYSCALL(sleep)
 SYSCALL(getpid)
 SYSCALL(gettime)
 SYSCALL(getprio)
+SYSCALL(send)
 
 #
 # This is a bogus system call; it's here so that we can test

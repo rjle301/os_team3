@@ -187,6 +187,20 @@ time_t gettime( void );
 */
 int getprio( pid_t pid );
 
+//TODO: stub send syscall!
+
+
+/**
+** send(char* data)
+**
+** Constructs an ethernet frame out of the data and sends it over ethernet
+**
+** @param data  The data being sent over ethernet
+**
+** @return None
+*/
+void send( char *data );
+
 /**
 ** bogus()
 **

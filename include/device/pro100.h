@@ -10,6 +10,7 @@
 #ifndef PRO_100_H
 #define PRO_100_H
 
+#include <pci.h>
 #include <device/cb.h>
 
 typedef struct pro_100 {

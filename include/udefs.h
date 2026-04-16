@@ -75,7 +75,7 @@ USERMAIN(progABC); USERMAIN(progDE);  USERMAIN(progFG); USERMAIN(progH);
 USERMAIN(progI);   USERMAIN(progJ);   USERMAIN(progKL); USERMAIN(progMN);
 USERMAIN(progO);   USERMAIN(progP);   USERMAIN(progQ);  USERMAIN(progR);
 USERMAIN(progS);   USERMAIN(progTUV); USERMAIN(progW);  USERMAIN(progX);
-USERMAIN(progY);   USERMAIN(progZ);
+USERMAIN(progY);   USERMAIN(progZ);   USERMAIN(progSEND);
 
 // user command-line argument separator character
 #define	ARG_SEP    '\r'
@@ -192,6 +192,8 @@ typedef struct proc_s {
 ** The standard set of test programs, start by the shell (which is started
 ** automatically from the initial user process)
 */
+
+#define SPAWN_SEND
 
 #define SPAWN_A
 #define SPAWN_B

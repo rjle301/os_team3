@@ -33,9 +33,10 @@
 #define SYS_getpid      7
 #define SYS_gettime     8
 #define SYS_getprio     9
+#define SYS_send        10
 
 // UPDATE THIS DEFINITION IF MORE SYSCALLS ARE ADDED!
-#define N_SYSCALLS      10
+#define N_SYSCALLS      11
 
 // dummy system call code for testing our ISR
 #define SYS_bogus       0xbad

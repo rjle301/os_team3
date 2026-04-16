@@ -189,6 +189,7 @@ void pro100_transmit(char *data) {
   memcpy(&p[6], pro100->mac, 6);
 
   // EtherType. 0x0800 = IPv4
+  // Probably doesn't matter if ethernet cable runs computer-to-computer
   p[12] = 0x08;
   p[13] = 0x00;
   
@@ -218,6 +219,9 @@ void pro100_transmit(char *data) {
 // Consider changing this to return a pointer to some struct
 // that represents a network device
 void pro100_init() {
+#ifdef DEBUG_PCI
+  char buf[128];
+#endif
   
   pro100 = (pro100_t *) km_page_alloc(1);
 
@@ -235,43 +239,32 @@ void pro100_init() {
   // Recommended delay after software reset is 15us.
   // With 1 KHz clock frequency, no delay should be needed
   // Time for a CB No-Op command
-  //cb_t *cb_noop = (cb_t *) km_page_alloc(1);
-  //cb_noop->status = 0;
-  //cb_noop->command = CB_CMD_NOP | CB_CMD_EL; 
-  //cb_noop->link = 0xFFFFFFFF; // end of list
+  cb_t *cb_noop = (cb_t *) km_page_alloc(1);
+  cb_noop->status = 0;
+  cb_noop->command = CB_CMD_NOP | CB_CMD_EL; 
+  cb_noop->link = 0xFFFFFFFF; // end of list
   
   // Load the No-Op command block into the SCB 
-  //pro100_outl(SCB_POINTER, (uint32_t) cb_noop);
+  pro100_outl(SCB_POINTER, (uint32_t) cb_noop);
 
   // This generates an interrupt I'm not handling yet, so mask for now
-  //pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+
+#ifdef DEBUG_PCI
+  sprint(buf, "No-Op Command Block Status=0x%04x\n", cb_noop->status);
+  cio_printf(buf);
+  delay(DELAY_2_SEC);
+#endif
 
   // The device's operating parameters need initialization after a reset
   cb_config_t *cb_config = pro100_create_init_cbs();
   pro100_outl(SCB_POINTER, (uint32_t) cb_config);
   pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
 
-
-
-  /*
-  ** Here lies the transmit milestone
-  ** packet construction and transmission will be moved to it's
-  ** own function and called via a syscall from a user program
-  **
-  ** Syscall should call packet send function, check the result
-  ** of the trasmit, and print a message based on that result
-  */
-  // Null terminated and word aligned
-  char *msg = "Hello, World! RLE\0";
-  pro100_transmit(msg);
-
-
 #ifdef DEBUG_PCI
   
-  char buf[128];
-
   // lets do some testing and see what we have here
-  sprint(buf, "Command block Status=0x%04x\n", cb_config->hdr.status);
+  sprint(buf, "Configure Command block Status=0x%04x\n", cb_config->hdr.status);
   cio_printf(buf);
   delay( DELAY_1_SEC );
   

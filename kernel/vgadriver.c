@@ -322,6 +322,7 @@ static unsigned char g_8x16_font[4096] =
 //256 colors, 320 pixels wide, 200 pixels tall, linear addressing
 	//VGA graphics mode
 	//This should hopefully be the easiest mode.
+	//Got from Chris Giese.
 unsigned char g_320x200x256[] =
 {
 /* MISC */
@@ -344,6 +345,7 @@ unsigned char g_320x200x256[] =
 
 //80 characters wide, 25 characters tall.
 	//Text mode
+	//Got from Chris Giese.
 unsigned char g_80x25_text[] =
 {
 /* MISC */
@@ -363,6 +365,51 @@ unsigned char g_80x25_text[] =
 	0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F,
 	0x0C, 0x00, 0x0F, 0x08, 0x00
 };
+
+
+int active = 0;
+
+//Get 4k page that will represent the screen buffer.
+	//Because the VGA segment is initially uninitialized...
+	//Buffer is intended to never be deallocated. Thus, should be ok.
+	//Assumed to only be for 13h mode.
+static char vga_graphics_buffer[VGA_GRAPHICS_SCREEN_HEIGHT][VGA_GRAPHICS_SCREEN_WIDTH];
+
+
+//Should set up a buffer for the VGA screen.
+	//Just allocates a block that contains only one page of memory
+	
+	//64l/4kb = page count
+
+void write_to_pixel_buffer(unsigned x, unsigned y, unsigned c){
+	unsigned wd_in_bytes;
+	unsigned off;
+
+	wd_in_bytes = g_wd;
+	vga_graphics_buffer[y][x] = (char)c;
+}
+
+
+void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
+{
+	unsigned wd_in_bytes;
+	unsigned off;
+
+	wd_in_bytes = g_wd;
+	off = wd_in_bytes * y + x;
+	vpokeb(off, c);
+}
+
+//Updates the vga graphics screen.
+	//Assumed to be in mode 13h.
+static void update_vga_graphics_screen(){
+	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
+		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
+			write_pixel(j, i, vga_graphics_buffer[i][j]);
+		}
+	}
+}
+
 
 //Sets the plane.
 	//From Chris Giese.
@@ -473,6 +520,13 @@ assume: chain-4 addressing already off */
 }
 
 
+//inb and outb
+	//inb:
+		//Index of the io port
+		//Reads from some io port
+	//outb:
+		//Inde of the io port, data
+		//Writes to some io port
 //Writes registers for VGA graphics mode.
 	//Effectively taken this from Chris Giese, but I replaced the inportb and outportb stuff with the ones provided by ops.h
 //Forgot to add the comments that actually define what this actually does.
@@ -481,7 +535,6 @@ void write_regs(unsigned char *regs)
 	unsigned i;
 
 /* write MISCELLANEOUS reg */
-
 	outb(VGA_MISC_WRITE, *regs);
 	regs++;
 /* write SEQUENCER regs */
@@ -531,6 +584,14 @@ static void vpokeb(unsigned off, unsigned val)
 	pokeb(get_fb_seg(), off, val);
 }
 
+static void update_13h_buffer(){
+	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
+		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
+			vga_graphics_buffer[i][j] = peekb(get_fb_seg(), i*VGA_GRAPHICS_SCREEN_WIDTH+j);
+		}
+	}
+}
+
 
 //inb
 	//inb( int port )
@@ -539,6 +600,8 @@ static void vpokeb(unsigned off, unsigned val)
 //Modified version of Chris Giese's code, which writes 80x25 text registers
 void set_text_mode()
 {
+	//Save what was already present in text mode in graphics mode.
+	update_13h_buffer();
 	unsigned rows, cols, ht, i;
 	write_regs(g_80x25_text);
 	cols = 80;
@@ -562,24 +625,21 @@ void set_text_mode()
 	g_ht = 25;
 }
 
-//What are vpokeb, vpeekb, supposed to be?
-	//How large is the unsigned data type
-	//Writes to VGA 256 linear addressing
-void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
-{
-	unsigned wd_in_bytes;
-	unsigned off;
-
-	wd_in_bytes = g_wd;
-	off = wd_in_bytes * y + x;
-	vpokeb(off, c);
-}
 
 
 void set_vga_256linear(void){
+	if(active == 0){//If not activated before, initialize the graphics buffer and set the flag to "active."
+		for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
+			for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
+				vga_graphics_buffer[i][j] = 0x0;
+			}
+		}
+		active = 1;
+	}
 	write_regs(g_320x200x256);
 	g_wd = 320;
 	g_ht = 200;
+	update_vga_graphics_screen();//Immediately updates the screen.
 }
 
 

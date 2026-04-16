@@ -652,5 +652,5 @@ unsigned return_height(void){
 }
 
 unsigned return_fb_segment(void){
-	return get_fb_segment();
+	return getfbsegment();
 }

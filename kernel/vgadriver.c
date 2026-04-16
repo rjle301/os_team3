@@ -54,6 +54,19 @@ static unsigned g_wd;
 static unsigned g_ht;
 
 
+
+//From Chris Giese.
+static void vmemwr(unsigned dst_off, unsigned char *src, unsigned count)
+{
+	_vmemwr(get_fb_seg(), dst_off, src, count);
+}
+
+static void vpokeb(unsigned off, unsigned val)
+{
+	pokeb(get_fb_seg(), off, val);
+}
+
+
 //If set to 1, is in text mode 80x25. If set to 0, is in graphics mode 320x200, 256 colors, linear addressing
 //static char textMode = 1;//By default, set to this due to how the bios works...
 
@@ -382,10 +395,6 @@ static char vga_graphics_buffer[VGA_GRAPHICS_SCREEN_HEIGHT][VGA_GRAPHICS_SCREEN_
 	//64l/4kb = page count
 
 void write_to_pixel_buffer(unsigned x, unsigned y, unsigned c){
-	unsigned wd_in_bytes;
-	unsigned off;
-
-	wd_in_bytes = g_wd;
 	vga_graphics_buffer[y][x] = (char)c;
 }
 
@@ -454,11 +463,6 @@ static unsigned get_fb_seg(void)
 	return seg;
 }
 
-//From Chris Giese.
-static void vmemwr(unsigned dst_off, unsigned char *src, unsigned count)
-{
-	_vmemwr(get_fb_seg(), dst_off, src, count);
-}
 
 //Writes font to plane 4 of the video memory.
 	//Effectively taken this from Chris Giese, but I replaced the inportb and outportb stuff with the ones provided by ops.h
@@ -579,12 +583,7 @@ void write_regs(unsigned char *regs)
 	outb(VGA_AC_INDEX, 0x20);
 }
 
-static void vpokeb(unsigned off, unsigned val)
-{
-	pokeb(get_fb_seg(), off, val);
-}
-
-static void update_13h_buffer(){
+void update_13h_buffer(){
 	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
 		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
 			vga_graphics_buffer[i][j] = peekb(get_fb_seg(), i*VGA_GRAPHICS_SCREEN_WIDTH+j);

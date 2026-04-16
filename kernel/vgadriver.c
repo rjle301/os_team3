@@ -53,6 +53,32 @@ static unsigned g_wd;
 //Current height of the screen.
 static unsigned g_ht;
 
+//This gets the respective memory segment needed 
+	//From Chris Giese.
+static unsigned get_fb_seg(void)
+{
+	unsigned seg;
+
+	outb(VGA_GC_INDEX, 6);
+	seg = inb(VGA_GC_DATA);
+	seg >>= 2;
+	seg &= 3;
+	switch(seg)
+	{
+	case 0:
+	case 1:
+		seg = 0xA000;
+		break;
+	case 2:
+		seg = 0xB000;
+		break;
+	case 3:
+		seg = 0xB800;
+		break;
+	}
+	return seg;
+}
+
 
 
 //From Chris Giese.
@@ -411,7 +437,7 @@ void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
 
 //Updates the vga graphics screen.
 	//Assumed to be in mode 13h.
-static void update_vga_graphics_screen(){
+void update_vga_graphics_screen(){
 	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
 		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
 			write_pixel(j, i, vga_graphics_buffer[i][j]);
@@ -435,32 +461,6 @@ static void set_plane(unsigned p)
 /* set write plane */
 	outb(VGA_SEQ_INDEX, 2);
 	outb(VGA_SEQ_DATA, pmask);
-}
-
-//This gets the respective memory segment needed 
-	//From Chris Giese.
-static unsigned get_fb_seg(void)
-{
-	unsigned seg;
-
-	outb(VGA_GC_INDEX, 6);
-	seg = inb(VGA_GC_DATA);
-	seg >>= 2;
-	seg &= 3;
-	switch(seg)
-	{
-	case 0:
-	case 1:
-		seg = 0xA000;
-		break;
-	case 2:
-		seg = 0xB000;
-		break;
-	case 3:
-		seg = 0xB800;
-		break;
-	}
-	return seg;
 }
 
 

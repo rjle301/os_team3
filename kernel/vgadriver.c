@@ -650,3 +650,7 @@ unsigned return_width(void){
 unsigned return_height(void){
 	return g_ht;
 }
+
+unsigned return_fb_segment(void){
+	return get_fb_segment();
+}

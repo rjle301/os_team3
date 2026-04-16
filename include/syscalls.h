@@ -42,9 +42,10 @@
 #define SYS_writepixel      12
 #define SYS_getwidth        13
 #define SYS_getheight       14
+#define SYS_getfbsegment    15
 
 // UPDATE THIS DEFINITION IF MORE SYSCALLS ARE ADDED!
-#define N_SYSCALLS      15
+#define N_SYSCALLS      16
 
 // dummy system call code for testing our ISR
 #define SYS_bogus       0xbad

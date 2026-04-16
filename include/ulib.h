@@ -257,6 +257,16 @@ unsigned getwidth( void );
 unsigned getheight( void );
 
 
+/**
+** returnfbsegment()
+**
+** Get the location of the fb segment.
+**
+**
+** @return The address where VGA is looking at..
+*/
+unsigned getfbsegment( void );
+
 
 /*
 *************************************************

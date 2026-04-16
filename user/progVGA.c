@@ -16,9 +16,10 @@ USERMAIN( progVGA ) {
 
 
 	ARG_PROC( 3, args, 5, argc, "progVGA" );
-
+    char buf[128];
+    sprint( buf, "%x\n", getfbsegment());//Get the text location.
     setvga256linear();//Sets to linear text mode.
-
+    sprint( buf, "%x\n", getfbsegment());//Get the 13h memory location.
 
     unsigned x = getwidth()/2;
     unsigned y = getheight()/2;

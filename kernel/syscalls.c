@@ -836,6 +836,13 @@ SYSIMPL(getheight) {
 	RET(pcb) = return_height();
 }
 
+SYSIMPL(getfbsegment) {
+
+	assert( pcb != NULL );
+
+	RET(pcb) = return_fb_segment();
+}
+
 /*
 ** PRIVATE FUNCTIONS AND GLOBAL VARIABLES
 */
@@ -864,7 +871,8 @@ static void (* const syscalls[N_SYSCALLS])( pcb_t * ) = {
 	[ SYS_setvgatextmode ]	= sys_setvgatextmode,
 	[ SYS_writepixel ]		= sys_writepixel,
 	[ SYS_getwidth ]		= sys_getwidth,
-	[ SYS_getheight ]		= sys_getheight
+	[ SYS_getheight ]		= sys_getheight,
+	[ SYS_getfbsegment ]	= sys_getfbsegment
 };
 
 /**

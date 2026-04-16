@@ -435,9 +435,10 @@ void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
 	vpokeb(off, c);
 }
 
+
 //Updates the vga graphics screen.
 	//Assumed to be in mode 13h.
-void update_vga_graphics_screen(){
+void update_vga_graphics_screen(void){
 	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
 		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
 			write_pixel(j, i, vga_graphics_buffer[i][j]);
@@ -583,7 +584,7 @@ void write_regs(unsigned char *regs)
 	outb(VGA_AC_INDEX, 0x20);
 }
 
-void update_13h_buffer(){
+void update_13h_buffer(void){
 	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
 		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
 			vga_graphics_buffer[i][j] = peekb(get_fb_seg(), i*VGA_GRAPHICS_SCREEN_WIDTH+j);
@@ -597,7 +598,7 @@ void update_13h_buffer(){
 //outb
 	//outb( int port, uint8_t data )
 //Modified version of Chris Giese's code, which writes 80x25 text registers
-void set_text_mode()
+void set_text_mode(void)
 {
 	//Save what was already present in text mode in graphics mode.
 	update_13h_buffer();

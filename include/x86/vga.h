@@ -77,4 +77,6 @@ unsigned return_width(void);
 
 unsigned return_height(void);
 
+unsigned return_fb_segment(void);
+
 #endif	/* vga.h */

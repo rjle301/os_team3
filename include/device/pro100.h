@@ -13,6 +13,9 @@
 #include <pci.h>
 #include <device/cb.h>
 
+// Other interrupt vectors are in include/x86/arch.h
+#define VEC_NIC 0x2b
+
 typedef struct pro_100 {
 
   // Pro100 PCI information
@@ -22,7 +25,11 @@ typedef struct pro_100 {
   uint8_t mac[6];
  
   // Beginning of the I/O communication space 
-  uint16_t io_base_addr; 
+  uint16_t io_base_addr;
+
+  // The device's Recieve Frame Descriptor
+  // Recieved ethernet frames are copied here by the device
+  rfd_t *rfd;
 
 } pro100_t;
  
@@ -39,6 +46,11 @@ uint32_t pro100_inl(uint32_t offset);
 uint16_t pro100_inw(uint32_t offset);
 uint8_t pro100_inb(uint32_t offset);
 
+/*
+** End read/write functions
+*/
+
+void pro100_isr(int vector, int code);
 
 /*
 ** Creates the necessary command blocks to initialize the Pro100.
@@ -49,18 +61,28 @@ uint8_t pro100_inb(uint32_t offset);
 cb_config_t *pro100_create_init_cbs(void);
 
 /*
-** Enables I/O communication from the CPU to the NIC
+** Enables I/O communication from the host CPU to the NIC
 */
 void pro100_access_enable(void);
 
 /*
+** Creates the first (and only) RFD, gives it to the NIC
+** and issues an RU_START command to the NIC
+*/
+void pro100_rx_init(void);
+
+/*
 ** Builds a TxCB, constructs an ethernet packet, and
-** begins the transmit action command
+** issues a transmit command to the NIC
 */
 void pro100_transmit(char *data);
 
 /*
-** Sets the Pro100 NIC up for Transmit/Recieve
+** Initialization routine for the Pro100 NIC.
+** Performs a software reset, then configures
+** the NIC. Once this routine returns, the
+** NIC should be ready to transmit and recieve
+** ethernet frames
 */
 void pro100_init(void);
 

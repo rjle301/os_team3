@@ -193,8 +193,8 @@ typedef struct proc_s {
 ** automatically from the initial user process)
 */
 
-#define SPAWN_SEND
 
+#if 0
 #define SPAWN_A
 #define SPAWN_B
 #define SPAWN_C
@@ -207,7 +207,6 @@ typedef struct proc_s {
 #define SPAWN_J
 #define SPAWN_K
 #define SPAWN_L
-#if 0
 #define SPAWN_M
 #define SPAWN_N
 there is no user 'O'
@@ -219,6 +218,7 @@ there is no user 'O'
 #define SPAWN_U
 #define SPAWN_V
 #endif
+#define SPAWN_SEND
 // users 'W' through 'Z' are spawned by other processes
 
 #endif /* !ASM_SRC */

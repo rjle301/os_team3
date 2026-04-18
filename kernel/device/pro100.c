@@ -11,13 +11,11 @@
 #include <device/pro100.h>
 #include <kmem.h>
 #include <x86/ops.h>
+#include <x86/pic.h>
 #include <lib.h>
-
-/** These are for print debugging */
 #include <support.h>
 #include <cio.h>
 #include <klib.h>
-/** ====== */
 
 /*
 ** Macros for values used in write/out_ functions
@@ -25,6 +23,7 @@
 #define BUS_MASTER      (1 << 2)
 #define IO_SPACE        (1 << 0)
 #define SOFTWARE_RESET  0x00
+#define RU_START        0x0001
 #define CU_START        0x0010
 #define CU_RESUME       0x0020
 #define INT_MASK        0x0100
@@ -38,7 +37,23 @@
 #define SCB_COMMAND   0x02
 #define SCB_POINTER   0x04
 #define PORT          0x08
-#define EEPROM_CTRL   0x0E
+
+#define STAT_ACK      SCB_STATUS + 0x01
+
+/*
+** Interrupt flags set by the NIC inside the
+** SCB Status word. These are called the STAT/ACK
+** bits and only live in the upper byte of the word
+**
+** Bits 7:2 and bit 0 are used. Bit 1 is reserved
+*/
+#define CX_TNO_INT    0x80
+#define FR_INT        0x40
+#define CNA_INT       0x20
+#define RNR_INT       0x10
+#define MDI_INT       0x08
+#define SWI_INT       0x04
+#define FCP_INT       0x01
 
 /*
 ** Command Block (CB) Macros
@@ -47,6 +62,7 @@
 #define CB_CMD_IAS    0x0001
 #define CB_CMD_CFG    0x0002
 #define CB_CMD_TX     0x0004
+#define CB_CMD_SF     0x0008
 #define CB_CMD_EL     0x8000  // Any cb with this bit set is the last cb
 #define TXCB_EOF      0x8000
 #define CMD_SUCCESS   0xA000
@@ -76,6 +92,47 @@ uint16_t pro100_inw(uint32_t offset) {
 
 uint8_t pro100_inb(uint32_t offset) {
   return inb(pro100->io_base_addr + offset);
+}
+
+/*
+** For more detailed information about the Pro100's interrupt flags, visit
+** page 43 of the Intel 8255x datasheet.
+*/
+void pro100_isr(int vector, int code) {
+
+#ifdef DEBUG_NIC
+  cio_printf("\n** Pro100 ISR! vector=0x%02x, code=%d\n",
+      (unsigned int) vector, code);
+
+  // Print the STAT/ACK bits so we can see which interrupt flag is set
+  uint8_t flags = pro100_inb(STAT_ACK);
+  cio_printf("STAT/ACK bits=%x\n", flags);
+#endif
+
+  // We're probably in this ISR because a frame was recieved
+  // Frame recieved == FR
+  if (flags & FR_INT) {
+    pro100_outb(STAT_ACK, FR_INT);
+    flags &= ~FR_INT;
+  }
+
+  // The other main interrupt flag is the CNA flag, which gets set
+  // everytime the command unit (CU) leaves the active state.
+  if (flags & CNA_INT) {
+    pro100_outb(STAT_ACK, CNA_INT);
+    flags &= ~CNA_INT;
+  }
+
+  // Ack the interrupt on the NIC
+  // This will acknowledge ALL remaining interrupt flags raised by the NIC,
+  // even though we aren't handling them all.
+  // This driver is simple enough that nothing else besdies the RSR flag
+  // should be set
+  pro100_outb(STAT_ACK, flags);
+  
+  // Tell the PIC we're done
+  outb(PIC2_CMD, PIC_EOI);
+  outb(PIC1_CMD, PIC_EOI);
 }
 
 cb_config_t *pro100_create_init_cbs(void) {
@@ -160,6 +217,27 @@ void pro100_access_enable(void) {
 
 }
 
+void pro100_rx_init(void) {
+  
+  // Build the RFD 
+  rfd_t *rfd = (rfd_t *) km_page_alloc(1);
+  rfd->hdr.status = 0;
+  rfd->hdr.command = CB_CMD_SF | CB_CMD_EL; 
+  rfd->hdr.link = 0xFFFFFFFF;
+
+  // Clear four bytes where recieve frame info goes.
+  // These bytes will be set by the device when a 
+  // frame is recieved
+  memset(&rfd->actual_count, sizeof(uint32_t), 0);
+ 
+  // Tell device it is ready to recieve frames
+  pro100_outl(SCB_POINTER, (uint32_t) rfd);
+  pro100_outw(SCB_COMMAND, RU_START | CNA_INT_MASK);
+
+  // Copy this RFD to the logical device so we can access it later
+  pro100->rfd = rfd;
+}
+
 void pro100_transmit(char *data) {
  
   // Build the TxCB
@@ -205,7 +283,7 @@ void pro100_transmit(char *data) {
 
   // Begin transmission
   pro100_outl(SCB_POINTER, (uint32_t) tx_cb);
-  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+  pro100_outw(SCB_COMMAND, CU_START /* | CNA_INT_MASK */);
   
   // Poll to see if entire frame has been sent to NIC's transmit FIFO
   while(!(tx_cb->hdr.status & CMD_SUCCESS)) {
@@ -219,7 +297,7 @@ void pro100_transmit(char *data) {
 // Consider changing this to return a pointer to some struct
 // that represents a network device
 void pro100_init() {
-#ifdef DEBUG_PCI
+#ifdef DEBUG_NIC
   char buf[128];
 #endif
   
@@ -235,7 +313,8 @@ void pro100_init() {
   // Now that we can access the device, issue a software reset
   // to prepare it for initialization
   pro100_outl(pro100->io_base_addr + PORT, SOFTWARE_RESET);
-  
+
+ /* 
   // Recommended delay after software reset is 15us.
   // With 1 KHz clock frequency, no delay should be needed
   // Time for a CB No-Op command
@@ -244,27 +323,31 @@ void pro100_init() {
   cb_noop->command = CB_CMD_NOP | CB_CMD_EL; 
   cb_noop->link = 0xFFFFFFFF; // end of list
   
-  // Load the No-Op command block into the SCB 
+   Load the No-Op command block into the SCB 
   pro100_outl(SCB_POINTER, (uint32_t) cb_noop);
 
-  // This generates an interrupt I'm not handling yet, so mask for now
+   This generates an interrupt I'm not handling yet, so mask for now
   pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
 
-#ifdef DEBUG_PCI
+#ifdef DEBUG_NIC
   sprint(buf, "No-Op Command Block Status=0x%04x\n", cb_noop->status);
   cio_printf(buf);
-  delay(DELAY_2_SEC);
+  delay(DELAY_1_SEC);
 #endif
+*/
 
   // The device's operating parameters need initialization after a reset
   cb_config_t *cb_config = pro100_create_init_cbs();
   pro100_outl(SCB_POINTER, (uint32_t) cb_config);
   pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
 
-#ifdef DEBUG_PCI
+  // Now prepare the device for ethernet frame reception
+  pro100_rx_init();
+
+#ifdef DEBUG_NIC
   
   // lets do some testing and see what we have here
-  sprint(buf, "Configure Command block Status=0x%04x\n", cb_config->hdr.status);
+  sprint(buf, "Rx Command block Status=0x%04x\n", cb_config->hdr.status);
   cio_printf(buf);
   delay( DELAY_1_SEC );
   
@@ -280,9 +363,13 @@ void pro100_init() {
   delay( DELAY_1_SEC );
 
 #endif
+
+  // Lastly, install the ISR that handles Rx
+  install_isr(VEC_NIC, &pro100_isr);
   
   // Free the command block memory
   // cast to silence compiler warnings
   km_page_free((cb_ias_t *) cb_config->hdr.link);
   km_page_free(cb_config);
 }
+

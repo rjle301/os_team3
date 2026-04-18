@@ -24,7 +24,7 @@ USERMAIN( progSEND ) {
 	prio_t prio = getprio( 0 );
 
 	char buf[128];
-	sprint( buf, "idle [%d], started @ %u\n", pid, prio, now );
+	sprint( buf, "send [%d], started @ %u\n", pid, prio, now );
 	cwrites( buf );
   
   // Send a message

@@ -10,7 +10,10 @@
 #define CMDBLOCK_H
 
 #define N_CONFIG_BYTES  22
-#define ETH_FRAME_SIZE  64
+#define ETH_FRAME_HDR   14    // 14-byte MAC Address + Type prefix 
+#define ETH_FRAME_CRC   4     // 4-byte postfix checksum
+#define PAYLOAD_SIZE    1500  // maximum of 1500-byte payload
+#define ETH_FRAME_SIZE  ETH_FRAME_HDR + PAYLOAD_SIZE + ETH_FRAME_CRC
 
 /*
 ** Shared fields across all command blocks
@@ -30,7 +33,7 @@ typedef struct __attribute__((packed)) {
 */
 typedef struct __attribute__((packed)) {
   
-  // Bytes are packed so this can't be a pointer
+  // Shared header information across command blocks
   cb_t hdr;
 
   // Contiguous 22-byte configuration map
@@ -44,7 +47,7 @@ typedef struct __attribute__((packed)) {
 */
 typedef struct __attribute__((packed)) {
   
-  // Bytes are packed so this can't be a pointer 
+  // Shared header information across command blocks
   cb_t hdr;
 
   // MAC addresses are 6 bytes long
@@ -59,7 +62,7 @@ typedef struct __attribute__((packed)) {
 */
 typedef struct __attribute__((packed)) {
   
-  // Bytes are packed so this can't be a pointer
+  // Shared header information across command blocks
   cb_t hdr; 
   
   // Address of the Transmit Buffer Descriptor array
@@ -84,5 +87,38 @@ typedef struct __attribute__((packed)) {
   uint8_t packet[ETH_FRAME_SIZE];
 
 } tx_cb_t;
+
+/*
+** A recieve frame descriptor. Contains the standard command block
+** header information (status, command, link), as well as information
+** about the recieved frame and the payload.
+**
+** Page 108 of the Intel8255x datasheet has useful diagrams
+** 
+*/
+typedef struct __attribute__((packed)) {
+  
+  // Shared header information across command blocks
+  cb_t hdr;
+  
+  // The Dword immediately after the common command block header
+  // is reserved in RFDs. Still need this here because command
+  // block structs are packed.
+  uint32_t reserved;
+  
+  // Bit  15   = EOF - Set by the device when payload has been copied to memory
+  // Bit  14   = F - Set by the device when the actual count field is updated
+  // Bits 13:0 = Actual count - The number of bytes copied to memory
+  uint16_t actual_count;
+  
+  // Bit  15 = 0
+  // Bit  14 = 0
+  // Bits 13:0 = Size of the data buffer
+  uint16_t size;
+  
+  // The sequential data buffer of this RFD
+  uint8_t data[PAYLOAD_SIZE];
+  
+} rfd_t;
 
 #endif

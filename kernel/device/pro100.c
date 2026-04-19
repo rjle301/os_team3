@@ -100,12 +100,13 @@ uint8_t pro100_inb(uint32_t offset) {
 */
 void pro100_isr(int vector, int code) {
 
+  uint8_t flags = pro100_inb(STAT_ACK);
+  
 #ifdef DEBUG_NIC
   cio_printf("\n** Pro100 ISR! vector=0x%02x, code=%d\n",
       (unsigned int) vector, code);
 
   // Print the STAT/ACK bits so we can see which interrupt flag is set
-  uint8_t flags = pro100_inb(STAT_ACK);
   cio_printf("STAT/ACK bits=%x\n", flags);
 #endif
 

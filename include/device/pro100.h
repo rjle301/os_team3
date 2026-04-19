@@ -45,7 +45,6 @@ void pro100_outb(uint32_t offset, uint8_t val);
 uint32_t pro100_inl(uint32_t offset);
 uint16_t pro100_inw(uint32_t offset);
 uint8_t pro100_inb(uint32_t offset);
-
 /*
 ** End read/write functions
 */
@@ -70,6 +69,13 @@ void pro100_access_enable(void);
 ** and issues an RU_START command to the NIC
 */
 void pro100_rx_init(void);
+
+/*
+** Parses a recieved ethernet frame and prints the data.
+**
+** Called in pro100_isr
+*/
+void pro100_recieve(void);
 
 /*
 ** Builds a TxCB, constructs an ethernet packet, and

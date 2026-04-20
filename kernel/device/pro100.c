@@ -279,7 +279,7 @@ void pro100_transmit(char *data) {
   uint8_t *p = tx_cb->packet;
 
   // Destination MAC  
-#ifdef BUILD_1
+#ifndef BUILD_1
   p[0] = 0x2A;
   p[1] = 0x3B;
   p[2] = 0x4C;
@@ -298,21 +298,22 @@ void pro100_transmit(char *data) {
 
   // Source MAC. Not inserted by NIC, per settings from config command
   memcpy(&p[6], pro100->mac, 6);
-
-  // EtherType. 0x0800 = IPv4
-  // Probably doesn't matter if ethernet cable runs computer-to-computer
-  p[12] = 0x08;
-  p[13] = 0x00;
   
+  uint16_t len_data = (uint16_t) strlen(data);
+
+  // Length/Type field of ethernet frame header. 2 bytes long
+  // This will be used on recieve to strip any padding bytes
+  p[12] = (uint8_t) (len_data >> 8);
+  p[13] = (uint8_t) len_data;
+
   // Payload
   // config map byte 18 bits 1:0 means NIC should handle packet
   // padding and stripping, so SHOULD be fine if data is shorter
   // than minimum required ethernet frame length 
-  uint32_t len_data = strlen(data);
   memcpy(&p[14], data, len_data);
   
   // 14 = 2 * 6-byte MAC addresses, 2-byte Length/Type field
-  tx_cb->byte_count = 14 + len_data;
+  tx_cb->byte_count = ETH_FRAME_HDR + len_data;  
 
   /*
   ** End packet construction

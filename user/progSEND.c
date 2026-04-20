@@ -12,6 +12,7 @@
 ** Invoked as progS
 */
 
+#define MAX_MSG 80 // limit msg length to screen width in chars
 
 USERMAIN( progSEND ) {
 
@@ -28,11 +29,28 @@ USERMAIN( progSEND ) {
 	cwrites( buf );
   
   // Send a message
-  char *msg = "Hello, World! -RLE";
+  char buffer[MAX_MSG];
+  int n = read( CHAN_SIO, buffer, MAX_MSG );
+  if (n <= 0) {
+    sprint( buf, "No bytes read from CHAN_SIO. Terminating!\n" );
+    cwrites( buf );
+    exit( -1 );
+    return( 82 );
+  }
+
+  // If the clock bug on real hardware is fixed, this can just be
+  // keyboard input
+  char *msg;
+
+#ifdef BAD_CLOCK
+  msg = "Hello, World! -RLE\0";
+#else
+  msg = &buffer[0];
+#endif
+
   send( msg );
 
   exit( 0 );
-
   return( 83 );
 }
 #endif

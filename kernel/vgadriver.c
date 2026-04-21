@@ -9,7 +9,10 @@
 //"unsigned" = "unsigned int"
 #include "../include/x86/ops.h"
 #include "../include/x86/vga.h"
+#include "../include/kmem.h" //Are any addresses I'm accessing above 1 MB?
 
+//	0xA0000
+//+	 0xFA00
 //From Chris Giese.
 	//Accesses memory based on a segment, offset, and the number of bytes to modify at the given location
 #define	peekb(S,O)		*(unsigned char *)(16uL * (S) + (O))
@@ -17,7 +20,7 @@
 #define	pokew(S,O,V)		*(unsigned short *)(16uL * (S) + (O)) = (V)
 #define	_vmemwr(DS,DO,S,N)	memcpy((char *)((DS) * 16 + (DO)), S, N)
 
-#define VGA_GRAPHICS_REGION_ADDRESS 0xA0000
+#define VGA_GRAPHICS_REGION_ADDRESS 0xA000
 
 #define VGA_GRAPHICS_SCREEN_HEIGHT 200
 
@@ -87,10 +90,14 @@ static void vmemwr(unsigned dst_off, unsigned char *src, unsigned count)
 	_vmemwr(get_fb_seg(), dst_off, src, count);
 }
 
-static void vpokeb(unsigned off, unsigned val)
+static void vpokeb(unsigned off, unsigned val)//This is supposed to ONLY be called with respect to vga 13h.
 {
 	pokeb(get_fb_seg(), off, val);
 }
+
+
+//VGA text buffer.
+short vga_text_buffer [8*80][15*25];
 
 
 //If set to 1, is in text mode 80x25. If set to 0, is in graphics mode 320x200, 256 colors, linear addressing
@@ -409,10 +416,12 @@ unsigned char g_80x25_text[] =
 int active = 0;
 
 //Get 4k page that will represent the screen buffer.
-	//Because the VGA segment is initially uninitialized...
-	//Buffer is intended to never be deallocated. Thus, should be ok.
-	//Assumed to only be for 13h mode.
-static char vga_graphics_buffer[VGA_GRAPHICS_SCREEN_HEIGHT][VGA_GRAPHICS_SCREEN_WIDTH];
+        //Because the VGA segment is initially uninitialized...
+        //Buffer is intended to never be deallocated. Thus, should be ok.
+        //Assumed to only be for 13h mode.
+static char* vga_graphics_buffer = NULL;
+
+static char vga_text_data[VGA_GRAPHICS_SCREEN_HEIGHT][VGA_GRAPHICS_SCREEN_WIDTH];
 
 
 //Should set up a buffer for the VGA screen.
@@ -498,7 +507,7 @@ assume: chain-4 addressing already off */
 /* write font to plane P4 */
 	set_plane(2);
 /* write font 0 */
-	for(i = 0; i < 256; i++)
+	for(i = 0; i < 256; i++)//This starts writing at 0x0... Shouldn't font data already be located in this area?
 	{
 		vmemwr(16384u * 0 + i * 32, buf, font_height);
 		buf += font_height;
@@ -603,15 +612,20 @@ void update_13h_buffer(void){
 void set_text_mode(void)
 {
 	//Save what was already present in text mode in graphics mode.
-	update_13h_buffer();
+	//update_13h_buffer();
+	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
+			for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
+					write_pixel(j, i, vga_text_data[i][j]);
+			}
+	}
 	unsigned rows, cols, ht, i;
 	write_regs(g_80x25_text);
 	cols = 80;
 	rows = 25;
 	ht = 16;
 /* set font */
-	write_font(g_8x16_font, 16);
-	//Set the write address below to 0x400, as that's where the bios data area starts.
+	write_font(g_8x16_font, 16);//Writes starting at segment 0x0000...
+	//Set the write address below to 0x4000, as that's where the bios data area starts.
 /* tell the BIOS what we've done, so BIOS text output works OK */
 	pokew(0x40, 0x4A, cols);	/* columns on screen */
 	pokew(0x40, 0x4C, cols * rows * 2); /* framebuffer size */
@@ -630,17 +644,26 @@ void set_text_mode(void)
 
 
 void set_vga_256linear(void){
-	if(active == 0){//If not activated before, initialize the graphics buffer and set the flag to "active."
-		for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
-			for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
-				vga_graphics_buffer[i][j] = 0x0;
-			}
-		}
-		active = 1;
-	}
+	
+
 	write_regs(g_320x200x256);
 	g_wd = 320;
 	g_ht = 200;
+	
+	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
+			for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
+					vga_text_data[i][j] = peekb(0xA000, i*VGA_GRAPHICS_SCREEN_WIDTH+j);
+			}
+	}
+	if(active == 0){//If not activated before, initialize the graphics buffer and set the flag to "active."
+			vga_graphics_buffer = km_page_alloc(((g_wd*g_ht)/4096)+1);
+			for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
+					for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
+							vga_graphics_buffer[i*VGA_GRAPHICS_SCREEN_WIDTH+j] = 0x0;
+					}
+			}
+			active = 1;
+	}
 	update_vga_graphics_screen();//Immediately updates the screen.
 }
 

@@ -24,8 +24,10 @@
 #define IO_SPACE        (1 << 0)
 #define SOFTWARE_RESET  0x00
 #define RU_START        0x0001
+#define RU_LOAD_BASE    0x0006
 #define CU_START        0x0010
 #define CU_RESUME       0x0020
+#define CU_LOAD_BASE    0x0060
 #define INT_MASK        0x0100
 #define CNA_INT_MASK    0x2000
 
@@ -58,6 +60,7 @@
 /*
 ** Command Block (CB) Macros
 */
+#define CB_CMD_ACCEPT 0x0000
 #define CB_CMD_NOP    0x0000
 #define CB_CMD_IAS    0x0001
 #define CB_CMD_CFG    0x0002
@@ -66,6 +69,8 @@
 #define CB_CMD_EL     0x8000  // Any cb with this bit set is the last cb
 #define TXCB_EOF      0x8000
 #define CMD_SUCCESS   0xA000
+#define RX_SUCCESS    0xA000
+#define RX_EVENT      0xBFFF
 
 // Global Pro100 pointer
 pro100_t *pro100;
@@ -140,8 +145,12 @@ void pro100_isr(int vector, int code) {
   outb(PIC1_CMD, PIC_EOI);
 }
 
-cb_config_t *pro100_create_init_cbs(void) {
-  
+/*
+**
+*/
+void pro100_address_setup(void) {
+
+  // Build the individual address command 
   cb_ias_t *cb_ias = (cb_ias_t *) km_page_alloc(1);
   cb_ias->hdr.status = 0;
   cb_ias->hdr.command = CB_CMD_IAS | CB_CMD_EL;
@@ -162,22 +171,49 @@ cb_config_t *pro100_create_init_cbs(void) {
   cb_ias->mac[3] = 0x5D;
   cb_ias->mac[4] = 0x6E;
   cb_ias->mac[5] = 0x7F;
-#endif
-  
+#endif 
 
   // Copy this 6-byte mac address to the Pro100 device structure in memory
-  // Might be important later for building Tx frames
+  // Important later for building Tx frames
   memcpy(pro100->mac, cb_ias->mac, 6);
 
-  // Now build the Configure command and set it's link
-  // to the IAS command
+  pro100_outl(SCB_POINTER, (uint32_t) cb_ias);
+
+#ifdef DEBUG_NIC
+  char buf[128];
+  uint32_t scb_pointer = pro100_inl(SCB_POINTER);
+  sprint(buf, "** Pointer Values! In NIC=0x%08x, In HOST=0x%08x\n",
+                  scb_pointer, (uint32_t) cb_ias);
+  cio_printf(buf);
+  delay(DELAY_1_SEC);
+#endif
+
+  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+  
+  while (!(cb_ias->hdr.status & CMD_SUCCESS)) {
+    // wait until the command has been accepted by the NIC
+  }
+  
+  // Slight delay before freeing just to be safe
+  delay(10); 
+
+  // The command has been accepted, we can free this memory now
+  km_page_free(cb_ias);
+}
+
+/*
+**
+*/
+void pro100_configure(void) {
+  
+  // Build the Configure command 
   cb_config_t *cb = (cb_config_t *) km_page_alloc(1);
   cb->hdr.status = 0;
-  cb->hdr.command = CB_CMD_CFG; 
-  cb->hdr.link = (uint32_t) cb_ias;
+  cb->hdr.command = CB_CMD_CFG | CB_CMD_EL; 
+  cb->hdr.link = 0xFFFFFFFF;
   
-  // Set everything in the config map to 0, 
-  // because many recommended values are 0 
+  // Some recommended values in the config map are 0,
+  // so just clear everything then set individual bytes.
   memset(cb->config, N_CONFIG_BYTES, 0);
 
   // Set the fundamental operating parameters of the Pro100
@@ -196,7 +232,32 @@ cb_config_t *pro100_create_init_cbs(void) {
   cb->config[20]  = 0x3F;  // Mandatory bits for 82559
   cb->config[21]  = 0x05;  // Disables Multicast all
 
-  return cb;
+  pro100_outl(SCB_POINTER, (uint32_t) cb);
+
+#ifdef DEBUG_NIC
+  char buf[128];
+  uint32_t scb_pointer = pro100_inl(SCB_POINTER);
+  sprint(buf, "** Pointer Values! In NIC=0x%08x, In HOST=0x%08x\n",
+                  scb_pointer, (uint32_t) cb);
+  cio_printf(buf);
+  delay(DELAY_1_SEC);
+#endif
+
+  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+
+  while(!(cb->hdr.status & CMD_SUCCESS)) {
+    // wait until the command has been accepted
+  }
+  
+#ifdef DEBUG_NIC
+  sprint(buf, "While loop terminated, so what's the value? 0x%04x\n",
+               cb->hdr.status);
+  cio_printf(buf);
+  delay(DELAY_1_SEC);
+#endif
+
+  // Configure command is done, free the command block memory
+  km_page_free(cb);
 }
 
 void pro100_access_enable(void) {
@@ -232,6 +293,9 @@ void pro100_access_enable(void) {
 
 }
 
+/*
+** 
+*/
 void pro100_rx_init(void) {
   
   // Build the RFD 
@@ -251,12 +315,25 @@ void pro100_rx_init(void) {
  
   // Tell device it is ready to recieve frames
   pro100_outl(SCB_POINTER, (uint32_t) rfd);
-  pro100_outw(SCB_COMMAND, RU_START | CNA_INT_MASK); 
+
+#ifdef DEBUG_NIC
+  char buf[128];
+  uint32_t scb_pointer = pro100_inl(SCB_POINTER);
+  sprint(buf, "** Pointer Values! In NIC=0x%08x, In HOST=0x%08x\n",
+                  scb_pointer, (uint32_t) rfd);
+  cio_printf(buf);
+  delay(DELAY_1_SEC);
+#endif
+
+  pro100_outw(SCB_COMMAND, RU_START | CNA_INT_MASK);
 
   // Copy this RFD to the logical device so we can access it later
   pro100->rfd = rfd;
 }
 
+/*
+**
+*/
 void pro100_recieve(void) {
   // Check how many bytes were recieved
   uint32_t byte_count = pro100->rfd->actual_count;
@@ -266,6 +343,9 @@ void pro100_recieve(void) {
   // Now print the payload
 }
 
+/*
+**
+*/
 void pro100_transmit(char *data) {
  
   // Build the TxCB
@@ -300,7 +380,6 @@ void pro100_transmit(char *data) {
   p[5] = 0xF7;
 #endif
   
-
   // Source MAC. Not inserted by NIC, per settings from config command
   memcpy(&p[6], pro100->mac, 6);
   
@@ -337,8 +416,9 @@ void pro100_transmit(char *data) {
   km_page_free(tx_cb);
 }
 
-// Consider changing this to return a pointer to some struct
-// that represents a network device
+/*
+**
+*/
 void pro100_init() {
 #ifdef DEBUG_NIC
   char buf[128];
@@ -356,25 +436,25 @@ void pro100_init() {
   // Now that we can access the device, issue a software reset
   // to prepare it for initialization
   pro100_outl(pro100->io_base_addr + PORT, SOFTWARE_RESET);
+  
+  // Delay at least 10us after a reset
+  delay(100);
+
+  // Now set the CU to linear addressing mode
+  pro100_outl(SCB_POINTER, 0x00000000);
+  pro100_outw(SCB_COMMAND, CU_LOAD_BASE | CNA_INT_MASK);
+
+  // Make sure the command was accepted before issuing the next command
+
+  // Then set the RU to linear addressing mode
+  pro100_outl(SCB_POINTER, 0x00000000);
+  pro100_outw(SCB_COMMAND, RU_LOAD_BASE | CNA_INT_MASK);
 
   // The device's operating parameters need initialization after a reset
-  cb_config_t *cb_config = pro100_create_init_cbs();
-  pro100_outl(SCB_POINTER, (uint32_t) cb_config);
-  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+  pro100_configure();
 
-  while (cb_config->hdr.status & 0x0000) {
-    // Wait until something good or bad happens
-  }
-
-  // Make sure a good thing happened
-  if (!(cb_config->hdr.status & CMD_SUCCESS)) {
-    kpanic("pro100_init, could not configure the device");
-  }
-
-  // Configure command is done, free the command block memory
-  // cast to silence compiler warnings
-  km_page_free((cb_ias_t *) cb_config->hdr.link);
-  km_page_free(cb_config);
+  // Now set the MAC address of the device
+  pro100_address_setup();
 
   // Now prepare the device for ethernet frame reception
   pro100_rx_init();
@@ -403,12 +483,12 @@ void pro100_init() {
   // will be needed to test transmitting/recieving frames.
 
 #if defined(NODE_1)
-  char* msg = "Hello, World! -RLE"\0;
+  char* msg = "Hello, World! -RLE\0";
   pro100_transmit(msg);
-#elif defined(NODE_2);
+#elif defined(NODE_2)
 
   // loop here until a frame is recieved, then print the data
-  while(!pro100->rfd->hdr.status & 0xBFFF) { }
+  while(!(pro100->rfd->hdr.status & 0xBFFF)) { }
   
   if (pro100->rfd->hdr.status & RX_SUCCESS) {
     pro100_recieve();

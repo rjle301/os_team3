@@ -51,10 +51,10 @@
 				VGA_NUM_GC_REGS + VGA_NUM_AC_REGS)
 
 //Current width of the screen.
-static unsigned g_wd;
+static unsigned g_wd = 80;
 
 //Current height of the screen.
-static unsigned g_ht;
+static unsigned g_ht = 25;
 
 //This gets the respective memory segment needed 
 	//From Chris Giese.

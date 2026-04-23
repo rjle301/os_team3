@@ -89,28 +89,98 @@ typedef struct {
 
 extern pci_dev_t *pci_dev_pro100;
 
+/*
+** pci_cfgspace_readl
+**
+** Reads 4 bytes from PCI configuration space
+**
+** @param pci_dev - The PCI device to read from
+** @param offset - The offset from the base to read from
+** 
+** @return The 4 bytes read
+*/
 uint32_t pci_cfgspace_readl(pci_dev_t *pci_dev, uint8_t offset);
 
+/*
+** pci_cfgspace_writel
+**
+** Writes 4 bytes to PCI configuration space
+**
+** @param pci_dev - The PCI device to write
+** @param offset - The offset from the base to write to
+** @param val - The value to write
+*/
 void pci_cfgspace_writel(pci_dev_t *pci_dev, uint8_t offset, uint32_t val);
 
+
+/*
+** get_device_id
+**
+** Gets the device ID from a PCI device
+**
+** @param pci_dev - The PCI device
+**
+** @return The 2-byte PCI device ID
+*/
 uint16_t get_device_id(pci_dev_t *pci_dev);
 
+/*
+** get_vendor_id
+**
+** Gets the vendor ID from a PCI device
+**
+** @param pci_dev - The PCI device
+**
+** @return The 2-byte PCI vendor ID
+*/
 uint16_t get_vendor_id(pci_dev_t *pci_dev);
 
+/*
+** pci_get_bar
+**
+** Gets one base address register (BAR) from a PCI device
+**
+** @param pci_dev - The PCI device
+** @param type - The type of BAR
+**
+** @return The 4-byte BAR read from the PCI device
+*/
 uint32_t pci_get_bar(pci_hdr_t *hdr, uint8_t type);
 
 /* 
+** read_header
+**
 ** Read a PCI device's header from PCI configuration space
 ** The header information is stored in the block of memory pointed to by hdr
+**
+** @param pci_dev - The PCI device
+** @param hdr - Address where the PCI device header is stored
 */
 void read_header(pci_dev_t *pci_dev, uint32_t *hdr);
 
+/*
+** check_device
+**
+** Checks if this is a real PCI device. If it is, it then checks
+** if this is the Pro100 NIC.
+**
+** @param pci_dev - the PCI device to check
+*/
 void check_device(pci_dev_t *pci_dev);
 
-// Brute force scan PCI devices
+/*
+** pci_bus_scan
+**
+** Scans all PCI buses, devices, and functions
+*/
 void pci_bus_scan(void);
 
-// Initialize PCI device list
+/*
+** pci_init
+**
+** Initializes PCI devices that we are looking for. In this project, it will
+** skip anything that's not the Pro100 NIC.
+*/
 void pci_init(void);
 
 #endif

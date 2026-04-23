@@ -30,11 +30,13 @@ static const proc_t in_procs[] = {
 	PROCENT( idle, "idle\r.", PRIO_LOW, '!' ),
 
 #ifdef RUN_SHELL
-
 	// the user shell
 	PROCENT( shell, "shell", PRIO_STD, '@' ),
+#endif
 
-#else
+#if defined(SPAWN_SEND)
+  PROCENT( progSEND, "userSEND", PRIO_STD, '$'),
+#endif
 
 	// Users A-C each run ProgABC, which loops printing its character
 #if defined(SPAWN_A)

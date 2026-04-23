@@ -30,7 +30,7 @@ USER_SRC := user/locations.S \
 	user/progI.c user/progJ.c user/progKL.c user/progMN.c \
 	user/progP.c user/progQ.c user/progR.c user/progS.c \
 	user/progTUV.c user/progW.c user/progX.c user/progY.c \
-	user/progZ.c user/progVGA.c
+	user/progZ.c user/progVGA.c user/progSEND.c
 
 USER_OBJ := $(patsubst %.c, $(BUILD)/%.o, $(USER_SRC))
 USER_OBJ := $(patsubst %.S, $(BUILD)/%.o, $(USER_OBJ))

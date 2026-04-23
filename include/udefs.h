@@ -75,8 +75,7 @@ USERMAIN(progABC); USERMAIN(progDE);  USERMAIN(progFG); USERMAIN(progH);
 USERMAIN(progI);   USERMAIN(progJ);   USERMAIN(progKL); USERMAIN(progMN);
 USERMAIN(progO);   USERMAIN(progP);   USERMAIN(progQ);  USERMAIN(progR);
 USERMAIN(progS);   USERMAIN(progTUV); USERMAIN(progW);  USERMAIN(progX);
-USERMAIN(progY);   USERMAIN(progZ);
-USERMAIN(progVGA);
+USERMAIN(progY);   USERMAIN(progZ);   USERMAIN(progSEND);USERMAIN(progVGA);
 
 // user command-line argument separator character
 #define	ARG_SEP    '\r'
@@ -189,15 +188,13 @@ typedef struct proc_s {
 ** of ?.
 */
 
-//What does "#if 0" mean?
-	//Code below will spawn all processes in except M-Q and S-V.
-
 /*
 ** The standard set of test programs, start by the shell (which is started
 ** automatically from the initial user process)
 */
-#define SPAWN_VGA
-/*
+
+
+#if 0
 #define SPAWN_A
 #define SPAWN_B
 #define SPAWN_C
@@ -210,22 +207,21 @@ typedef struct proc_s {
 #define SPAWN_J
 #define SPAWN_K
 #define SPAWN_L
-#if 0
 #define SPAWN_M
 #define SPAWN_N
-there is no user 'O'
+//there is no user 'O'
 #define SPAWN_P
 #define SPAWN_Q
-#endif
 #define SPAWN_R
-#if 0
 #define SPAWN_S
 #define SPAWN_T
 #define SPAWN_U
 #define SPAWN_V
 #endif
+#define SPAWN_SEND
+#define SPAWN_VGA
 // users 'W' through 'Z' are spawned by other processes
-*/
+
 #endif /* !ASM_SRC */
 
 #endif

@@ -44,8 +44,10 @@
 #define SYS_getheight       14
 #define SYS_getfbsegment    15
 
+#define SYS_send            16
+
 // UPDATE THIS DEFINITION IF MORE SYSCALLS ARE ADDED!
-#define N_SYSCALLS      16
+#define N_SYSCALLS      17
 
 // dummy system call code for testing our ISR
 #define SYS_bogus       0xbad

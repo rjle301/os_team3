@@ -267,6 +267,16 @@ unsigned getheight( void );
 */
 unsigned getfbsegment( void );
 
+/**
+** send(char* data)
+**
+** Constructs an ethernet frame out of the data and sends it over ethernet
+**
+** @param data  The data being sent over ethernet
+**
+** @return None
+*/
+void send( char *data );
 
 /*
 *************************************************

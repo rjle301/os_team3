@@ -843,6 +843,34 @@ SYSIMPL(getfbsegment) {
 	RET(pcb) = return_fb_segment();
 }
 
+/**
+** sys_send - sends specified message over ethernet
+**
+** Implements
+**    void send(char *data)
+**
+** This should probably return some int to the user process
+** to indicate the status of the transmit.
+*/
+SYSIMPL(send) {
+  
+  // sanity check
+  assert( pcb != NULL );
+
+  SYSCALL_ENTER( pcb->pid );
+  
+  // Get the message from the user process
+  char *data = ARG( pcb, 1 );
+
+  // Maybe do some error checking on the data before sending?
+  pro100_transmit( data );
+  
+  // 0 is success, something else is error
+  //return 0;
+
+  SYSCALL_EXIT( pcb->pid );
+}
+
 /*
 ** PRIVATE FUNCTIONS AND GLOBAL VARIABLES
 */
@@ -872,7 +900,8 @@ static void (* const syscalls[N_SYSCALLS])( pcb_t * ) = {
 	[ SYS_writepixel ]		= sys_writepixel,
 	[ SYS_getwidth ]		= sys_getwidth,
 	[ SYS_getheight ]		= sys_getheight,
-	[ SYS_getfbsegment ]	= sys_getfbsegment
+	[ SYS_getfbsegment ]	= sys_getfbsegment,
+	[ SYS_send ]			= sys_send
 };
 
 /**

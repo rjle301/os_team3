@@ -567,6 +567,6 @@
 000330f2 T padstr
 0003318f T pad
 000340a0 r in_procs
-0003470c R hexdigits
+00034718 R hexdigits
 00035000 d ch
 00036000 b proc_pids

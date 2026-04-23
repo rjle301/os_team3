@@ -3,7 +3,7 @@
 **
 ** @author: Ryan Lembo-Ehms
 **
-** @brief:
+** @brief: Pro100 driver function definitions
 **
 */
 
@@ -52,12 +52,16 @@ uint8_t pro100_inb(uint32_t offset);
 void pro100_isr(int vector, int code);
 
 /*
-** Creates the necessary command blocks to initialize the Pro100.
-** In particular, creates a Configure CB and an IAS CB and links
-** them together. These commands will be run after a software
-** reset is issued.
+** Creates a individual address setup command block, gives it to the NIC,
+** and issues a CU_START command to process the command block
 */
-cb_config_t *pro100_create_init_cbs(void);
+void pro100_address_setup(void);
+
+/*
+** Creates a configure command block, gives it to the NIC,
+** and issues a CU_START command to process the command block
+*/
+void pro100_configure(void);
 
 /*
 ** Enables I/O communication from the host CPU to the NIC

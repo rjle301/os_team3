@@ -86,9 +86,6 @@ typedef struct {
 
 } pci_dev_t;
 
-// Limit max devices to how many pointers can fit on one page of memory
-//#define MAX_DEVICES     1024
-
 extern pci_dev_t *pci_dev_pro100;
 
 // Read one register from PCI configuration space.

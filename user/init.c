@@ -296,4 +296,3 @@ USERMAIN( init ) {
 
 	return( 1 );  // shut the compiler up
 }
-#endif

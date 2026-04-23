@@ -143,8 +143,12 @@ void pro100_isr(int vector, int code) {
   outb(PIC1_CMD, PIC_EOI);
 }
 
+
 /*
+** pro100_address_setup
 **
+** Creates a individual address setup command block, gives it to the NIC,
+** and issues a CU_START command to process the command block
 */
 void pro100_address_setup(void) {
 
@@ -197,8 +201,12 @@ void pro100_address_setup(void) {
   km_page_free(cb_ias);
 }
 
+
 /*
+** pro100_configure
 **
+** Creates a configure command block, gives it to the NIC,
+** and issues a CU_START command to process the command block
 */
 void pro100_configure(void) {
   
@@ -247,12 +255,16 @@ void pro100_configure(void) {
   km_page_free(cb);
 }
 
+
+/*
+** Enables I/O communication from the host CPU to the NIC
+*/
 void pro100_access_enable(void) {
   
   // 0x4 is the offset of the register with command 
   // Refer to the pci_dev_t struct in include/pci.h for 
   // offsets of each header register.
-  uint32_t command = pci_cfgspace_read_dword(pro100->pci_dev, 0x4);
+  uint32_t command = pci_cfgspace_readl(pro100->pci_dev, 0x4);
 
 #ifdef DEBUG_PCI
   char buf[128];
@@ -269,10 +281,10 @@ void pro100_access_enable(void) {
   delay( DELAY_1_SEC );
 #endif
 
-  pci_cfgspace_write_dword(pro100->pci_dev, 0x4, command); 
+  pci_cfgspace_writel(pro100->pci_dev, 0x4, command); 
 
 #ifdef DEBUG_PCI
-  command = pci_cfgspace_read_dword(pro100->pci_dev, 0x4);
+  command = pci_cfgspace_readl(pro100->pci_dev, 0x4);
   sprint(buf, "Pro100 PCI command reg=0x%x\n", command);
   cio_printf(buf);
   delay( DELAY_1_SEC );
@@ -280,8 +292,12 @@ void pro100_access_enable(void) {
 
 }
 
+ 
 /*
-** 
+** pro100_rx_init
+**
+** Creates the first (and only) RFD, gives it to the NIC
+** and issues an RU_START command to the NIC
 */
 void pro100_rx_init(void) {
   
@@ -310,8 +326,13 @@ void pro100_rx_init(void) {
   pro100->rfd = rfd;
 }
 
+
 /*
+** pro100_recieve
 **
+** Parses a recieved ethernet frame and prints the data.
+**
+** Called in pro100_isr
 */
 void pro100_recieve(void) {
   // Check how many bytes were recieved
@@ -322,8 +343,12 @@ void pro100_recieve(void) {
   // Now print the payload
 }
 
+
 /*
+** pro100_transmit
 **
+** Builds a TxCB, constructs an ethernet packet, and
+** issues a transmit command to the NIC
 */
 void pro100_transmit(char *data) {
  
@@ -396,8 +421,15 @@ void pro100_transmit(char *data) {
   km_page_free(tx_cb);
 }
 
+
 /*
+** pro100_init
 **
+** Initialization routine for the Pro100 NIC.
+** Performs a software reset, then configures
+** the NIC. Once this routine returns, the
+** NIC should be ready to transmit and recieve
+** ethernet frames
 */
 void pro100_init() {
 #ifdef DEBUG_NIC

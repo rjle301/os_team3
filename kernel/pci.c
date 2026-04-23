@@ -49,7 +49,7 @@
 pci_dev_t *pci_dev_pro100;
 
 // Basically the same as the pseudocode on OSDev wiki, but reads all 32 bits instead of 16
-uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset) {
+uint32_t pci_cfgspace_readl(pci_dev_t *pci_dev, uint8_t offset) {
 
   uint32_t address;
   uint32_t lbus  = (uint32_t)pci_dev->bus;
@@ -67,7 +67,7 @@ uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset) {
 
 }
 
-void pci_cfgspace_write_dword(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) {
+void pci_cfgspace_writel(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) {
 
   uint32_t address;
   uint32_t lbus  = (uint32_t)pci_dev->bus;
@@ -86,11 +86,11 @@ void pci_cfgspace_write_dword(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) 
 }
 
 uint16_t get_device_id(pci_dev_t *pci_dev) {
-  return (uint16_t) ((pci_cfgspace_read_dword(pci_dev, 0) >> 16) & 0xFFFF);
+  return (uint16_t) ((pci_cfgspace_readl(pci_dev, 0) >> 16) & 0xFFFF);
 }
 
 uint16_t get_vendor_id(pci_dev_t *pci_dev) {
-  return (uint16_t) (pci_cfgspace_read_dword(pci_dev, 0) & 0xFFFF);
+  return (uint16_t) (pci_cfgspace_readl(pci_dev, 0) & 0xFFFF);
 }
 
 // Gets the I/O BAR
@@ -113,7 +113,7 @@ void read_header(pci_dev_t *pci_dev, uint32_t *hdr) {
   
   for (uint8_t i = 0; i < N_REGS; i++) {
 
-    hdr[i] = pci_cfgspace_read_dword(pci_dev, i * 4);
+    hdr[i] = pci_cfgspace_readl(pci_dev, i * 4);
   
   }
 

@@ -19,6 +19,7 @@
 #include <kmem.h>
 #include <x86/pic.h>
 #include <x86/vga.h>
+#include <device/pro100.h>
 
 /*
 ** PRIVATE DEFINITIONS

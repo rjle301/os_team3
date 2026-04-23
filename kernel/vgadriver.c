@@ -412,7 +412,7 @@ unsigned char g_80x25_text[] =
 	0x0C, 0x00, 0x0F, 0x08, 0x00
 };
 
-
+//Is graphics mode active?
 int active = 0;
 
 //Get 4k page that will represent the screen buffer.
@@ -430,7 +430,7 @@ static char vga_text_data[VGA_GRAPHICS_SCREEN_HEIGHT][VGA_GRAPHICS_SCREEN_WIDTH]
 	//64l/4kb = page count
 
 void write_to_pixel_buffer(unsigned x, unsigned y, unsigned c){
-	vga_graphics_buffer[y][x] = (char)c;
+	vga_graphics_buffer[y*VGA_GRAPHICS_SCREEN_WIDTH + x] = (char)c;
 }
 
 
@@ -450,7 +450,7 @@ void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
 void update_vga_graphics_screen(void){
 	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
 		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
-			write_pixel(j, i, vga_graphics_buffer[i][j]);
+			write_pixel(j, i, vga_graphics_buffer[i*VGA_GRAPHICS_SCREEN_WIDTH + j]);
 		}
 	}
 }
@@ -593,13 +593,13 @@ void write_regs(unsigned char *regs)
 	outb(VGA_AC_INDEX, 0x20);
 }
 
-void update_13h_buffer(void){
+/*void update_13h_buffer(void){
 	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
 		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
 			vga_graphics_buffer[i][j] = peekb(get_fb_seg(), i*VGA_GRAPHICS_SCREEN_WIDTH+j);
 		}
 	}
-}
+}*/
 
 
 //inb

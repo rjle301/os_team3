@@ -385,7 +385,7 @@ void pro100_transmit(char *data) {
 
   // Begin transmission
   pro100_outl(SCB_POINTER, (uint32_t) tx_cb);
-  pro100_outw(SCB_COMMAND, CU_START | CNA_INT_MASK);
+  pro100_outw(SCB_COMMAND, CU_START);
   
   // Poll to see if entire frame has been sent to NIC's transmit FIFO
   while(!(tx_cb->hdr.status & CMD_SUCCESS)) {

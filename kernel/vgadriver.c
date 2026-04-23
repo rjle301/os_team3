@@ -96,10 +96,6 @@ static void vpokeb(unsigned off, unsigned val)//This is supposed to ONLY be call
 }
 
 
-//VGA text buffer.
-short vga_text_buffer [8*80][16*25];
-
-
 //If set to 1, is in text mode 80x25. If set to 0, is in graphics mode 320x200, 256 colors, linear addressing
 //static char textMode = 1;//By default, set to this due to how the bios works...
 

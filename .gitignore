@@ -1,0 +1,14 @@
+build/
+Makefile
+LOG
+*.img
+*.img.hex
+.gdbinit
+*.nl
+*.nll
+*lst
+*.i 
+*.X
+offsets
+all.sym
+BuildImage

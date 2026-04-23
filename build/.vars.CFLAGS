@@ -1,1 +1,0 @@
--m32 -fno-pie -std=c99 -ggdb -fno-stack-protector -fno-builtin -Wall -Wstrict-prototypes -MD -nostdinc -I./include

@@ -501,6 +501,8 @@ SYSIMPL(exec)
 	pcb->context = stk_setup( stk, where, args );
 	assert1( pcb->context != NULL );
 
+  pcb->stack = stk;
+
 	// now we can safely free the old stack
 	stk_free( oldstack );
 
@@ -579,7 +581,7 @@ SYSIMPL(read) {
 		if( n < 1 ) {
 			// nothing available, so we'll block
 			pcb->state = STATE_BLOCKED;
-			assert1( que_insert(sioread,(void *)pcb) != E_SUCCESS );
+			assert1( que_insert(sioread,(void *)pcb) == E_SUCCESS );
 			// dispatch a new process
 			dispatch();
 			SYSCALL_EXIT(0);

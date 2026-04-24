@@ -32,7 +32,8 @@
 
 // IDs to identify my NIC
 #define INTEL_VENDOR_ID 0x8086
-#define PRO100_DEV_ID   0x1209
+#define QEMU_DEV_ID     0x1209
+#define PRO100_DEV_ID   0x1229
 
 #define N_BUSES         256
 #define N_SLOTS         32
@@ -48,8 +49,17 @@
 */
 pci_dev_t *pci_dev_pro100;
 
-// Basically the same as the pseudocode on OSDev wiki, but reads all 32 bits instead of 16
-uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset) {
+/*
+** pci_cfgspace_readl
+**
+** Reads 4 bytes from PCI configuration space
+**
+** @param pci_dev - The PCI device to read from
+** @param offset - The offset from the base to read from
+** 
+** @return The 4 bytes read
+*/
+uint32_t pci_cfgspace_readl(pci_dev_t *pci_dev, uint8_t offset) {
 
   uint32_t address;
   uint32_t lbus  = (uint32_t)pci_dev->bus;
@@ -57,6 +67,7 @@ uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset) {
   uint32_t lfunc = (uint32_t)pci_dev->function;
 
   // Create configuration address
+  // This is almost exactly copied from the PCI OS dev wiki
   address = (uint32_t)((lbus << 16) | (lslot << 11) |
             (lfunc << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
 
@@ -67,7 +78,16 @@ uint32_t pci_cfgspace_read_dword(pci_dev_t *pci_dev, uint8_t offset) {
 
 }
 
-void pci_cfgspace_write_dword(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) {
+/*
+** pci_cfgspace_writel
+**
+** Writes 4 bytes to PCI configuration space
+**
+** @param pci_dev - The PCI device to write
+** @param offset - The offset from the base to write to
+** @param val - The value to write
+*/
+void pci_cfgspace_writel(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) {
 
   uint32_t address;
   uint32_t lbus  = (uint32_t)pci_dev->bus;
@@ -75,6 +95,7 @@ void pci_cfgspace_write_dword(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) 
   uint32_t lfunc = (uint32_t)pci_dev->function;
 
   // Create configuration address
+  // This is almost exactly copied from the PCI OS dev wiki
   address = (uint32_t)((lbus << 16) | (lslot << 11) |
             (lfunc << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
 
@@ -85,15 +106,42 @@ void pci_cfgspace_write_dword(pci_dev_t *pci_dev, uint8_t offset, uint32_t val) 
   outl(CONFIG_DATA, val);
 }
 
+/*
+** get_device_id
+**
+** Gets the device ID from a PCI device
+**
+** @param pci_dev - The PCI device
+**
+** @return The 2-byte PCI device ID
+*/
 uint16_t get_device_id(pci_dev_t *pci_dev) {
-  return (uint16_t) ((pci_cfgspace_read_dword(pci_dev, 0) >> 16) & 0xFFFF);
+  return (uint16_t) ((pci_cfgspace_readl(pci_dev, 0) >> 16) & 0xFFFF);
 }
 
+/*
+** get_vendor_id
+**
+** Gets the vendor ID from a PCI device
+**
+** @param pci_dev - The PCI device
+**
+** @return The 2-byte PCI vendor ID
+*/
 uint16_t get_vendor_id(pci_dev_t *pci_dev) {
-  return (uint16_t) (pci_cfgspace_read_dword(pci_dev, 0) & 0xFFFF);
+  return (uint16_t) (pci_cfgspace_readl(pci_dev, 0) & 0xFFFF);
 }
 
-// Gets the I/O BAR
+/*
+** pci_get_bar
+**
+** Gets one base address register (BAR) from a PCI device
+**
+** @param pci_dev - The PCI device
+** @param type - The type of BAR
+**
+** @return The 4-byte BAR read from the PCI device
+*/
 uint32_t pci_get_bar(pci_hdr_t *hdr, uint8_t bar_type) {
   
   uint32_t bar = 0;
@@ -108,17 +156,30 @@ uint32_t pci_get_bar(pci_hdr_t *hdr, uint8_t bar_type) {
   return 0xFFFFFFF0;
 }
 
-// Read the device's header registers from PCI configuration space  
+/* 
+** read_header
+**
+** Read a PCI device's header from PCI configuration space
+** The header information is stored in the block of memory pointed to by hdr
+**
+** @param pci_dev - The PCI device
+** @param hdr - Address where the PCI device header is stored
+*/
 void read_header(pci_dev_t *pci_dev, uint32_t *hdr) { 
   
   for (uint8_t i = 0; i < N_REGS; i++) {
-
-    hdr[i] = pci_cfgspace_read_dword(pci_dev, i * 4);
-  
+    hdr[i] = pci_cfgspace_readl(pci_dev, i * 4); 
   }
-
 }
 
+/*
+** check_device
+**
+** Checks if this is a real PCI device. If it is, it then checks
+** if this is the Pro100 NIC.
+**
+** @param pci_dev - the PCI device to check
+*/
 void check_device(pci_dev_t *pci_dev) {
    
   uint16_t vendor_id = get_vendor_id(pci_dev);
@@ -136,14 +197,15 @@ void check_device(pci_dev_t *pci_dev) {
          pci_dev->bus, pci_dev->slot, vendor_id, device_id);
   cio_printf(buf);
 
-  delay( DELAY_1_SEC );
+  delay(DELAY_1_SEC);
 
 #endif
   
   // If it's the Pro100 NIC, make it global so we can use it in driver initialization
   // Actually good PCI scanning wouldn't do this, of course. We should use a global
   // list (queue) of device headers...
-  if ( vendor_id == INTEL_VENDOR_ID && (device_id == PRO100_DEV_ID || device_id == 0x1229) ) {
+  if (vendor_id == INTEL_VENDOR_ID && 
+     (device_id == PRO100_DEV_ID || device_id == QEMU_DEV_ID)) {
 
     // Allocate a page to store device header information
     // Should I use a slice instead of a page?      
@@ -157,33 +219,30 @@ void check_device(pci_dev_t *pci_dev) {
 
 #ifdef DEBUG_PCI
     for (uint8_t j = 0; j < 0x6; j++) {
-      sprint( buf, "BAR[%x]=0x%08x\n", j, pci_dev_pro100->hdr->bar[j] );
-      cio_printf( buf );
+      sprint(buf, "BAR[%x]=0x%08x\n", j, pci_dev_pro100->hdr->bar[j]);
+      cio_printf(buf);
     }
 
-    sprint(buf, "Interrupt PIN=0%x, Interrupt Line=0x%x\n",
-                pci_dev->hdr->interrupt_pin, pci_dev->hdr->interrupt_line);
-    cio_printf( buf );
-
-    // Give enough time to see dump of all header registers
-    delay( DELAY_2_SEC );
+    delay(DELAY_2_SEC);
 #endif
-
   }
 
 }
 
-// This function has many nested blocks, so using comments
-// at the end of blocks for extra clarity
+/*
+** pci_bus_scan
+**
+** Scans all PCI buses, devices, and functions
+*/
 void pci_bus_scan(void) {
 
   pci_dev_t *pci_dev;
 
-  for ( uint16_t bus = 0; bus < N_BUSES; bus++ ) {
+  for (uint16_t bus = 0; bus < N_BUSES; bus++) {
 
-    for ( uint8_t slot = 0; slot< N_SLOTS; slot++ ) {
+    for (uint8_t slot = 0; slot< N_SLOTS; slot++) {
       
-      pci_dev = km_page_alloc( 1 );
+      pci_dev = km_page_alloc(1);
       pci_dev->bus = bus;
       pci_dev->slot = slot;
       pci_dev->function = 0;
@@ -192,27 +251,27 @@ void pci_bus_scan(void) {
       check_device( pci_dev );
       
       // Either not a real device or not the device we are looking for
-      if ( pci_dev->hdr == NULL ) {
-        km_page_free( pci_dev );
+      if (pci_dev->hdr == NULL) {
+        km_page_free(pci_dev);
         continue;
       }
 
       // If we have a multi-function device, we need to treat
       // each function individually 
       uint8_t header_type = pci_dev->hdr->header_type;
-      if ( header_type & MULTI_FUNCTION ) {
+      if (header_type & MULTI_FUNCTION) {
         
-        for ( uint8_t i = 1; i < N_FUNCS; i++ ) {
+        for (uint8_t i = 1; i < N_FUNCS; i++) {
           
           // Each of this devices functions needs it's own entry!
-          check_device( pci_dev );
+          check_device(pci_dev);
 
-          if ( pci_dev == NULL ) {
+          if (pci_dev == NULL) {
             continue;
           } /* if */
 
-          else if ( pci_dev->hdr == NULL ) {
-            km_page_free( pci_dev );
+          else if (pci_dev->hdr == NULL) {
+            km_page_free(pci_dev);
             continue;
           } /* if */
 
@@ -226,6 +285,12 @@ void pci_bus_scan(void) {
 
 } /* pci_bus_scan */
 
+/*
+** pci_init
+**
+** Initializes PCI devices that we are looking for. In this project, it will
+** skip anything that's not the Pro100 NIC.
+*/
 void pci_init(void) {
   
   // Nothing else here at the moment, but putting call to bus_scan in

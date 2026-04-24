@@ -675,3 +675,9 @@ unsigned return_height(void){
 unsigned return_fb_segment(void){
 	return get_fb_seg();
 }
+
+
+//Simply initializes graphics mode.
+void vga_graphics_init(void){
+	set_vga_256linear();
+}

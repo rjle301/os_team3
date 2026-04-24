@@ -27,6 +27,7 @@
 
 #include <pci.h>
 #include <device/pro100.h>
+#include <x86/vga.h>
 /*
 ** PRIVATE DEFINITIONS
 */
@@ -293,6 +294,8 @@ int main( void ) {
 #endif
 
   pro100_init();
+
+	vga_graphics_init();
 	/*
 	** Create the initial user process
 	** 

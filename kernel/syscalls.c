@@ -789,7 +789,14 @@ SYSIMPL(getprio) {
 
 
 
-
+/**
+** sys_setvga256linear - sets 320x200 255 color graphics mode for vga
+**
+** Implements:
+**		void setvga256linear();
+**
+** 
+*/
 SYSIMPL(setvga256linear) {
 
 	// sanity check!
@@ -799,6 +806,14 @@ SYSIMPL(setvga256linear) {
 	set_vga_256linear();
 }
 
+/**
+** sys_setvgatextmode - sets 80x25 text mode for vga
+**
+** Implements:
+**		void setvgatextmode();
+**
+** 
+*/
 SYSIMPL(setvgatextmode) {
 
 	// sanity check!
@@ -808,6 +823,14 @@ SYSIMPL(setvgatextmode) {
 	set_text_mode();
 }
 
+/**
+** sys_writepixel - Writes a pixel to some (x, y) on the screen.
+**
+** Implements:
+**		void writepixel(unsigned x, unsigned y, unsigned c);
+**
+** Has undefined behavior if vga driver is not 320x200 255 color graphics mode.
+*/
 SYSIMPL(writepixel) {
 
 	// sanity check!
@@ -822,6 +845,14 @@ SYSIMPL(writepixel) {
 
 }
 
+/**
+** sys_getwidth - Gets the width of the screen.
+**
+** Implements:
+**		void getwidth();
+**
+** If in graphics mode, is in pixels. If in text mode, is in columns.
+*/
 SYSIMPL(getwidth) {
 
 	// sanity check!
@@ -831,6 +862,14 @@ SYSIMPL(getwidth) {
 
 }
 
+/**
+** sys_height - Gets the height of the screen.
+**
+** Implements:
+**		void getheight();
+**
+** If in graphics mode, is in pixels. If in text mode, is in rows.
+*/
 SYSIMPL(getheight) {
 
 	// sanity check!
@@ -839,6 +878,14 @@ SYSIMPL(getheight) {
 	RET(pcb) = return_height();
 }
 
+
+/**
+** sys_getfbsegment - Gets the starting address of the current vga memory region accessed by the vga driver.
+**
+** Implements:
+**		unsigned getfbsegment();
+**
+*/
 SYSIMPL(getfbsegment) {
 
 	assert( pcb != NULL );

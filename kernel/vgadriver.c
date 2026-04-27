@@ -11,13 +11,17 @@
 #include "../include/x86/vga.h"
 #include "../include/kmem.h" //Are any addresses I'm accessing above 1 MB?
 
-//	0xA0000
-//+	 0xFA00
-//From Chris Giese.
-	//Accesses memory based on a segment, offset, and the number of bytes to modify at the given location
+//Gets the byte at a given segment S and an offset O.
+	//From Chris Giese.
 #define	peekb(S,O)		*(unsigned char *)(16uL * (S) + (O))
+//Writes a byte V to a given segment S at an offset O.
+	//From Chris Giese.
 #define	pokeb(S,O,V)		*(unsigned char *)(16uL * (S) + (O)) = (V)
+//Writes a word V to a given segment S at an offset O.
+	//From Chris Giese.
 #define	pokew(S,O,V)		*(unsigned short *)(16uL * (S) + (O)) = (V)
+//Copies a set of N bytes S to a given segment DS at an offset DO.
+	//From Chris Giese.
 #define	_vmemwr(DS,DO,S,N)	memcpy((char *)((DS) * 16 + (DO)), S, N)
 
 #define VGA_GRAPHICS_REGION_ADDRESS 0xA000
@@ -26,6 +30,7 @@
 
 #define VGA_GRAPHICS_SCREEN_WIDTH 320
 
+//Register indices
 #define	VGA_AC_INDEX		0x3C0
 #define	VGA_AC_WRITE		0x3C0
 #define	VGA_AC_READ		    0x3C1
@@ -56,8 +61,16 @@ static unsigned g_wd = 80;
 //Current height of the screen.
 static unsigned g_ht = 25;
 
-//This gets the respective memory segment needed 
-	//From Chris Giese.
+/**
+** update_vga_graphics_screen(unsigned x, unsigned y, unsigned c)
+**
+** @param dst_off  The offset from the segment.
+** @param src  The array of bytes to be copie from
+** @param count  The amount of bytes to copy.
+** 
+** Writes a set of bytes to some offset in the current vga memory region. Taken from Chris Giese.
+** @return The first segment of the current region accessed.
+*/
 static unsigned get_fb_seg(void)
 {
 	unsigned seg;
@@ -84,20 +97,33 @@ static unsigned get_fb_seg(void)
 
 
 
-//From Chris Giese.
+/**
+** update_vga_graphics_screen(unsigned x, unsigned y, unsigned c)
+**
+** @param dst_off  The offset from the segment.
+** @param src  The array of bytes to be copie from
+** @param count  The amount of bytes to copy.
+** 
+** Writes a set of bytes to some offset in the current vga memory region. Taken from Chris Giese.
+*/
 static void vmemwr(unsigned dst_off, unsigned char *src, unsigned count)
 {
 	_vmemwr(get_fb_seg(), dst_off, src, count);
 }
 
+
+/**
+** update_vga_graphics_screen(unsigned x, unsigned y, unsigned c)
+**
+** @param off  The offset from the segment.
+** @param val  The value to be written
+** 
+** Writes a byte to some offset in the current vga memory region. Taken from Chris Giese.
+*/
 static void vpokeb(unsigned off, unsigned val)//This is supposed to ONLY be called with respect to vga 13h.
 {
 	pokeb(get_fb_seg(), off, val);
 }
-
-
-//If set to 1, is in text mode 80x25. If set to 0, is in graphics mode 320x200, 256 colors, linear addressing
-//static char textMode = 1;//By default, set to this due to how the bios works...
 
 //Font data used for 80x25 text mode.
 static unsigned char g_8x16_font[4096] =
@@ -361,9 +387,7 @@ static unsigned char g_8x16_font[4096] =
 };
 
 
-//256 colors, 320 pixels wide, 200 pixels tall, linear addressing
-	//VGA graphics mode
-	//This should hopefully be the easiest mode.
+//Bytes needed to be loaded into registers for 13h mode.
 	//Got from Chris Giese.
 unsigned char g_320x200x256[] =
 {
@@ -385,7 +409,7 @@ unsigned char g_320x200x256[] =
 	0x41, 0x00, 0x0F, 0x00,	0x00
 };
 
-//80 characters wide, 25 characters tall.
+//Bytes needed to be loaded into registers for 80x25 text mode.
 	//Text mode
 	//Got from Chris Giese.
 unsigned char g_80x25_text[] =
@@ -409,27 +433,43 @@ unsigned char g_80x25_text[] =
 };
 
 //Is graphics mode active?
+	//If 0, 80x25 text mode is active. Else, 13h mode is called.
 int active = 0;
 
 //Get 4k page that will represent the screen buffer.
-        //Because the VGA segment is initially uninitialized...
-        //Buffer is intended to never be deallocated. Thus, should be ok.
-        //Assumed to only be for 13h mode.
+	//Because the VGA segment is initially uninitialized...
+	//Buffer is intended to never be deallocated. Thus, should be ok.
+	//Assumed to only be for 13h mode.
 static char* vga_graphics_buffer = NULL;
 
+
+//Buffer containing what was originally set in the 0xA000 region of VGA memory.
+	//At least some data in the region is used by 80x25 text mode, for some reason.
 static char vga_text_data[VGA_GRAPHICS_SCREEN_HEIGHT][VGA_GRAPHICS_SCREEN_WIDTH];
 
 
-//Should set up a buffer for the VGA screen.
-	//Just allocates a block that contains only one page of memory
-	
-	//64l/4kb = page count
-
+/**
+** write_to_pixel_buffer(unsigned x, unsigned y, unsigned c)
+**
+** @param x  The x coordinate.
+** @param y  The y coordinate.
+** @param c  The color written to the pixel at (x, y).
+** 
+** Writes a color to some pixel at (x, y) in the vga buffer.
+*/
 void write_to_pixel_buffer(unsigned x, unsigned y, unsigned c){
 	vga_graphics_buffer[y*VGA_GRAPHICS_SCREEN_WIDTH + x] = (char)c;
 }
 
-
+/**
+** write_pixel(unsigned x, unsigned y, unsigned c)
+**
+** @param x  The x coordinate.
+** @param y  The y coordinate.
+** @param c  The color written to the pixel at (x, y).
+** 
+** Writes a color to some pixel at (x, y) in 13h mode. Taken from Chris Giese.
+*/
 void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
 {
 	unsigned wd_in_bytes;
@@ -441,8 +481,12 @@ void write_pixel(unsigned x, unsigned y, unsigned c)//Means "unsigned int"
 }
 
 
-//Updates the vga graphics screen.
-	//Assumed to be in mode 13h.
+/**
+** update_vga_graphics_screen()
+**
+** 
+** Writes whatever is in the vga_graphics_buffer to all possible areas of the vga screen in 13h mode.
+*/
 void update_vga_graphics_screen(void){
 	for(unsigned i = 0; i < VGA_GRAPHICS_SCREEN_HEIGHT; i++){
 		for(unsigned j = 0; j < VGA_GRAPHICS_SCREEN_WIDTH;j++){
@@ -452,9 +496,15 @@ void update_vga_graphics_screen(void){
 }
 
 
-//Sets the plane.
-	//From Chris Giese.
-	//Effectively taken this from Chris Giese, but I replaced the inportb and outportb stuff with the ones provided by ops.h
+
+/**
+** set_plane(unsigned p)
+**
+** @param buf  The list of bytes to be loaded in as a font
+** @param font_height  The font height
+** 
+** Sets the plane written and read to. Chris Giese's code, modified with the respective read/write port functions.
+*/
 static void set_plane(unsigned p)
 {
 	unsigned char pmask;
@@ -470,8 +520,14 @@ static void set_plane(unsigned p)
 }
 
 
-//Writes font to plane 4 of the video memory.
-	//Effectively taken this from Chris Giese, but I replaced the inportb and outportb stuff with the ones provided by ops.h
+/**
+** write_font(unsigned char *buf, unsigned font_height)
+**
+** @param buf  The list of bytes to be loaded in as a font
+** @param font_height  The font height
+** 
+** Writes the fonts required for text mode to their respective area. Chris Giese's code, modified with the respective read/write port functions.
+*/
 static void write_font(unsigned char *buf, unsigned font_height)
 {
 	unsigned char seq2, seq4, gc4, gc5, gc6;
@@ -530,16 +586,13 @@ assume: chain-4 addressing already off */
 }
 
 
-//inb and outb
-	//inb:
-		//Index of the io port
-		//Reads from some io port
-	//outb:
-		//Inde of the io port, data
-		//Writes to some io port
-//Writes registers for VGA graphics mode.
-	//Effectively taken this from Chris Giese, but I replaced the inportb and outportb stuff with the ones provided by ops.h
-//Forgot to add the comments that actually define what this actually does.
+/**
+** write_regs(unsigned char *regs)
+**
+** @param regs  The list of bytes to be loaded into the vga registers.
+**
+** Writes the registers used by the vga driver. Chris Giese's code, modified with the respective read/write port functions.
+*/
 void write_regs(unsigned char *regs)
 {
 	unsigned i;
@@ -598,13 +651,11 @@ void write_regs(unsigned char *regs)
 }*/
 
 
-//inb
-	//inb( int port )
-//outb
-	//outb( int port, uint8_t data )
-//Modified version of Chris Giese's code, which writes 80x25 text registers
-	//Also seems to be breaking.
-		//Will unintentionally modify the visuals of the text mode provided by the baseline operating system, for some reason.
+/**
+** set_text_mode()
+**
+** Sets 80x25 text mode. Chris Giese's code, modified with the respective read/write port functions.
+*/
 void set_text_mode(void)
 {
 	//Save what was already present in text mode in graphics mode.
@@ -638,7 +689,13 @@ void set_text_mode(void)
 }
 
 
-
+/**
+** vga_graphics_init()
+**
+** Simply initializes graphics mode.
+**
+**
+*/
 void set_vga_256linear(void){
 	
 
@@ -663,21 +720,49 @@ void set_vga_256linear(void){
 	update_vga_graphics_screen();//Immediately updates the screen.
 }
 
-
+/**
+** return_width()
+**
+** Gets the width of the screen (in pixels if in graphics mode, in columns if in text mode)
+** @return The width of the screen.
+*/
 unsigned return_width(void){
 	return g_wd;
 }
 
+/**
+** return_height()
+**
+** Gets the height of the screen (in pixels if in graphics mode, in rows if in text mode)
+** @return The height of the screen.
+*/
 unsigned return_height(void){
 	return g_ht;
 }
 
+/**
+** return_fb_segment()
+**
+** Calculate the index of a queue in the array of queues.
+**
+**
+** @return The first segment of the current vga memory region accessed.
+*/
 unsigned return_fb_segment(void){
 	return get_fb_seg();
 }
 
 
-//Simply initializes graphics mode.
+/**
+** vga_graphics_init()
+**
+** Simply initializes graphics mode.
+**
+**
+*/
 void vga_graphics_init(void){
 	set_vga_256linear();
+
+
+	set_text_mode();
 }

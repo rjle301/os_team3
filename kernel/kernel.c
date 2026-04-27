@@ -19,6 +19,7 @@
 #include <cio.h>
 #include <clock.h>
 #include <kmem.h>
+#include <klib.h>
 #include <procs.h>
 #include <stacks.h>
 #include <queues.h>

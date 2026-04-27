@@ -690,7 +690,7 @@ void set_text_mode(void)
 
 
 /**
-** vga_graphics_init()
+** set_vga_256linear()
 **
 ** Simply initializes graphics mode.
 **

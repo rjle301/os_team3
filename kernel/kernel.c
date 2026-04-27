@@ -295,7 +295,15 @@ int main( void ) {
 
   pro100_init();
 
+	/*
+	** Showcase switch to 13h mode and back.
+	*/
 	vga_graphics_init();
+
+	delay(100);//Wait for some n units.
+
+	set_text_mode();
+
 	/*
 	** Create the initial user process
 	** 

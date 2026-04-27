@@ -13,6 +13,8 @@
 #include <pci.h>
 #include <device/cb.h>
 
+#define DUMP_SIZE 21  // 21 dwords * 4 bytes / dword = 84 bytes for a dump cmd
+
 // Other interrupt vectors are in include/x86/arch.h
 #define VEC_NIC 0x2b
 
@@ -30,6 +32,9 @@ typedef struct pro_100 {
   // The device's Recieve Frame Descriptor
   // Recieved ethernet frames are copied here by the device
   rfd_t *rfd;
+  
+  // Statistical counters that are updated after a frame is processed
+  uint32_t stat_counters[DUMP_SIZE];
 
 } pro100_t;
  
@@ -86,6 +91,26 @@ void pro100_recieve(void);
 ** issues a transmit command to the NIC
 */
 void pro100_transmit(char *data);
+
+/*
+** pro100_check_counter
+**
+** Checks a specific statistical counter
+**
+** @param offset - The offset of the statiscal counter from the first counter
+**
+** @return The new value of the statiscal counter if there was a change
+**         since the last dump, otherwise -1.
+*/
+int pro100_check_counter(uint32_t offset);
+
+/*
+** pro100_counter_dump
+**
+** Issues a Dump Statistical Counters command to the NIC
+**
+*/
+void pro100_counter_dump(void);
 
 /*
 ** Initialization routine for the Pro100 NIC.

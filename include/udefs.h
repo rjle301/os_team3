@@ -219,7 +219,7 @@ typedef struct proc_s {
 #define SPAWN_V
 #endif
 #define SPAWN_SEND
-#define SPAWN_VGA
+//#define SPAWN_VGA
 // users 'W' through 'Z' are spawned by other processes
 
 #endif /* !ASM_SRC */

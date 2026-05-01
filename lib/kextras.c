@@ -23,13 +23,13 @@
 **
 ** @param ch    The character to be printed
 */
-void put_char_or_code( int ch ) {
+void put_char_or_code(int ch) {
 
-	if( ch >= ' ' && ch < 0x7f ) {
-		cio_putchar( ch );
-	} else {
-		cio_printf( "\\x%02x", ch );
-	}
+  if (ch >= ' ' && ch < 0x7f) {
+    cio_putchar(ch);
+  } else {
+    cio_printf("\\x%02x", ch);
+  }
 }
 
 /**
@@ -40,31 +40,31 @@ void put_char_or_code( int ch ) {
 ** @param[in] ebp   Initial EBP to use
 ** @param[in] args  Number of function argument values to print
 */
-void backtrace( uint32_t *ebp, uint_t args ) {
+void backtrace(uint32_t *ebp, uint_t args) {
 
-	cio_puts( "Trace:  " );
-	if( ebp == NULL ) {
-		cio_puts( "NULL ebp, no trace possible\n" );
-		return;
-	} else {
-		cio_putchar( '\n' );
-	}
+  cio_puts("Trace:  ");
+  if (ebp == NULL) {
+    cio_puts("NULL ebp, no trace possible\n");
+    return;
+  } else {
+    cio_putchar('\n');
+  }
 
-	while( ebp != NULL ){
+  while (ebp != NULL) {
 
-		// get return address and report it and EBP
-		uint32_t ret = ebp[1];
-		cio_printf( " ebp %08x ret %08x args", (uint32_t) ebp, ret );
+    // get return address and report it and EBP
+    uint32_t ret = ebp[1];
+    cio_printf(" ebp %08x ret %08x args", (uint32_t)ebp, ret);
 
-		// print the requested number of function arguments
-		for( uint_t i = 0; i < args; ++i ) {
-			cio_printf( " [%u] %08x", i+1, ebp[2+i] );
-		}
-		cio_putchar( '\n' );
+    // print the requested number of function arguments
+    for (uint_t i = 0; i < args; ++i) {
+      cio_printf(" [%u] %08x", i + 1, ebp[2 + i]);
+    }
+    cio_putchar('\n');
 
-		// follow the chain
-		ebp = (uint32_t *) *ebp;
-	}
+    // follow the chain
+    ebp = (uint32_t *)*ebp;
+  }
 }
 
 /*
@@ -85,12 +85,12 @@ void backtrace( uint32_t *ebp, uint_t args ) {
 **
 ** @param[in] length   How long (sort of) to delay
 */
-void delay( int length ) {
+void delay(int length) {
 
-	while( --length >= 0 ) {
-		for( int i = 0; i < 10000000; ++i )
-			;
-	}
+  while (--length >= 0) {
+    for (int i = 0; i < 10000000; ++i)
+      ;
+  }
 }
 
 /**
@@ -103,44 +103,42 @@ void delay( int length ) {
 ** @param msg[in]  String containing a relevant message to be printed,
 **				   or NULL
 */
-void kpanic( const char *msg ) {
+void kpanic(const char *msg) {
 
-	cio_puts( "\n***** KERNEL PANIC *****\n" );
+  cio_puts("\n***** KERNEL PANIC *****\n");
 
-	if( msg ) {
-		cio_printf( "%s\n", msg );
-	}
+  if (msg) {
+    cio_printf("%s\n", msg);
+  }
 
-	delay( DELAY_5_SEC );   // approximately
+  delay(DELAY_5_SEC); // approximately
 
-	// dump a bunch of potentially useful information
+  // dump a bunch of potentially useful information
 
-	// dump the contents of the current PCB
-	pcb_dump( "Current", current, true );
+  // dump the contents of the current PCB
+  pcb_dump("Current", current, true);
 
-	// dump the basic info about what's in the process table
-	ptable_dump_stats( NULL );
+  // dump the basic info about what's in the process table
+  ptable_dump_stats(NULL);
 
-	// dump information about the queues
-	que_dump( "RH", ready[PRIO_HIGH] );
-	que_dump( "RS", ready[PRIO_STD] );
-	que_dump( "RL", ready[PRIO_LOW] );
-	que_dump( "S", sleeping );
-	que_dump( "Z", zombie );
-	que_dump( "B", blocked );
-	que_dump( "I", sioread );
+  // dump information about the queues
+  rbtree_dump("R", ready);
+  que_dump("S", sleeping);
+  que_dump("Z", zombie);
+  que_dump("B", blocked);
+  que_dump("I", sioread);
 
-	cio_puts( "\n\nPanic information:\n" );
+  cio_puts("\n\nPanic information:\n");
 
-	ptable_dump( "Full process table", true );
+  ptable_dump("Full process table", true);
 
-	ctx_dump_all( "Full context dump" );
+  ctx_dump_all("Full context dump");
 
-	backtrace( (uint32_t *) r_ebp(), 3 );
+  backtrace((uint32_t *)r_ebp(), 3);
 
-	__asm__( "cli" );
-	cio_printf( "*** HALTING" );
-	for(;;) {
-		;
-	}
+  __asm__("cli");
+  cio_printf("*** HALTING");
+  for (;;) {
+    ;
+  }
 }

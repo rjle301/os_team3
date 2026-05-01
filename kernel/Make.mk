@@ -16,7 +16,8 @@ BOOT_OBJ := $(patsubst %.c, $(BUILD)/%.o, $(BOOT_SRC))
 KERN_SRC := kernel/entry.S kernel/isrs.S \
 	kernel/cio.c kernel/clock.c kernel/kernel.c kernel/kmem.c \
 	kernel/list.c kernel/procs.c kernel/queues.c kernel/sio.c \
-	kernel/stacks.c kernel/support.c kernel/syscalls.c
+	kernel/stacks.c kernel/support.c kernel/syscalls.c \
+	kernel/rbtrees.c
 
 KERN_OBJ := $(patsubst %.c, $(BUILD)/%.o, $(KERN_SRC))
 KERN_OBJ := $(patsubst %.S, $(BUILD)/%.o, $(KERN_OBJ))

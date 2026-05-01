@@ -6,7 +6,6 @@
  * @brief   Red-Black tree module implementation.
  *
  */
-#include <memory_resource>
 #define KERNEL_SRC
 
 #include <common.h>
@@ -70,7 +69,7 @@ static int rbtree_ix(rbtree_t t) {
 }
 
 static void rbtnode_add_page(void) {
-  block = (rbtnode_t *)km_page_alloc(1);
+  rbtnode_t *block = (rbtnode_t *)km_page_alloc(1);
   assert(block != NULL);
 
   for (int i = 0; i < RBTNODES_PER_PAGE; ++i, ++block) {
@@ -95,8 +94,8 @@ static rbtnode_t *rbtnode_alloc(void) {
   return tmp;
 }
 
-static rbtree_dump_recurse_short(rbtnode_t *t, int8_t depth) {
-  if (t == NULL && depth < DUMP_RBT_MAX_DEPTH) {
+static void rbtree_dump_recurse_short(rbtnode_t *t, int8_t depth) {
+  if (t == NULL || depth >= DUMP_RBT_MAX_DEPTH) {
     return;
   }
 
@@ -106,11 +105,9 @@ static rbtree_dump_recurse_short(rbtnode_t *t, int8_t depth) {
              (t->color == RBNODE_BLK) ? 'B' : 'R');
 
   rbtree_dump_recurse_short(t->right, depth + 1);
-
-  return;
 }
 
-static rbtree_dump_details(const char *msg, rbtree_t t) {
+static void rbtree_dump_details(const char *msg, rbtree_t t) {
   cio_printf("%s: ", msg ? msg : "???");
   if (t == NULL) {
     cio_puts("NULL???\n");
@@ -119,7 +116,6 @@ static rbtree_dump_details(const char *msg, rbtree_t t) {
 
   cio_printf("root: %08x size %d compare %08x\n", (uint32_t)t->root, t->size,
              t->compare);
-  return;
 }
 
 /*
@@ -128,9 +124,10 @@ static rbtree_dump_details(const char *msg, rbtree_t t) {
  *  preforms a left rotate at node n.
  *
  *  @param[in,out] the node to be rotated about.
+ *  @param[in,out] the tree to preform operation on.
  */
-static void rbtree_rotate_left(rbtree_t *t, rbtnode_t *n) {
-  assert1(tree != NULL);
+static void rbtree_rotate_left(rbtree_t t, rbtnode_t *n) {
+  assert1(t != NULL);
   assert1(n != NULL);
 
   rbtnode_t *r = n->right;
@@ -161,8 +158,16 @@ static void rbtree_rotate_left(rbtree_t *t, rbtnode_t *n) {
   n->parent = r;
 }
 
+/*
+ *  rbtree_rotate_right(rbtree_t t,rbtnode_t *n)
+ *
+ *  preforms a right rotate at node n on tree t.
+ *
+ *  @param[in,out] the node to be rotated about.
+ *  @param[in,out] the tree to preform operation on.
+ */
 static void rbtree_rotate_right(rbtree_t t, rbtnode_t *n) {
-  assert1(tree != NULL);
+  assert1(t != NULL);
   assert1(n != NULL);
 
   rbtnode_t *l = n->left;
@@ -203,9 +208,9 @@ void rbtree_dump_human(const char *msg, rbtree_t t) {
  * rbtree_dump_short(const char *msg, rbtree_t t)
  */
 void rbtree_dump_short(const char *msg, rbtree_t t) {
-  rbtree_dump_details(const char *msg, rbtree_t);
+  rbtree_dump_details(msg, t);
 
-  rbtree_dump_recurse_short(t, 0);
+  rbtree_dump_recurse_short(t->root, 0);
   cio_putchar('\n');
 }
 
@@ -217,11 +222,14 @@ void rbtree_dump(const char *msg, rbtree_t t) {
 #endif
   return;
 }
+
 // taken pretty much bar-for-bar from queues.c
 void rbtree_init(void) {
+
 #if TRACING_INIT
   cio_puts("Red-Black Tree");
 #endif
+
   memclr(rbtrees, sizeof(rbtrees));
 
   memset(rbtrees_free, sizeof(rbtrees_free), RBT_FREE);
@@ -230,14 +238,14 @@ void rbtree_init(void) {
   rbtnode_add_page();
 }
 
-void rbtree_alloc(compare_t compare) {
+rbtree_t rbtree_alloc(compare_t compare) {
 #if TRACING_RBT
   cio_printf("+++ rbt_alloc(%08x)", (uint32_t)compare);
 #endif
   int i;
 
   for (i = 0; i < N_TREES; ++i) {
-    if (queue_free[i]) {
+    if (rbtrees_free[i]) {
       break;
     }
   }
@@ -253,15 +261,15 @@ void rbtree_alloc(compare_t compare) {
     return NULL;
   }
 
-  rbtree_t t = &trees[i];
+  rbtree_t t = &rbtrees[i];
   rbtrees_free[i] = RBT_INUSE;
 
   t->root = NULL;
-  t->count = 0;
+  t->size = 0;
   t->compare = compare;
 
 #if TRACING_RBT
-  cio_printf(" addr %08x\n", (uint32_t)q);
+  cio_printf(" addr %08x\n", (uint32_t)t);
   rbtree_dump("new tree", t);
 #endif
 
@@ -276,16 +284,16 @@ void rbtree_free(rbtree_t t) {
   int ix = rbtree_ix(t);
 
 #if TRACING_RBT
-  cio_printf("ix %d, free[ix] %u", ix, queue_free[ix]);
+  cio_printf("ix %d, free[ix] %u", ix, rbtrees_free[ix]);
 #endif
 
   if (ix < 0) {
     kpanic("rbtree_free, bad rbtree pointer");
   }
-  rbtree_free[ix] = RBT_FREE;
+  rbtrees_free[ix] = RBT_FREE;
   t->root = NULL;
   t->compare = NULL;
-  t->count = 0;
+  t->size = 0;
 }
 
 int rbtree_size(rbtree_t t) {
@@ -295,8 +303,8 @@ int rbtree_size(rbtree_t t) {
     kpanic("rbtree_size, bad rbtree pointer");
   }
 
-  if (queue_free[ix]) {
-    kpanic("rbtree_size, unallocated queue");
+  if (rbtrees_free[ix] == RBT_FREE) {
+    kpanic("rbtree_size, unallocated tree");
   }
 
   return t->size;
@@ -313,27 +321,98 @@ int rbtree_insert(rbtree_t t, void *data) {
   }
 
   // all new nodes get set to red
-  n->color = #RBNODE_RED;
+  n->color = RBNODE_RED;
   n->data = data;
 
   // if rbtree is empty.
   if (t->size == 0) {
     t->root = n;
     t->size = 1;
-
-    n->color = #RBNODE_BLK;
+    n->color = RBNODE_BLK;
     return E_SUCCESS;
   }
 
-  //@TODO: Implement insert logic for red-black tree.
+  // Find the correct insertion position
+  rbtnode_t *p = NULL;
   rbtnode_t *curr = t->root;
+  uint8_t isLeft = 0;
   while (curr != NULL) {
-    if (t->compare(curr->data, data) < 0) {
-      curr = t->left;
+    p = curr;
+    if (t->compare(curr->data, data) > 0) {
+      curr = curr->left;
+      isLeft = 1;
     } else {
-      curr = t->right;
+      curr = curr->right;
+      isLeft = 0;
     }
   }
+
+  // Insert node as child into tree.
+  n->parent = p;
+  if (isLeft) {
+    p->left = n;
+  } else {
+    p->right = n;
+  }
+  t->size += 1;
+
+  // Rebalance the tree to maintain Red-Black properties
+  rbtnode_t *curr_node = n;
+  while (curr_node->parent != NULL && curr_node->parent->color == RBNODE_RED) {
+    rbtnode_t *gp = curr_node->parent->parent;
+    rbtnode_t *p_node = curr_node->parent;
+
+    // Determine uncle and which side parent is on
+    rbtnode_t *uncle = NULL;
+    uint8_t parent_is_left = 0;
+
+    if (gp->left == p_node) {
+      parent_is_left = 1;
+      uncle = gp->right;
+    } else {
+      uncle = gp->left;
+    }
+
+    uint8_t uncle_color = (uncle == NULL) ? RBNODE_BLK : uncle->color;
+
+    if (uncle_color == RBNODE_RED) {
+      // Case 1: Uncle is red - recolor
+      p_node->color = RBNODE_BLK;
+      uncle->color = RBNODE_BLK;
+      gp->color = RBNODE_RED;
+      curr_node = gp;
+    } else {
+      // Case 2 & 3: Uncle is black - rotations needed
+      if (parent_is_left) {
+        if (p_node->right == curr_node) {
+          // Left-Right case: rotate parent left
+          rbtree_rotate_left(t, p_node);
+          curr_node = p_node;
+          p_node = curr_node->parent;
+        }
+        // Left-Left case: rotate grandparent right
+        rbtree_rotate_right(t, gp);
+        p_node->color = RBNODE_BLK;
+        gp->color = RBNODE_RED;
+      } else {
+        if (p_node->left == curr_node) {
+          // Right-Left case: rotate parent right
+          rbtree_rotate_right(t, p_node);
+          curr_node = p_node;
+          p_node = curr_node->parent;
+        }
+        // Right-Right case: rotate grandparent left
+        rbtree_rotate_left(t, gp);
+        p_node->color = RBNODE_BLK;
+        gp->color = RBNODE_RED;
+      }
+    }
+  }
+
+  // Ensure root is black
+  t->root->color = RBNODE_BLK;
+
+  return E_SUCCESS;
 }
 
 int rbtree_peek(rbtree_t t, void **data) {
@@ -353,14 +432,11 @@ int rbtree_peek(rbtree_t t, void **data) {
     n = n->left;
   }
 
-  // get left most leaf.
-  for (n = t->root; n->left != NULL; n->left)
-    ;
   *data = n->data;
   return E_SUCCESS;
 }
 
-rbtree_remove(rbtree_t t, void **data) {
+int rbtree_remove(rbtree_t t, void **data) {
   assert1(t != NULL);
 
   if (data == NULL) {
@@ -373,7 +449,7 @@ rbtree_remove(rbtree_t t, void **data) {
 
   assert1(t->root != NULL);
 
-  rbtnode_ *n;
+  rbtnode_t *n;
 
   for (n = t->root; n->left != NULL; n = n->left)
     ;

@@ -25,8 +25,8 @@
 #define PROCS_H_
 
 #include <common.h>
-
 #include <queues.h>
+#include <rbtrees.h>
 
 /*
 ** General (C and/or assembly) definitions
@@ -152,8 +152,7 @@ typedef struct pcb_s {
   uint32_t wakeup;      // wakeup time, for sleeping processes
   int32_t status;       // termination status, for parent's use
 
-  // vruntime
-  int32_t vrunttime;
+  uint32_t vruntime; // Virtual Runtime.
 
   // these things may not need to be four bytes
   pid_t pid; // PID of this process
@@ -174,7 +173,8 @@ typedef struct pcb_s {
 */
 
 // public-facing process queues
-extern queue_t ready[N_PRIOS]; // a MLQ
+// extern queue_t ready[N_PRIOS]; // a MLQ
+extern rbtree_t ready; // new CFS
 extern queue_t sleeping;
 extern queue_t zombie;
 extern queue_t blocked;
@@ -196,7 +196,7 @@ extern pcb_t *init_pcb;
 extern const char state_str[N_STATES][4];
 
 // table of priority name strings
-extern const char prio_str[N_PRIOS][5];
+// extern const char prio_str[N_PRIOS][5];
 
 /*
 ** Prototypes

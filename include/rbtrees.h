@@ -73,7 +73,7 @@ void rbtree_free(rbtree_t t);
  *
  *  Panics if t is NULL or invalid
  */
-void rbtree_size(rbtree_t t);
+int rbtree_size(rbtree_t t);
 
 /*
  *  rbtree_insert(rbtree_t t, void *data)

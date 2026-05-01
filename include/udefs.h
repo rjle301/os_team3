@@ -5,7 +5,6 @@
 **
 ** @brief   "Userland" configuration information
 */
-
 #ifndef UDEFS_H_
 #define UDEFS_H_
 
@@ -20,11 +19,11 @@
 
 // delay loop counts
 
-#define DELAY_LONG		100000000
-#define DELAY_MED		4500000
-#define DELAY_SHORT		2500000
+#define DELAY_LONG 100000000
+#define DELAY_MED 4500000
+#define DELAY_SHORT 2500000
 
-#define DELAY_STD		DELAY_SHORT
+#define DELAY_STD DELAY_SHORT
 
 #ifndef ASM_SRC
 
@@ -36,9 +35,11 @@
 
 // a delay loop - kind of ugly, but it works
 
-#define DELAY(n)	do { \
-		for(int _dlc = 0; _dlc < (DELAY_##n); ++_dlc) continue; \
-	} while(0)
+#define DELAY(n)                                                               \
+  do {                                                                         \
+    for (int _dlc = 0; _dlc < (DELAY_##n); ++_dlc)                             \
+      continue;                                                                \
+  } while (0)
 
 /*
 ** All user main() functions have the following prototype:
@@ -65,20 +66,35 @@
 ** SPAWN_x definition in the list at the end of this header file.
 */
 
-#define USERMAIN(f)	int f( char *args )
+#define USERMAIN(f) int f(char *args)
 
 // these are always started
-USERMAIN(init);    USERMAIN(idle);    USERMAIN(shell);
+USERMAIN(init);
+USERMAIN(idle);
+USERMAIN(shell);
 
 // these are started by other processes (e.g., the shell)
-USERMAIN(progABC); USERMAIN(progDE);  USERMAIN(progFG); USERMAIN(progH);
-USERMAIN(progI);   USERMAIN(progJ);   USERMAIN(progKL); USERMAIN(progMN);
-USERMAIN(progO);   USERMAIN(progP);   USERMAIN(progQ);  USERMAIN(progR);
-USERMAIN(progS);   USERMAIN(progTUV); USERMAIN(progW);  USERMAIN(progX);
-USERMAIN(progY);   USERMAIN(progZ);
+USERMAIN(progABC);
+USERMAIN(progDE);
+USERMAIN(progFG);
+USERMAIN(progH);
+USERMAIN(progI);
+USERMAIN(progJ);
+USERMAIN(progKL);
+USERMAIN(progMN);
+USERMAIN(progO);
+USERMAIN(progP);
+USERMAIN(progQ);
+USERMAIN(progR);
+USERMAIN(progS);
+USERMAIN(progTUV);
+USERMAIN(progW);
+USERMAIN(progX);
+USERMAIN(progY);
+USERMAIN(progZ);
 
 // user command-line argument separator character
-#define	ARG_SEP    '\r'
+#define ARG_SEP '\r'
 
 /*
 ** Command-line argument processing is done the same way for all
@@ -117,7 +133,7 @@ USERMAIN(progY);   USERMAIN(progZ);
 **       duration."
 **
 ** We use an initializer list with a single 0 in it to force argv[0]
-** to contain a NULL pointer, and the other entries automatically 
+** to contain a NULL pointer, and the other entries automatically
 ** contain NULL thanks to the C specification. :-)
 **
 ** Example:
@@ -128,9 +144,9 @@ USERMAIN(progY);   USERMAIN(progZ);
 ** creates 'argv' and 'nargs', and initializes 'nargs' to the actual arg
 ** count.
 */
-#define ARG_PROC( n, str, vlen, count, name ) \
-	char *argv[ vlen ] = { 0 }; \
-	int count = parseArgs( n, (char *) str, ARG_SEP, vlen, argv );
+#define ARG_PROC(n, str, vlen, count, name)                                    \
+  char *argv[vlen] = {0};                                                      \
+  int count = parseArgs(n, (char *)str, ARG_SEP, vlen, argv);
 
 // could add the following to check argument counts
 //	if( n != 0 && count != n ) {
@@ -148,10 +164,10 @@ USERMAIN(progY);   USERMAIN(progZ);
 */
 
 typedef struct proc_s {
-	uint32_t entry;          // process entry point
-	char *args;              // command-line argument string
-	prio_t priority;         // process priority
-	char select;             // identifying character
+  uint32_t entry;  // process entry point
+  char *args;      // command-line argument string
+  prio_t priority; // process priority
+  char select;     // identifying character
 } proc_t;
 
 /*
@@ -164,11 +180,11 @@ typedef struct proc_s {
 ** PROCENT( progABC, PRIO_STD, "a", "proga\ra\r30" }
 */
 // #define PROCENT(e,p,s,a) { (uint32_t) e, 0, p, s, a }
-#define PROCENT(ent,args,prio,sel) { (uint32_t) ent, args, prio, sel }
+#define PROCENT(ent, args, prio, sel) {(uint32_t)ent, args, prio, sel}
 
 // sentinel value for the end of the table - must be a value that
 // will never occur as the actual entry point of a function
-#define TBLEND  0xfeedbead
+#define TBLEND 0xfeedbead
 
 /*
 ** User process controls.
@@ -192,7 +208,7 @@ typedef struct proc_s {
 ** The standard set of test programs, start by the shell (which is started
 ** automatically from the initial user process)
 */
-
+#if 0
 #define SPAWN_A
 #define SPAWN_B
 #define SPAWN_C
@@ -205,6 +221,7 @@ typedef struct proc_s {
 #define SPAWN_J
 #define SPAWN_K
 #define SPAWN_L
+#endif
 #if 0
 #define SPAWN_M
 #define SPAWN_N

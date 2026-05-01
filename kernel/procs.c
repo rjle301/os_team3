@@ -300,7 +300,7 @@ void pcb_dump(const char *msg, register pcb_t *pcb, bool_t all) {
   }
 
   // now, the rest of the contents
-  cio_printf(" vruntime %s", pcb->vruntime);
+  cio_printf(" vruntime %u", pcb->vruntime);
 
   cio_printf(" xit %d wake %08x\n", pcb->status, pcb->wakeup);
 
@@ -387,7 +387,8 @@ void ptable_dump(const char *msg, bool_t all) {
 ** @return The number of process table entries in an "unknown" state.
 */
 uint32_t ptable_dump_stats(uint32_t *tbl) {
-  uint32_t nstate[N_STATES] = {0};
+  uint32_t nstate[N_STATES];
+  memclr(nstate, sizeof(nstate));
   uint32_t unknown = 0;
 
   int n = 0;
@@ -679,7 +680,9 @@ void schedule(pcb_t *p) {
 */
 void dispatch(void) {
   uint32_t elapsed = system_time - last_dispatch;
-  current->vruntime += elapsed;
+  if (current != NULL) {
+    current->vruntime += elapsed;
+  }
 
   pcb_t *p = NULL;
 

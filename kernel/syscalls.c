@@ -913,7 +913,7 @@ SYSIMPL(send) {
   SYSCALL_ENTER(pcb->pid);
 
   // Get the message from the user process
-  char *data = ARG(pcb, 1);
+  char *data = (char *)ARG(pcb, 1);
 
   // Maybe do some error checking on the data before sending?
   pro100_transmit(data);

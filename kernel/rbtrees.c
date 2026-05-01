@@ -39,7 +39,7 @@ struct rbtree_s {
 
 #define N_TREES 8
 #define RBT_FREE 1
-#define RBT_INUSE 1
+#define RBT_INUSE 0
 
 #define DUMP_RBT_MAX_DEPTH 5
 static rbtnode_t *free_rbtnodes;
@@ -191,6 +191,117 @@ static void rbtree_rotate_right(rbtree_t t, rbtnode_t *n) {
   l->right = n;
   // Finalize Parent: Set n's parent to l.
   n->parent = l;
+}
+
+static uint8_t rbtnode_color(const rbtnode_t *n) {
+  return (n == NULL) ? RBNODE_BLK : n->color;
+}
+
+static void rbtree_transplant(rbtree_t t, rbtnode_t *u, rbtnode_t *v) {
+  assert1(t != NULL);
+  assert1(u != NULL);
+
+  if (u->parent == NULL) {
+    t->root = v;
+  } else if (u == u->parent->left) {
+    u->parent->left = v;
+  } else {
+    u->parent->right = v;
+  }
+
+  if (v != NULL) {
+    v->parent = u->parent;
+  }
+}
+
+static void rbtree_remove_fixup(rbtree_t t, rbtnode_t *n, rbtnode_t *parent) {
+  while (n != t->root && rbtnode_color(n) == RBNODE_BLK) {
+    if (parent != NULL && n == parent->left) {
+      rbtnode_t *sibling = parent->right;
+
+      if (rbtnode_color(sibling) == RBNODE_RED) {
+        sibling->color = RBNODE_BLK;
+        parent->color = RBNODE_RED;
+        rbtree_rotate_left(t, parent);
+        sibling = parent->right;
+      }
+
+      if (rbtnode_color(sibling ? sibling->left : NULL) == RBNODE_BLK &&
+          rbtnode_color(sibling ? sibling->right : NULL) == RBNODE_BLK) {
+        if (sibling != NULL) {
+          sibling->color = RBNODE_RED;
+        }
+        n = parent;
+        parent = n->parent;
+      } else {
+        if (rbtnode_color(sibling ? sibling->right : NULL) == RBNODE_BLK) {
+          if (sibling != NULL && sibling->left != NULL) {
+            sibling->left->color = RBNODE_BLK;
+          }
+          if (sibling != NULL) {
+            sibling->color = RBNODE_RED;
+            rbtree_rotate_right(t, sibling);
+          }
+          sibling = parent->right;
+        }
+
+        if (sibling != NULL) {
+          sibling->color = parent->color;
+        }
+        parent->color = RBNODE_BLK;
+        if (sibling != NULL && sibling->right != NULL) {
+          sibling->right->color = RBNODE_BLK;
+        }
+        rbtree_rotate_left(t, parent);
+        n = t->root;
+        parent = NULL;
+      }
+    } else {
+      rbtnode_t *sibling = (parent != NULL) ? parent->left : NULL;
+
+      if (rbtnode_color(sibling) == RBNODE_RED) {
+        sibling->color = RBNODE_BLK;
+        parent->color = RBNODE_RED;
+        rbtree_rotate_right(t, parent);
+        sibling = parent->left;
+      }
+
+      if (rbtnode_color(sibling ? sibling->right : NULL) == RBNODE_BLK &&
+          rbtnode_color(sibling ? sibling->left : NULL) == RBNODE_BLK) {
+        if (sibling != NULL) {
+          sibling->color = RBNODE_RED;
+        }
+        n = parent;
+        parent = n ? n->parent : NULL;
+      } else {
+        if (rbtnode_color(sibling ? sibling->left : NULL) == RBNODE_BLK) {
+          if (sibling != NULL && sibling->right != NULL) {
+            sibling->right->color = RBNODE_BLK;
+          }
+          if (sibling != NULL) {
+            sibling->color = RBNODE_RED;
+            rbtree_rotate_left(t, sibling);
+          }
+          sibling = parent->left;
+        }
+
+        if (sibling != NULL) {
+          sibling->color = parent->color;
+        }
+        parent->color = RBNODE_BLK;
+        if (sibling != NULL && sibling->left != NULL) {
+          sibling->left->color = RBNODE_BLK;
+        }
+        rbtree_rotate_right(t, parent);
+        n = t->root;
+        parent = NULL;
+      }
+    }
+  }
+
+  if (n != NULL) {
+    n->color = RBNODE_BLK;
+  }
 }
 
 /**
@@ -449,13 +560,24 @@ int rbtree_remove(rbtree_t t, void **data) {
 
   assert1(t->root != NULL);
 
+  // remove the left-most node (minimum key)
   rbtnode_t *n;
-
   for (n = t->root; n->left != NULL; n = n->left)
     ;
 
   *data = n->data;
+
+  uint8_t removed_color = n->color;
+  rbtnode_t *replacement = n->right;
+  rbtnode_t *replacement_parent = n->parent;
+
+  rbtree_transplant(t, n, n->right);
   t->size -= 1;
+
+  if (removed_color == RBNODE_BLK) {
+    rbtree_remove_fixup(t, replacement, replacement_parent);
+  }
+
   rbtnode_free(n);
 
   return E_SUCCESS;

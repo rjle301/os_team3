@@ -389,7 +389,7 @@ void stk_dump( const char *msg, uint32_t *stk, uint32_t limit )
 	char oldbuf[HBUFSZ], buf[HBUFSZ], cbuf[CBUFSZ];
 	uint32_t addr = (uint32_t ) stk;
 	uint32_t *sp = (uint32_t *) stk;
-	char hexdigits[] = "0123456789ABCDEF";
+	const char *hexdigits = "0123456789ABCDEF";
 
 	// if a limit was specified, dump only that many words
 

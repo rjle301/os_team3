@@ -398,6 +398,7 @@ SYSIMPL(fork) {
   new->parent = pcb;
   new->pid = next_pid++;
   new->priority = ARG(pcb, 1);
+  new->nice = 0;
   new->vruntime = 0;
 
   // see if we're supposed to inherit the parent's priority

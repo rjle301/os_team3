@@ -301,6 +301,7 @@ void pcb_dump(const char *msg, register pcb_t *pcb, bool_t all) {
 
   // now, the rest of the contents
   cio_printf(" vruntime %u", pcb->vruntime);
+  cio_printf(" nice %d", pcb->nice);
 
   cio_printf(" xit %d wake %08x\n", pcb->status, pcb->wakeup);
 
@@ -311,12 +312,6 @@ void pcb_dump(const char *msg, register pcb_t *pcb, bool_t all) {
 
   cio_printf(" context %08x stk %08x", (uint32_t)pcb->context,
              (uint32_t)pcb->stack);
-
-  cio_printf(" fill");
-  for (int i = 0; i < sizeof(pcb->filler); ++i) {
-    cio_putchar(' ');
-    put_char_or_code(pcb->filler[i]);
-  }
 
   cio_putchar('\n');
 }
@@ -681,7 +676,8 @@ void schedule(pcb_t *p) {
 void dispatch(void) {
   uint32_t elapsed = system_time - last_dispatch;
   if (current != NULL) {
-    current->vruntime += elapsed;
+    current->vruntime +=
+        (elapsed * NICE_TO_PRIO(current->nice)) / NICE_TO_PRIO(0);
   }
 
   pcb_t *p = NULL;

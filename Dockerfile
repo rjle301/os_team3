@@ -20,4 +20,3 @@ VOLUME ["/src"]
 WORKDIR /src
 
 CMD [ "make" ]
-RUN chmod -R jarchi .

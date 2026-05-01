@@ -72,10 +72,17 @@ enum state_e {
 // process state
 typedef uint8_t state_t;
 
-/*
-** Process priorities are defined in <defs.h> so that they
-** are visible to user-level code.
-*/
+// Macros taken from Linux kernel sched/prio.h
+#define MAX_NICE 19
+#define MIN_NICE -20
+#define NICE_WIDTH (MAX_NICE - MIN_NICE + 1)
+
+#define MAX_RT_PRIO 100
+#define MAX_PRIO (MAX_RT_PRIO + NICE_WIDTH)
+#define DEFAULT_PRIO (MAX_RT_PRIO + NICE_WIDTH / 2)
+
+#define NICE_TO_PRIO(nice) ((nice) + DEFAULT_PRIO)
+#define PRIO_TO_NICE(prio) ((prio) - DEFAULT_PRIO)
 
 // quantum values, in clock ticks
 // (could be an enum, but we only have one...)
@@ -163,7 +170,7 @@ typedef struct pcb_s {
   uint8_t quantum; // remaining quantum for this process
 
   // filler out to 32 bytes
-  uint8_t filler[1];
+  int8_t nice;
 
 } pcb_t;
 // SZ_PCB is defined in <offsets.h>

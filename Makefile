@@ -17,17 +17,23 @@
 #                         we aren't compiling with at least -O2
 #   VIDEO_BW            Use black-on-white for the console display
 #   CIO_DUP2_SIO        CIO output can be duped to SIO
+#   NODE_X              Determines the MAC address of this machine
+#   BAD_CLOCK           Clock on actual hardware runs at ~1Hz
 #
 
 GEN_OPTS := -DCLEAR_BSS -DGET_MMAP
 GEN_OPTS += -DVIDEO_BW
 GEN_OPTS += -DCIO_DUP2_SIO
 GEN_OPTS += -DFORCE_INLINING
+GEN_OPTS += -DNODE_1
+#GEN_OPTS += -DBAD_CLOCK
 
 #
 # Debugging options:
 #   ANNOUNCE_ENTRY      announce entry and exit from kernel functions
 #   SLOW_KINIT          add 2-second delays in the main() function
+#   DEBUG_PCI           Debug PCI device discovery
+#   DEBUG_NIC           Debug the NIC
 #   RPT_INT_UNEXP       report any 'unexpected' interrupts
 #   RPT_INT_MYSTERY     report interrupt 0x27 specifically
 #   TRACE_CX            context restore tracing
@@ -51,6 +57,8 @@ DBG_OPTS += -DCX_SANITY_CHK
 DBG_OPTS += -DSYSTEM_STATUS=5
 DBG_OPTS += -DCATCH_OP_FAULTS
 DBG_OPTS += -DCATCH_GP_FAULTS
+DBG_OPTS += -DDEBUG_PCI
+DBG_OPTS += -DDEBUG_NIC
 
 #
 # T_ options are used to define bits in a "tracing" bitmask, to allow
@@ -75,6 +83,7 @@ DBG_OPTS += -DCATCH_GP_FAULTS
 #
 
 TRACE_OPTS := -DT_INIT
+<<<<<<< HEAD
 TRACE_OPTS += -DT_QUE
 TRACE_OPTS += -DT_KM -DT_KMI -DT_KMF
 TRACE_OPTS += -DT_STKS
@@ -84,6 +93,16 @@ TRACE_OPTS += -DT_SCALL -DT_SRET
 TRACE_OPTS += -DT_PCI
 TRACE_OPTS += -DT_RBT
 TRACE_OPTS += -DT_P100
+=======
+#TRACE_OPTS += -DT_QUE
+#TRACE_OPTS += -DT_KM -DT_KMI -DT_KMF
+#TRACE_OPTS += -DT_STKS
+#TRACE_OPTS += -DT_SCH
+#TRACE_OPTS += -DT_DSP
+#TRACE_OPTS += -DT_SCALL -DT_SRET
+#TRACE_OPTS += -DT_PCI
+#TRACE_OPTS += -DT_P100
+>>>>>>> origin/vga
 
 KERNEL_OPTS := $(GEN_OPTS) $(DBG_OPTS) $(TRACE_OPTS) $(EXTRAS)
 
@@ -239,7 +258,10 @@ QEMUGDB := $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 # run 'make' with -DQEMUEXTRA=xxx to add option 'xxx' when QEMU is run
 #
 # does not include a '-serial' option, as that may or may not be needed
-QEMUOPTS := -drive file=disk.img,index=0,media=disk,format=raw $(QEMUEXTRA)
+QEMUOPTS := -drive file=disk.img,index=0,media=disk,format=raw \
+            -netdev user,id=net0 \
+            -device i82559er,netdev=net0 \
+            -object filter-dump,id=f1,netdev=net0,file=packets.pcap $(QEMUEXTRA)
 
 ########################################
 # RULES SECTION

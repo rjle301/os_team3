@@ -30,11 +30,13 @@ static const proc_t in_procs[] = {
 	PROCENT( idle, "idle\r.", PRIO_LOW, '!' ),
 
 #ifdef RUN_SHELL
-
 	// the user shell
 	PROCENT( shell, "shell", PRIO_STD, '@' ),
+#endif
 
-#else
+#if defined(SPAWN_SEND)
+  PROCENT( progSEND, "userSEND", PRIO_STD, '$'),
+#endif
 
 	// Users A-C each run ProgABC, which loops printing its character
 #if defined(SPAWN_A)
@@ -126,9 +128,11 @@ static const proc_t in_procs[] = {
 	PROCENT( progTUV, "userU\rU\r6", PRIO_STD, 'u' ),
 #endif
 #if defined(SPAWN_V)
-	PROCENT( progTUV, "userV\rV\r6", PRIO_STD, 'v' )
+	PROCENT( progTUV, "userV\rV\r6", PRIO_STD, 'v' ),
 #endif
-	
+#if defined(SPAWN_VGA)
+	PROCENT( progVGA, "userVGA\rVGA\r6", PRIO_STD, '+' )
+#endif
 	// these processes are spawned by the ones above, and are never
 	// spawned directly.
 
@@ -292,4 +296,3 @@ USERMAIN( init ) {
 
 	return( 1 );  // shut the compiler up
 }
-#endif

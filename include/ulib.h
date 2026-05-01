@@ -202,6 +202,82 @@ int getprio( pid_t pid );
 */
 void bogus( void );
 
+/**
+** setvga256linear()
+**
+** Sets the VGA graphics mode to 256 linear graphics mode (Mode 13h).
+**
+** Should not return.
+*/
+void setvga256linear( void );
+
+
+/**
+** settextmode()
+**
+** Sets the VGA graphics mode to 80x25 text mode (Mode 3).
+**
+** Should not return.
+*/
+void setvgatextmode( void );
+
+/**
+** write()
+**
+** Write a specific color to an area on the screen.
+**
+** @param[in] x     x coordinate of the pixel in question
+** @param[in] y     y coordinate of the pixel in question
+** @param[in] c     Color to write to the screen.
+**
+** Should not return.
+*/
+void writepixel(unsigned x, unsigned y, unsigned c);
+
+
+/**
+** returnwidth()
+**
+** Get the screen width (in pixels in Mode 13h, in characters in Mode 3)
+**
+**
+** @return The current screen width.
+*/
+unsigned getwidth( void );
+
+
+/**
+** returnheight()
+**
+** Get the screen height (in pixels in Mode 13h, in characters in Mode 3)
+**
+**
+** @return The current screen height.
+*/
+unsigned getheight( void );
+
+
+/**
+** returnfbsegment()
+**
+** Get the location of the fb segment.
+**
+**
+** @return The address where VGA is looking at..
+*/
+unsigned getfbsegment( void );
+
+/**
+** send(char* data)
+**
+** Constructs an ethernet frame out of the data and sends it over ethernet
+**
+** @param data  The data being sent over ethernet
+**
+** @return None
+*/
+void send( char *data );
+
 /*
 *************************************************
 ** CONVENIENT "SHORTHAND" VERSIONS OF SYSCALLS **

@@ -92,6 +92,8 @@ USERMAIN(progW);
 USERMAIN(progX);
 USERMAIN(progY);
 USERMAIN(progZ);
+USERMAIN(progSEND);
+USERMAIN(progVGA);
 
 // user command-line argument separator character
 #define ARG_SEP '\r'
@@ -208,6 +210,7 @@ typedef struct proc_s {
 ** The standard set of test programs, start by the shell (which is started
 ** automatically from the initial user process)
 */
+
 #if 0
 #define SPAWN_A
 #define SPAWN_B
@@ -221,11 +224,9 @@ typedef struct proc_s {
 #define SPAWN_J
 #define SPAWN_K
 #define SPAWN_L
-#endif
-#if 0
 #define SPAWN_M
 #define SPAWN_N
-there is no user 'O'
+//there is no user 'O'
 #define SPAWN_P
 #define SPAWN_Q
 #define SPAWN_R
@@ -234,7 +235,9 @@ there is no user 'O'
 #define SPAWN_U
 #define SPAWN_V
 #endif
-// users 'W' through 'Z' are spawned by other processes
+#define SPAWN_SEND
+// #define SPAWN_VGA
+//  users 'W' through 'Z' are spawned by other processes
 
 #endif /* !ASM_SRC */
 

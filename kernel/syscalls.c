@@ -12,12 +12,14 @@
 
 #include <cio.h>
 #include <clock.h>
+#include <device/pro100.h>
 #include <kmem.h>
 #include <procs.h>
 #include <sio.h>
 #include <stacks.h>
 #include <syscalls.h>
 #include <x86/pic.h>
+#include <x86/vga.h>
 
 /*
 ** PRIVATE DEFINITIONS
@@ -504,6 +506,8 @@ SYSIMPL(exec) {
   pcb->context = stk_setup(stk, where, args);
   assert1(pcb->context != NULL);
 
+  pcb->stack = stk;
+
   // now we can safely free the old stack
   stk_free(oldstack);
 
@@ -575,9 +579,21 @@ SYSIMPL(read) {
 
   } else if (chan == CHAN_SIO) {
 
+<<<<<<< HEAD
     // SIO input is blocking, so if there are no characters
     // available, we'll block this process
     n = sio_read(buf, len);
+=======
+    if (n < 1) {
+      // nothing available, so we'll block
+      pcb->state = STATE_BLOCKED;
+      assert1(que_insert(sioread, (void *)pcb) == E_SUCCESS);
+      // dispatch a new process
+      dispatch();
+      SYSCALL_EXIT(0);
+      return;
+    }
+>>>>>>> origin/vga
 
     if (n < 1) {
       // nothing available, so we'll block
@@ -783,6 +799,137 @@ SYSIMPL(getprio) {
   SYSCALL_EXIT(pcb->pid);
 }
 
+/**
+** sys_setvga256linear - sets 320x200 255 color graphics mode for vga
+**
+** Implements:
+**		void setvga256linear();
+**
+**
+*/
+SYSIMPL(setvga256linear) {
+
+  // sanity check!
+  assert(pcb != NULL);
+
+  // Calls Chris Giese's register assignment
+  set_vga_256linear();
+}
+
+/**
+** sys_setvgatextmode - sets 80x25 text mode for vga
+**
+** Implements:
+**		void setvgatextmode();
+**
+**
+*/
+SYSIMPL(setvgatextmode) {
+
+  // sanity check!
+  assert(pcb != NULL);
+
+  // Calls Chris Giese's register assignment for reverting to text mode
+  set_text_mode();
+}
+
+/**
+** sys_writepixel - Writes a pixel to some (x, y) on the screen.
+**
+** Implements:
+**		void writepixel(unsigned x, unsigned y, unsigned c);
+**
+** Has undefined behavior if vga driver is not 320x200 255 color graphics mode.
+*/
+SYSIMPL(writepixel) {
+
+  // sanity check!
+  assert(pcb != NULL);
+
+  unsigned x = ARG(pcb, 1);
+  unsigned y = ARG(pcb, 2);
+  unsigned c = ARG(pcb, 3);
+
+  // Calls Chris Giese's register assignment for writing a color to a pixel at
+  // some coordinate (x, y)
+  write_pixel(x, y, c);
+}
+
+/**
+** sys_getwidth - Gets the width of the screen.
+**
+** Implements:
+**		void getwidth();
+**
+** If in graphics mode, is in pixels. If in text mode, is in columns.
+*/
+SYSIMPL(getwidth) {
+
+  // sanity check!
+  assert(pcb != NULL);
+
+  RET(pcb) = return_width();
+}
+
+/**
+** sys_height - Gets the height of the screen.
+**
+** Implements:
+**		void getheight();
+**
+** If in graphics mode, is in pixels. If in text mode, is in rows.
+*/
+SYSIMPL(getheight) {
+
+  // sanity check!
+  assert(pcb != NULL);
+
+  RET(pcb) = return_height();
+}
+
+/**
+** sys_getfbsegment - Gets the starting address of the current vga memory region
+* accessed by the vga driver.
+**
+** Implements:
+**		unsigned getfbsegment();
+**
+*/
+SYSIMPL(getfbsegment) {
+
+  assert(pcb != NULL);
+
+  RET(pcb) = return_fb_segment();
+}
+
+/**
+** sys_send - sends specified message over ethernet
+**
+** Implements
+**    void send(char *data)
+**
+** This should probably return some int to the user process
+** to indicate the status of the transmit.
+*/
+SYSIMPL(send) {
+
+  // sanity check
+  assert(pcb != NULL);
+
+  SYSCALL_ENTER(pcb->pid);
+
+  // Get the message from the user process
+  char *data = ARG(pcb, 1);
+
+  // Maybe do some error checking on the data before sending?
+  pro100_transmit(data);
+
+  // 0 is success, something else is error
+  // return 0;
+
+  SYSCALL_EXIT(pcb->pid);
+}
+
 /*
 ** PRIVATE FUNCTIONS AND GLOBAL VARIABLES
 */
@@ -796,12 +943,33 @@ SYSIMPL(getprio) {
 ** position in the initialization list is irrelevant.
 */
 
+<<<<<<< HEAD
 static void (*const syscalls[N_SYSCALLS])(pcb_t *) = {
     [SYS_exit] = sys_exit,       [SYS_wait] = sys_wait,
     [SYS_fork] = sys_fork,       [SYS_exec] = sys_exec,
     [SYS_read] = sys_read,       [SYS_write] = sys_write,
     [SYS_sleep] = sys_sleep,     [SYS_getpid] = sys_getpid,
     [SYS_gettime] = sys_gettime, [SYS_getprio] = sys_getprio};
+=======
+static void (*const syscalls[N_SYSCALLS])(pcb_t *) = {
+    [SYS_exit] = sys_exit,
+    [SYS_wait] = sys_wait,
+    [SYS_fork] = sys_fork,
+    [SYS_exec] = sys_exec,
+    [SYS_read] = sys_read,
+    [SYS_write] = sys_write,
+    [SYS_sleep] = sys_sleep,
+    [SYS_getpid] = sys_getpid,
+    [SYS_gettime] = sys_gettime,
+    [SYS_getprio] = sys_getprio,
+    [SYS_setvga256linear] = sys_setvga256linear,
+    [SYS_setvgatextmode] = sys_setvgatextmode,
+    [SYS_writepixel] = sys_writepixel,
+    [SYS_getwidth] = sys_getwidth,
+    [SYS_getheight] = sys_getheight,
+    [SYS_getfbsegment] = sys_getfbsegment,
+    [SYS_send] = sys_send};
+>>>>>>> origin/vga
 
 /**
 ** Name:	sys_isr

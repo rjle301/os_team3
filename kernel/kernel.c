@@ -17,6 +17,7 @@
 
 #include <cio.h>
 #include <clock.h>
+#include <klib.h>
 #include <kmem.h>
 #include <memory.h>
 #include <procs.h>
@@ -26,6 +27,9 @@
 #include <stacks.h>
 #include <syscalls.h>
 
+#include <device/pro100.h>
+#include <pci.h>
+#include <x86/vga.h>
 /*
 ** PRIVATE DEFINITIONS
 */
@@ -281,6 +285,22 @@ int main(void) {
   **
   **	Enabling any I/O devices (e.g., SIO xmit/rcv)
   */
+  pci_init();
+
+#ifdef SLOW_INIT
+  delay(DELAY_2_SEC);
+#endif
+
+  pro100_init();
+
+  /*
+  ** Showcase switch to 13h mode and back.
+  */
+  vga_graphics_init();
+
+  delay(100); // Wait for some n units.
+
+  set_text_mode();
 
   /*
   ** Create the initial user process

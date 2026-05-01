@@ -66,4 +66,70 @@
 #define	VGA_WHITE_ON_BLACK  (VGA_FG_WHITE | VGA_BG_BLACK)
 #define	VGA_BLACK_ON_WHITE  (VGA_FG_BLACK | VGA_BG_WHITE)
 
+/**
+** set_text_mode()
+**
+** Sets 80x25 text mode. Chris Giese's code, modified with the respective read/write port functions.
+*/
+void set_text_mode(void);
+
+/**
+** write_pixel(unsigned x, unsigned y, unsigned c)
+**
+** @param x  The x coordinate.
+** @param y  The y coordinate.
+** @param c  The color written to the pixel at (x, y).
+** 
+** Writes a color to some pixel at (x, y) in 13h mode. Taken from Chris Giese.
+*/
+void write_pixel(unsigned x, unsigned y, unsigned c);
+
+
+/**
+** set_vga_256linear()
+**
+** Simply initializes graphics mode.
+**
+**
+*/
+void set_vga_256linear(void);
+
+/**
+** return_width()
+**
+** Gets the width of the screen (in pixels if in graphics mode, in columns if in text mode)
+** @return The width of the screen.
+*/
+unsigned return_width(void);
+
+
+/**
+** return_height()
+**
+** Gets the height of the screen (in pixels if in graphics mode, in rows if in text mode)
+** @return The height of the screen.
+*/
+unsigned return_height(void);
+
+
+/**
+** return_fb_segment()
+**
+** Calculate the index of a queue in the array of queues.
+**
+**
+** @return The first segment of the current vga memory region accessed.
+*/
+unsigned return_fb_segment(void);
+
+
+/**
+** vga_graphics_init()
+**
+** Simply initializes graphics mode.
+**
+**
+*/
+void vga_graphics_init(void);
+
 #endif	/* vga.h */

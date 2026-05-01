@@ -398,10 +398,10 @@ SYSIMPL(fork) {
   new->parent = pcb;
   new->pid = next_pid++;
   new->priority = ARG(pcb, 1);
-  new->vruntime = 0
+  new->vruntime = 0;
 
-      // see if we're supposed to inherit the parent's priority
-      if (new->priority == PRIO_INHERIT) {
+  // see if we're supposed to inherit the parent's priority
+  if (new->priority == PRIO_INHERIT) {
     new->priority = pcb->priority;
   }
 
@@ -579,11 +579,6 @@ SYSIMPL(read) {
 
   } else if (chan == CHAN_SIO) {
 
-<<<<<<< HEAD
-    // SIO input is blocking, so if there are no characters
-    // available, we'll block this process
-    n = sio_read(buf, len);
-=======
     if (n < 1) {
       // nothing available, so we'll block
       pcb->state = STATE_BLOCKED;
@@ -593,7 +588,6 @@ SYSIMPL(read) {
       SYSCALL_EXIT(0);
       return;
     }
->>>>>>> origin/vga
 
     if (n < 1) {
       // nothing available, so we'll block
@@ -943,14 +937,6 @@ SYSIMPL(send) {
 ** position in the initialization list is irrelevant.
 */
 
-<<<<<<< HEAD
-static void (*const syscalls[N_SYSCALLS])(pcb_t *) = {
-    [SYS_exit] = sys_exit,       [SYS_wait] = sys_wait,
-    [SYS_fork] = sys_fork,       [SYS_exec] = sys_exec,
-    [SYS_read] = sys_read,       [SYS_write] = sys_write,
-    [SYS_sleep] = sys_sleep,     [SYS_getpid] = sys_getpid,
-    [SYS_gettime] = sys_gettime, [SYS_getprio] = sys_getprio};
-=======
 static void (*const syscalls[N_SYSCALLS])(pcb_t *) = {
     [SYS_exit] = sys_exit,
     [SYS_wait] = sys_wait,
@@ -969,7 +955,6 @@ static void (*const syscalls[N_SYSCALLS])(pcb_t *) = {
     [SYS_getheight] = sys_getheight,
     [SYS_getfbsegment] = sys_getfbsegment,
     [SYS_send] = sys_send};
->>>>>>> origin/vga
 
 /**
 ** Name:	sys_isr

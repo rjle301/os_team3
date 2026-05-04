@@ -19,23 +19,11 @@
 #define VEC_NIC 0x2b
 
 typedef struct pro_100 {
-
-  // Pro100 PCI information
-  pci_dev_t *pci_dev;
-  
-  // MAC address
-  uint8_t mac[6];
- 
-  // Beginning of the I/O communication space 
-  uint16_t io_base_addr;
-
-  // The device's Recieve Frame Descriptor
-  // Recieved ethernet frames are copied here by the device
-  rfd_t *rfd;
-  
-  // Statistical counters that are updated after a frame is processed
-  uint32_t stat_counters[DUMP_SIZE];
-
+  pci_dev_t *pci_dev;                 // Pro100 PCI information 
+  uint8_t mac[6];                     // MAC address
+  uint16_t io_base_addr;              // Base address to read/write Pro100 registers
+  rfd_t *rfd;                         // The single receive frame descriptor
+  uint32_t stat_counters[DUMP_SIZE];  // Statistical counters
 } pro100_t;
  
 extern pro100_t *pro100;

@@ -306,18 +306,14 @@ void pro100_rx_init(void) {
   
   // Build the RFD 
   rfd_t *rfd = (rfd_t *) km_page_alloc(1);
-  rfd->hdr.status = 0;
-  
-  // SF bit must be 0 in simplified mode
-  rfd->hdr.command = rfd->hdr.command & ~CB_CMD_SF;
+  rfd->hdr.status = 0; 
   rfd->hdr.command = CB_CMD_EL;
-
   rfd->hdr.link = 0xFFFFFFFF;
 
-  // Clear four bytes where recieve frame info goes.
-  // These bytes will be set by the device when a 
-  // frame is recieved
+  // This memory should be cleared so it accurately reports rx info
   memset(&rfd->actual_count, sizeof(uint32_t), 0);
+
+  rfd->size = PAYLOAD_SIZE;
  
   // Tell device it is ready to recieve frames
   pro100_outl(SCB_POINTER, (uint32_t) rfd);
@@ -358,7 +354,6 @@ void pro100_transmit(char *data) {
   // Build the TxCB
   tx_cb_t *tx_cb = (tx_cb_t *) km_page_alloc(1);
   tx_cb->hdr.status = 0;
-  tx_cb->hdr.command &= ~CB_CMD_SF;
   tx_cb->hdr.command = CB_CMD_TX | CB_CMD_EL;
   tx_cb->hdr.link = 0xFFFFFFFF;
 
@@ -382,12 +377,11 @@ void pro100_transmit(char *data) {
   // Source MAC. Not inserted by NIC, per settings from config command
   memcpy(&p[6], pro100->mac, 6);
   
-  uint16_t len_data = (uint16_t) strlen(data) + 1; // + 1 for the null byte
+  uint16_t len_data = (uint16_t) strlen(data);
 
   // Length/Type field of ethernet frame header. 2 bytes long
-  // This will be used on recieve to strip any padding bytes
-  p[12] = (uint8_t) (len_data >> 8);
-  p[13] = (uint8_t) len_data;
+  p[12] = 0x08;
+  p[13] = 0x00;
 
   // Payload
   // config map byte 18 bits 1:0 means NIC should handle packet
@@ -396,7 +390,8 @@ void pro100_transmit(char *data) {
   memcpy(&p[14], data, len_data);
   
   // 14 = 2 * 6-byte MAC addresses, 2-byte Length/Type field
-  tx_cb->byte_count = ETH_FRAME_HDR + len_data;  
+  // Since the entire frame is in one TCB, set the EOF bit too
+  tx_cb->byte_count = (ETH_FRAME_HDR + len_data) | TXCB_EOF;
 
   /*
   ** End of packet construction
@@ -483,11 +478,11 @@ void pro100_init() {
   // Delay at least 10us after a reset
   delay(100);
 
-  // Now set the CU to linear addressing mode
+  // Set the CU to linear addressing mode
   pro100_outl(SCB_POINTER, 0x00000000);
   pro100_outw(SCB_COMMAND, CU_LOAD_BASE | CNA_INT_MASK);
 
-  // Then set the RU to linear addressing mode
+  // Set the RU to linear addressing mode
   pro100_outl(SCB_POINTER, 0x00000000);
   pro100_outw(SCB_COMMAND, RU_LOAD_BASE | CNA_INT_MASK);
 
@@ -495,13 +490,10 @@ void pro100_init() {
   pro100_outl(SCB_POINTER, (uint32_t) pro100->stat_counters);
   pro100_outw(SCB_COMMAND, CU_LD_DUMP_ADR | CNA_INT_MASK);
 
-  // The device's operating parameters need initialization after a reset
   pro100_configure();
 
-  // Set the MAC address of the device
   pro100_address_setup();
 
-  // Prepare the device for ethernet frame reception
   pro100_rx_init();
 
 #ifdef DEBUG_NIC 
@@ -525,13 +517,19 @@ void pro100_init() {
 **
 ** The goal was to have frame transmission be done by a user process, and 
 ** recieving be handled in an interrupt. This is difficult to test because
-** of the interrupt clock bug, so Tx/Rx will be tested in the kernel instead.
+** of the clock bug, so Tx/Rx will be tested in the kernel instead.
 */
 #ifdef BAD_CLOCK
 #if defined(NODE_1) && defined(DEBUG_NIC)
-
-  char* msg = "Hello, World! -RLE\0";
+  
+  // An arbitrary 64-byte message
+  char* msg = "AAAAAAAAbbbbbbbbCCCCCCCCddddddddEEEEEEEEffffffffGGGGGGGGhhhhhhhh\0";
   pro100_transmit(msg);
+  delay(DELAY_2_SEC);
+
+  int tx_ok = pro100_check_counter(0x00);
+  sprint(buf, "** Transmit OK counter=%d\n", tx_ok);
+  cio_printf(buf);
 
 #elif defined(NODE_2) && defined(DEBUG_NIC)
 
